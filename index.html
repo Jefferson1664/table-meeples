@@ -1,187 +1,26 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#f3efe7">
-<link rel="manifest" href="manifest.webmanifest">
-<title>Table Meeples V2</title>
-<style>
-*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#eee9df;color:#292722}
-button,input,select{font:inherit} button{border:0}
-.app{min-height:100vh;display:flex;flex-direction:column}
-header{padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:#f8f5ef;border-bottom:1px solid #d8d1c5;position:sticky;top:0;z-index:10}
-.title{font-size:22px;font-weight:800}.sub{font-size:12px;color:#746f66;margin-top:2px}
-.toolbar{display:flex;gap:8px;margin-top:9px;overflow:auto}.toolbar>*{flex:0 0 auto}
-select,.btn{background:white;border:1px solid #d1c9bc;border-radius:10px;padding:9px 11px}
-.btn{font-weight:700}.btn.primary{background:#2f2d29;color:white;border-color:#2f2d29}
-main{display:flex;flex-direction:column;gap:10px;padding:10px;flex:1}
-.panel{background:#f8f5ef;border:1px solid #d8d1c5;border-radius:14px;overflow:hidden}
-.panel h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid #ded8ce}
-.reserve{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}
-.card{background:white;border:1px solid #d7d0c4;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;min-height:60px}
-.piece{width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex:0 0 42px}
-.meeple{width:25px;height:31px;clip-path:polygon(30% 0,70% 0,78% 15%,100% 28%,84% 43%,75% 38%,78% 100%,55% 100%,50% 64%,45% 100%,22% 100%,25% 38%,16% 43%,0 28%,22% 15%)}
-.circle{width:34px;height:34px;border-radius:50%;border:3px solid #b6b0a7;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
-.bread{width:38px;height:24px;border-radius:48% 48% 44% 44%;transform:rotate(-8deg);border:2px solid #b88e54}
-.coin{width:34px;height:34px;border-radius:50%;border:3px solid #aaa;box-shadow:inset 0 0 0 2px #ddd,0 1px 2px #aaa}
-.card .info{min-width:0;flex:1}.name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qty{font-size:12px;color:#777;margin-top:2px}
-.add{background:#2f2d29;color:white;border-radius:9px;width:36px;height:36px;font-size:22px;line-height:1}
-.tableWrap{padding:9px}
-.zones{display:grid;gap:9px}
-.zone{background:#fffdf9;border:1px solid #d6cfc3;border-radius:12px;min-height:135px;overflow:hidden}
-.zoneHead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed #d8d1c5;background:#f5f1e8}
-.zoneTitle{font-weight:800;font-size:13px}.zoneBtns{display:flex;gap:5px}.small{padding:5px 8px;border-radius:8px;background:white;border:1px solid #d2cabf;font-size:12px}
-.groups{padding:10px;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-start}
-.group{display:flex;flex-direction:column;align-items:center;gap:4px;touch-action:none;user-select:none;cursor:grab}
-.stack{display:flex;align-items:flex-end;min-height:47px}.stack .piece{margin-left:-9px}.stack .piece:first-child{margin-left:0}
-.groupCount{font-size:11px;color:#6f6a61;font-weight:700}.empty{padding:25px 12px;text-align:center;color:#999;font-size:12px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:flex-end;z-index:50}.modal.show{display:flex}
-.sheet{background:#f8f5ef;width:100%;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
-.sheet h3{margin:0 0 12px}.row{display:flex;gap:8px;margin:8px 0}.row>*{flex:1}.field{width:100%;padding:10px;border:1px solid #d2cabf;border-radius:10px;background:white}
-.palette{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0}.sw{height:34px;border-radius:9px;border:2px solid transparent}.sw.sel{border-color:#222;box-shadow:0 0 0 2px white inset}
-.footer{font-size:11px;color:#777;padding:4px 2px 12px;text-align:center}
-</style>
-</head>
-<body><div class="app">
-<header>
-  <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span style="font-size:11px;font-weight:800;background:#2f2d29;color:white;padding:4px 7px;border-radius:7px">V2.1</span></div><div class="sub">15 couleurs · groupes · zones · réserves</div>
-  <div class="toolbar">
-    <select id="gameSelect"></select>
-    <button class="btn primary" id="addMeeple">+ Meeple</button>
-    <button class="btn" id="addZone">+ Zone</button>
-    <button class="btn" id="newGame">Nouveau jeu</button>
-    <button class="btn" id="reset">Tout remettre</button>
-  </div>
-</header>
-<main>
-<section class="panel"><h2>Réserve</h2><div class="reserve" id="reserve"></div></section>
-<section class="panel"><h2>Table</h2><div class="tableWrap"><div class="zones" id="zones"></div></div></section>
-<div class="footer">Touchez + pour prendre une pièce. Touchez un groupe pour le déplacer vers une autre zone.</div>
-</main>
-</div>
-
-<div class="modal" id="modal"><div class="sheet">
-<h3 id="modalTitle">Ajouter</h3><div id="modalBody"></div>
-<div class="row"><button class="btn" id="cancel">Annuler</button><button class="btn primary" id="confirm">Créer</button></div>
-</div></div>
-
-<script>
-const colors=[
-["Jaune","#e6c229"],["Noir","#282828"],["Rouge","#c9473b"],["Bleu clair","#79b8d1"],["Marron","#8b5e3c"],
-["Violet","#8e65b5"],["Vert","#5b9b63"],["Blanc","#f4f1e8"],["Orange","#df8a3a"],["Rose","#d889a8"],
-["Gris","#8d9297"],["Bleu foncé","#3f5f9a"],["Turquoise","#49a9a0"],["Bordeaux","#7f3040"],["Beige","#cdbb99"]
-];
-const defaults=[
-{id:"yellow",name:"Meeple jaune",type:"meeple",color:"#e6c229",qty:10},{id:"black",name:"Meeple noir",type:"meeple",color:"#282828",qty:10},
-{id:"red",name:"Meeple rouge",type:"meeple",color:"#c9473b",qty:10},{id:"blue",name:"Meeple bleu clair",type:"meeple",color:"#79b8d1",qty:10},
-{id:"brown",name:"Meeple marron",type:"meeple",color:"#8b5e3c",qty:10},{id:"violet",name:"Meeple violet",type:"meeple",color:"#8e65b5",qty:10},
-{id:"green",name:"Meeple vert",type:"meeple",color:"#5b9b63",qty:10},{id:"white",name:"Meeple blanc",type:"meeple",color:"#f4f1e8",qty:10},
-{id:"orange",name:"Meeple orange",type:"meeple",color:"#df8a3a",qty:10},{id:"pink",name:"Meeple rose",type:"meeple",color:"#d889a8",qty:10},
-{id:"grey",name:"Meeple gris",type:"meeple",color:"#8d9297",qty:10},{id:"navy",name:"Meeple bleu foncé",type:"meeple",color:"#3f5f9a",qty:10},
-{id:"teal",name:"Meeple turquoise",type:"meeple",color:"#49a9a0",qty:10},{id:"burgundy",name:"Meeple bordeaux",type:"meeple",color:"#7f3040",qty:10},
-{id:"beige",name:"Meeple beige",type:"meeple",color:"#cdbb99",qty:10},
-{id:"bread",name:"Pain",type:"bread",color:"#d9ad70",qty:10},{id:"silver",name:"Pièce argent",type:"coin",color:"#c7cbd0",qty:20}
-];
-let games=JSON.parse(localStorage.tmV2||"null")||{ "Paladins du Royaume de l’Ouest":{components:defaults.map(x=>({...x})),zones:[{id:"z1",name:"Table principale"}],placed:{}}};
-let current=localStorage.tmGameV2||Object.keys(games)[0];
-function save(){localStorage.tmV2=JSON.stringify(games);localStorage.tmGameV2=current}
-function game(){return games[current]}
-function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function comp(id){return game().components.find(x=>x.id===id)}
-function placedCount(id){let p=game().placed||{};return Object.values(p).flat().filter(x=>x===id).length}
-function icon(c){return `<div class="piece"><div class="${c.type==='meeple'?'meeple':c.type==='bread'?'bread':'coin'}" style="background:${c.color}"></div></div>`}
-function render(){
- const sel=document.querySelector("#gameSelect");sel.innerHTML=Object.keys(games).map(g=>`<option ${g===current?"selected":""}>${esc(g)}</option>`).join("");
- const r=document.querySelector("#reserve");r.innerHTML="";
- game().components.forEach(c=>{let avail=c.qty-placedCount(c.id);let d=document.createElement("div");d.className="card";d.innerHTML=`${icon(c)}<div class="info"><div class="name">${esc(c.name)}</div><div class="qty">${avail} disponible${avail>1?"s":""} / ${c.qty}</div></div><button class="add">+</button>`;d.querySelector(".add").onclick=()=>take(c.id);r.appendChild(d)});
- renderZones();save();
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#f3efe7"><link rel="manifest" href="manifest.webmanifest"><title>Table Meeples V3</title><style>
+*{box-sizing:border-box}body{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{min-height:100vh}header{position:sticky;top:0;z-index:10;background:#f8f5ef;border-bottom:1px solid #d8d1c5;padding:calc(10px + env(safe-area-inset-top)) 12px 10px}.title{font-size:22px;font-weight:800}.v{font-size:11px;font-weight:800;background:#2f2d29;color:#fff;padding:4px 7px;border-radius:7px}.sub{font-size:12px;color:#746f66;margin-top:2px}.bar{display:flex;gap:7px;margin-top:9px;overflow:auto}.btn,select,input{font:inherit}.btn,select{background:#fff;border:1px solid #d1c9bc;border-radius:10px;padding:9px 11px}.btn{font-weight:700;white-space:nowrap}.primary{background:#2f2d29!important;color:#fff!important;border-color:#2f2d29!important}main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px solid #d8d1c5;border-radius:14px;overflow:hidden}.panel h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid #ded8ce}.reserve{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}.card{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;min-height:66px}.iconTap{width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex:0 0 46px;cursor:pointer;-webkit-tap-highlight-color:transparent}.piece{display:flex;align-items:center;justify-content:center;width:40px;height:40px}.meeple{width:27px;height:34px;clip-path:polygon(30% 0,70% 0,78% 15%,100% 28%,84% 43%,75% 38%,78% 100%,55% 100%,50% 64%,45% 100%,22% 100%,25% 38%,16% 43%,0 28%,22% 15%)}.circle{width:34px;height:34px;border-radius:50%;border:3px solid #aaa;box-shadow:inset 0 0 0 2px #fff8}.bread{width:38px;height:25px;border-radius:48% 48% 44% 44%;transform:rotate(-8deg);border:2px solid #a77940}.cube{width:31px;height:31px;border-radius:6px;transform:rotate(45deg)}.star{font-size:36px;line-height:1}.heart{font-size:34px;line-height:1}.gem{width:29px;height:35px;clip-path:polygon(25% 0,75% 0,100% 38%,50% 100%,0 38%)}.shield{width:31px;height:36px;clip-path:polygon(8% 0,92% 0,92% 62%,50% 100%,8% 62%)}.crown{font-size:34px}.info{min-width:0}.name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qty{font-size:12px;color:#777;margin-top:2px}.zones{display:grid;gap:9px;padding:9px}.zone{background:#fffdf9;border:1px solid #d6cfc3;border-radius:12px;min-height:130px;overflow:hidden}.zoneHead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed #d8d1c5;background:#f5f1e8}.zoneTitle{font-weight:800;font-size:13px}.zoneBtns{display:flex;gap:5px}.small{padding:5px 8px;border-radius:8px;background:#fff;border:1px solid #d2cabf;font-size:12px}.groups{padding:10px;display:flex;flex-wrap:wrap;gap:14px 18px}.group{display:flex;flex-direction:column;align-items:center;gap:4px}.pieces{display:flex;flex-wrap:wrap;max-width:180px;gap:4px}.pieces .iconTap{width:38px;height:42px;flex-basis:38px}.pieces .piece{width:36px;height:40px}.groupCount{font-size:11px;color:#6f6a61;font-weight:700}.empty{padding:25px 12px;text-align:center;color:#999;font-size:12px}.emptyBig{padding:40px 18px;text-align:center;color:#777}.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:flex-end;z-index:50}.modal.show{display:flex}.sheet{background:#f8f5ef;width:100%;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.sheet h3{margin:0 0 12px}.field{width:100%;padding:10px;border:1px solid #d2cabf;border-radius:10px;background:#fff;margin-bottom:9px}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.choice{background:#fff;border:1px solid #d2cabf;border-radius:10px;padding:9px 5px;text-align:center}.choice.selected{outline:3px solid #2f2d29}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:8px 0 12px}.sw{height:36px;border-radius:9px;border:2px solid transparent}.sw.selected{border-color:#222;box-shadow:0 0 0 2px #fff inset}.row{display:flex;gap:8px;margin-top:10px}.row>*{flex:1}.hint{font-size:12px;color:#716b62;margin:5px 0 10px}.menuList{display:grid;gap:8px}.menuList .btn{text-align:left}.footer{text-align:center;color:#777;font-size:11px;padding:2px 4px 15px}
+</style></head><body><div class="app"><header><div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V3</span></div><div class="sub">Jeux personnalisés · tables multiples · composants</div><div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div></header><main><section class="panel"><h2>Réserve · toucher l’image pour ajouter</h2><div class="reserve" id="reserve"></div></section><section class="panel"><h2>Tables</h2><div class="zones" id="zones"></div></section><div class="footer">Les composants sont regroupés automatiquement. Touchez une image sur la table pour retirer une seule pièce.</div></main></div><div class="modal" id="modal"><div class="sheet"><h3 id="modalTitle"></h3><div id="modalBody"></div><div class="row"><button class="btn" id="cancel">Annuler</button><button class="btn primary" id="confirm">Valider</button></div></div></div><input id="importFile" type="file" accept="application/json" hidden><script>
+const KEY='tableMeeplesV3Data',CUR='tableMeeplesV3Current';const colors=[['Jaune','#e6c229'],['Noir','#282828'],['Rouge','#c9473b'],['Bleu clair','#79b8d1'],['Marron','#8b5e3c'],['Violet','#8e65b5'],['Vert','#5b9b63'],['Blanc','#f4f1e8'],['Orange','#df8a3a'],['Rose','#d889a8'],['Gris','#8d9297'],['Bleu foncé','#3f5f9a'],['Turquoise','#49a9a0'],['Bordeaux','#7f3040'],['Beige','#cdbb99']];
+const icons=[['meeple','Meeple'],['bread','Pain'],['coin','Pièce'],['cube','Cube'],['token','Jeton'],['star','Étoile'],['heart','Cœur'],['gem','Gemme'],['shield','Bouclier'],['crown','Couronne']];
+let games=JSON.parse(localStorage.getItem(KEY)||'{}'),currentId=localStorage.getItem(CUR)||'';let modalAction=null,selectedColor=colors[0][1],selectedIcon='meeple';
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}function save(){localStorage.setItem(KEY,JSON.stringify(games));localStorage.setItem(CUR,currentId)}function game(){return games[currentId]||null}function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function pieceHTML(c,action){let cls=c.type==='meeple'?'meeple':c.type==='bread'?'bread':c.type==='coin'?'coin':c.type==='cube'?'cube':c.type==='token'?'circle':c.type==='gem'?'gem':c.type==='shield'?'shield':'';let content=['star','heart','crown'].includes(c.type)?({star:'★',heart:'♥',crown:'♛'}[c.type]):'';let style=c.type==='meeple'||['bread','coin','cube','token','gem','shield'].includes(c.type)?`background:${c.color}`:'';return `<span class="iconTap" data-action="${action}" data-cid="${c.id}"><span class="piece"><span class="${cls}" style="${style}">${content}</span></span></span>`}
+function render(){let g=game(),sel=document.getElementById('gameSelect');sel.innerHTML=Object.values(games).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');sel.value=currentId||'';if(!g){document.getElementById('reserve').innerHTML='<div class="emptyBig" style="grid-column:1/-1">Aucun jeu<br><br>Ouvrez le Menu pour créer votre premier jeu.</div>';document.getElementById('zones').innerHTML='';return}let r=document.getElementById('reserve');r.innerHTML=g.components.map(c=>{let n=g.placed.reduce((a,p)=>a+p.counts[c.id]||0,0);let available=Math.max(0,c.qty-n);return `<div class="card"><div class="iconTap" data-action="add" data-cid="${c.id}">${pieceHTML(c,'add').replace(/^.*?data-cid="[^"]+">/,'').replace(/<\/span><\/span>$/,'')}</div><div class="info"><div class="name">${esc(c.name)}</div><div class="qty">Réserve : ${available}</div></div></div>`}).join('')||'<div class="emptyBig" style="grid-column:1/-1">Aucun composant. Ouvrez le Menu pour en créer.</div>';
+let z=document.getElementById('zones');z.innerHTML=g.placed.map((t,i)=>{let groups=g.components.map(c=>({c,n:t.counts[c.id]||0})).filter(x=>x.n);return `<div class="zone"><div class="zoneHead"><div class="zoneTitle">${esc(t.name)}${i===0?' · principale':''}</div><div class="zoneBtns">${i?`<button class="small" data-zone-delete="${t.id}">Supprimer</button>`:''}</div></div><div class="groups">${groups.map(x=>`<div class="group"><div class="pieces">${Array.from({length:x.n},()=>pieceHTML(x.c,'remove')).join('')}</div><div class="groupCount">${esc(x.c.name)} · ${x.n}</div></div>`).join('')||'<div class="empty">Table vide</div>'}</div></div>`}).join('');
 }
-function take(id,zoneId){
- let g=game(), c=comp(id); if(!c||placedCount(id)>=c.qty)return;
- zoneId=zoneId||g.zones[0].id;(g.placed[zoneId]??=[]).push(id);render()
-}
-function moveGroup(id,from){
- let g=game();let n=g.zones.find(z=>z.id!==from);if(!n)return;
- let arr=g.placed[from]||[], count=arr.filter(x=>x===id).length;
- if(!count)return;g.placed[from]=arr.filter(x=>x!==id);(g.placed[n.id]??=[]).push(...Array(count).fill(id));render()
-}
-function returnGroup(id,zoneId){
- let g=game(),arr=g.placed[zoneId]||[];g.placed[zoneId]=arr.filter(x=>x!==id);render()
-}
-function renderZones(){
- const z=document.querySelector("#zones");z.innerHTML="";
- game().zones.forEach(zone=>{
-  let el=document.createElement("div");el.className="zone";
-  let arr=game().placed[zone.id]||[], ids=[...new Set(arr)];
-  el.innerHTML=`<div class="zoneHead"><div class="zoneTitle">${esc(zone.name)}</div><div class="zoneBtns"><button class="small addHere">+ composant</button><button class="small rename">Renommer</button></div></div><div class="groups"></div>`;
-  el.querySelector(".addHere").onclick=()=>openAddComponent(zone.id);
-  el.querySelector(".rename").onclick=()=>{let n=prompt("Nom de la zone",zone.name);if(n?.trim()){zone.name=n.trim();render()}};
-  let gs=el.querySelector(".groups");
-  if(!ids.length)gs.innerHTML='<div class="empty">Zone vide</div>';
-  ids.forEach(id=>{
-   let c=comp(id),count=arr.filter(x=>x===id).length;if(!c)return;
-   let gr=document.createElement("div");gr.className="group";gr.innerHTML=`<div class="stack">${Array.from({length:Math.min(count,6)},()=>icon(c)).join("")}</div><div class="groupCount">${esc(c.name)} × ${count}</div>`;
-   gr.onclick=()=>openGroup(id,zone.id);gs.appendChild(gr);
-  });
-  z.appendChild(el);
- });
-}
-function openGroup(id,from){
- let c=comp(id),g=game(),others=g.zones.filter(z=>z.id!==from);
- let body=document.querySelector("#modalBody");document.querySelector("#modalTitle").textContent=c.name+" × "+(g.placed[from]||[]).filter(x=>x===id).length;
- body.innerHTML=`<p style="margin:0 0 8px;color:#666">Choisir l’action :</p><div class="row"><button class="btn" id="ret">↩ Réserve</button>${others.length?`<select class="field" id="dest">${others.map(z=>`<option value="${z.id}">${esc(z.name)}</option>`).join("")}</select><button class="btn primary" id="move">Déplacer le groupe</button>`:""}</div>`;
- document.querySelector("#ret").onclick=()=>{returnGroup(id,from);closeModal()};
- if(others.length)document.querySelector("#move").onclick=()=>{let dest=document.querySelector("#dest").value,arr=g.placed[from]||[],n=arr.filter(x=>x===id).length;g.placed[from]=arr.filter(x=>x!==id);(g.placed[dest]??=[]).push(...Array(n).fill(id));closeModal();render()};
- document.querySelector("#modal").classList.add("show");
-}
-function openAddComponent(zoneId){
- let body=document.querySelector("#modalBody");
- document.querySelector("#modalTitle").textContent="Ajouter un composant";
- body.innerHTML=`<div style="font-weight:800;margin-bottom:6px">Type</div>
- <div class="row"><button class="btn primary" id="chooseMeeple">Meeple</button><button class="btn" id="chooseOther">Autre composant</button></div>
- <div id="chooser"></div>`;
- const chooser=body.querySelector("#chooser");
- let mode="meeple";
- function renderChooser(){
-   if(mode==="meeple"){
-     chooser.innerHTML=`<div style="font-weight:800;margin:8px 0 4px">Choisir une couleur — 15 disponibles</div>
-     <div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" title="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div>
-     <div id="chosen" style="font-size:13px;font-weight:700;margin:6px 0 10px">Meeple ${colors[0][0].toLowerCase()}</div>
-     <div class="row"><input class="field" id="cq" type="number" min="1" value="10"><button class="btn" id="preview">${colors[0][0]}</button></div>`;
-     chooser.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{
-       chooser.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
-       let i=+b.dataset.i;chooser.querySelector("#chosen").textContent="Meeple "+colors[i][0].toLowerCase();
-       chooser.querySelector("#preview").textContent=colors[i][0];
-     });
-   }else{
-     chooser.innerHTML=`<input class="field" id="cn" placeholder="Nom du composant">
-     <div class="row"><input class="field" id="cq" type="number" min="1" value="10"><select class="field" id="ct"><option value="bread">Pain / ressource</option><option value="coin">Pièce / jeton rond</option></select></div>
-     <div style="font-size:12px;color:#777">Couleur visuelle</div><div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" title="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div>`;
-     chooser.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{chooser.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel")});
-   }
- }
- body.querySelector("#chooseMeeple").onclick=()=>{mode="meeple";body.querySelector("#chooseMeeple").classList.add("primary");body.querySelector("#chooseOther").classList.remove("primary");renderChooser()};
- body.querySelector("#chooseOther").onclick=()=>{mode="other";body.querySelector("#chooseOther").classList.add("primary");body.querySelector("#chooseMeeple").classList.remove("primary");renderChooser()};
- renderChooser();
- document.querySelector("#confirm").onclick=()=>{
-   let q=+chooser.querySelector("#cq").value||1, i=+chooser.querySelector(".sw.sel").dataset.i;
-   let c= mode==="meeple"
-     ? {id:"c"+Date.now(),name:"Meeple "+colors[i][0].toLowerCase(),type:"meeple",color:colors[i][1],qty:q}
-     : {id:"c"+Date.now(),name:chooser.querySelector("#cn").value.trim()||"Composant",type:chooser.querySelector("#ct").value,color:colors[i][1],qty:q};
-   game().components.push(c);take(c.id,zoneId);closeModal();render();
- };
- document.querySelector("#cancel").onclick=closeModal;
- document.querySelector("#modal").classList.add("show");
-}
-function closeModal(){document.querySelector("#modal").classList.remove("show")}
-document.querySelector("#cancel").onclick=closeModal;
-document.querySelector("#gameSelect").onchange=e=>{current=e.target.value;render()};
-document.querySelector("#reset").onclick=()=>{if(confirm("Remettre tous les composants en réserve ?")){game().placed={};render()}};
-document.querySelector("#addMeeple").onclick=()=>openAddComponent(game().zones[0].id);
-document.querySelector("#addZone").onclick=()=>{let n=prompt("Nom de la nouvelle zone","Nouvelle zone");if(n?.trim()){game().zones.push({id:"z"+Date.now(),name:n.trim()});render()}};
-document.querySelector("#newGame").onclick=()=>{let n=prompt("Nom du jeu");if(!n?.trim())return;games[n.trim()]={components:defaults.map(x=>({...x})),zones:[{id:"z1",name:"Table principale"}],placed:{}};current=n.trim();render()};
-document.querySelector("#confirm").onclick=()=>{};
-render();
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");
+function open(title,body,fn){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;modalAction=fn;document.getElementById('modal').classList.add('show')}
+function close(){document.getElementById('modal').classList.remove('show');modalAction=null}
+function menu(){if(!game()){open('Menu','<div class="menuList"><button class="btn" data-menu="new">Créer un jeu</button><button class="btn" data-menu="import">Importer un jeu</button></div>',()=>{});return}open('Menu',`<div class="menuList"><button class="btn" data-menu="new">Créer un jeu</button><button class="btn" data-menu="component">Créer un composant</button><button class="btn" data-menu="save">Sauvegarder le jeu actuel</button><button class="btn" data-menu="import">Importer un jeu</button><button class="btn" data-menu="delete">Supprimer le jeu actuel</button></div>` ,()=>{})}
+function newGame(){open('Créer un jeu','<input class="field" id="gameName" placeholder="Nom du jeu" autocomplete="off">',()=>{let n=document.getElementById('gameName').value.trim();if(!n)return;currentId=id();games[currentId]={id:currentId,name:n,components:[],placed:[{id:id(),name:'Table principale',counts:{}}]};save();close();render()})}
+function component(){selectedIcon='meeple';selectedColor=colors[0][1];let iconChoices=icons.map(x=>`<button class="choice ${x[0]==='meeple'?'selected':''}" data-icon="${x[0]}">${x[1]}</button>`).join('');let pal=colors.map(x=>`<button class="sw ${x[1]===selectedColor?'selected':''}" title="${x[0]}" style="background:${x[1]}" data-color="${x[1]}"></button>`).join('');open('Créer un composant',`<div class="hint">Choisissez le type.</div><div class="grid">${iconChoices}</div><div class="hint">Couleur (15 couleurs disponibles pour les meeples).</div><div class="palette">${pal}</div><input class="field" id="compName" placeholder="Nom du composant"><input class="field" id="compQty" type="number" min="1" value="10" placeholder="Quantité totale">`,()=>{let g=game(),name=document.getElementById('compName').value.trim(),qty=Math.max(1,parseInt(document.getElementById('compQty').value||'1',10));if(!name)name=selectedIcon==='meeple'?'Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase():icons.find(x=>x[0]===selectedIcon)[1];g.components.push({id:id(),name,type:selectedIcon,color:selectedColor,qty});save();close();render()});document.querySelectorAll('[data-icon]').forEach(b=>b.onclick=()=>{selectedIcon=b.dataset.icon;document.querySelectorAll('[data-icon]').forEach(x=>x.classList.toggle('selected',x===b));});document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{selectedColor=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b));if(selectedIcon==='meeple'){let inp=document.getElementById('compName');inp.value='Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase()}})}
+function chooseTable(cid){let g=game();if(g.placed.length===1){addTo(g.placed[0],cid);return}open('Sur quelle table ajouter ?',g.placed.map(t=>`<button class="btn" style="width:100%;margin:4px 0" data-pick="${t.id}">${esc(t.name)}</button>`).join(''),()=>{});document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{let t=g.placed.find(x=>x.id===b.dataset.pick);if(t){addTo(t,cid);close()}})}
+function addTo(t,cid){let g=game(),c=g.components.find(x=>x.id===cid),used=g.placed.reduce((a,p)=>a+(p.counts[cid]||0),0);if(!c||used>=c.qty)return;t.counts[cid]=(t.counts[cid]||0)+1;save();render()}
+function removeOne(tid,cid){let g=game(),t=g.placed.find(x=>x.id===tid);if(!t||!t.counts[cid])return;t.counts[cid]--;if(t.counts[cid]<=0)delete t.counts[cid];save();render()}
+function addTable(){let g=game();if(!g)return;open('Créer une table','<input class="field" id="tableName" placeholder="Nom de la table" autocomplete="off">',()=>{let n=document.getElementById('tableName').value.trim();if(!n)return;g.placed.push({id:id(),name:n,counts:{}});save();close();render()})}
+function deleteZone(tid){let g=game();let i=g.placed.findIndex(x=>x.id===tid);if(i<=0)return;g.placed.splice(i,1);save();render()}
+function exportGame(){let g=game();if(!g)return;let blob=new Blob([JSON.stringify(g,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=g.name.replace(/[^a-z0-9àâçéèêëîïôûùüÿæœ_-]+/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function importGame(){document.getElementById('importFile').click()}
+document.getElementById('importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=()=>{try{let g=JSON.parse(rd.result);if(!g.name||!g.components||!g.placed)throw 0;g.id=id();games[g.id]=g;currentId=g.id;save();render()}catch(_){alert('Fichier de jeu invalide.')}e.target.value=''};rd.readAsText(f)};
+document.getElementById('gameSelect').onchange=e=>{currentId=e.target.value;save();render()};document.getElementById('menuBtn').onclick=menu;document.getElementById('tableBtn').onclick=addTable;document.getElementById('cancel').onclick=close;document.getElementById('confirm').onclick=()=>modalAction&&modalAction();document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')close()};document.getElementById('reserve').onclick=e=>{let x=e.target.closest('[data-action="add"]');if(x)chooseTable(x.dataset.cid)};document.getElementById('zones').onclick=e=>{let x=e.target.closest('[data-action="remove"]');if(x){let zone=e.target.closest('.zone'),tid=zone?.querySelector('[data-zone-delete]')?.dataset.zoneDelete||[...game().placed].find(t=>zone?.querySelector('.zoneTitle')?.textContent.startsWith(t.name))?.id;let zoneIndex=[...document.querySelectorAll('.zone')].indexOf(zone);tid=game().placed[zoneIndex]?.id;removeOne(tid,x.dataset.cid)}let d=e.target.closest('[data-zone-delete]');if(d&&confirm('Supprimer cette table ? Les composants placés dessus retournent dans la réserve.'))deleteZone(d.dataset.zoneDelete)};document.getElementById('modalBody').addEventListener('click',e=>{let m=e.target.closest('[data-menu]');if(!m)return;let a=m.dataset.menu;if(a==='new')newGame();if(a==='component')component();if(a==='save'){exportGame();close()}if(a==='import'){importGame();close()}if(a==='delete'){let g=game();if(g&&confirm('Supprimer définitivement ce jeu ?')){delete games[currentId];currentId=Object.keys(games)[0]||'';save();close();render()}}});render();
 </script></body></html>
