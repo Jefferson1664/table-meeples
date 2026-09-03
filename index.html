@@ -48,6 +48,7 @@ main{display:flex;flex-direction:column;gap:10px;padding:10px;flex:1}
   <div class="title">Table Meeples</div><div class="sub">V2 · sacs, réserves et table virtuelle</div>
   <div class="toolbar">
     <select id="gameSelect"></select>
+    <button class="btn primary" id="addMeeple">+ Meeple</button>
     <button class="btn" id="addZone">+ Zone</button>
     <button class="btn" id="newGame">Nouveau jeu</button>
     <button class="btn" id="reset">Tout remettre</button>
@@ -135,16 +136,49 @@ function openGroup(id,from){
  document.querySelector("#modal").classList.add("show");
 }
 function openAddComponent(zoneId){
- let body=document.querySelector("#modalBody");document.querySelector("#modalTitle").textContent="Ajouter un composant";
- body.innerHTML=`<input class="field" id="cn" placeholder="Nom du composant"><div class="row"><input class="field" id="cq" type="number" min="1" value="10" placeholder="Quantité"><select class="field" id="ct"><option value="meeple">Meeple</option><option value="bread">Pain / ressource</option><option value="coin">Pièce / jeton rond</option></select></div><div>Couleur</div><div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" style="background:${x[1]}"></button>`).join("")}</div>`;
- body.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{body.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel")});
- document.querySelector("#confirm").onclick=()=>{let name=document.querySelector("#cn").value.trim();let qty=+document.querySelector("#cq").value||1;if(!name)return;let i=+body.querySelector(".sw.sel").dataset.i;let id="c"+Date.now();game().components.push({id,name,type:document.querySelector("#ct").value,color:colors[i][1],qty});take(id,zoneId);closeModal();render()};
- document.querySelector("#cancel").onclick=closeModal;document.querySelector("#modal").classList.add("show");
+ let body=document.querySelector("#modalBody");
+ document.querySelector("#modalTitle").textContent="Ajouter un composant";
+ body.innerHTML=`<div style="font-weight:800;margin-bottom:6px">Type</div>
+ <div class="row"><button class="btn primary" id="chooseMeeple">Meeple</button><button class="btn" id="chooseOther">Autre composant</button></div>
+ <div id="chooser"></div>`;
+ const chooser=body.querySelector("#chooser");
+ let mode="meeple";
+ function renderChooser(){
+   if(mode==="meeple"){
+     chooser.innerHTML=`<div style="font-weight:800;margin:8px 0 4px">Choisir une couleur — 15 disponibles</div>
+     <div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" title="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div>
+     <div id="chosen" style="font-size:13px;font-weight:700;margin:6px 0 10px">Meeple ${colors[0][0].toLowerCase()}</div>
+     <div class="row"><input class="field" id="cq" type="number" min="1" value="10"><button class="btn" id="preview">${colors[0][0]}</button></div>`;
+     chooser.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{
+       chooser.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+       let i=+b.dataset.i;chooser.querySelector("#chosen").textContent="Meeple "+colors[i][0].toLowerCase();
+       chooser.querySelector("#preview").textContent=colors[i][0];
+     });
+   }else{
+     chooser.innerHTML=`<input class="field" id="cn" placeholder="Nom du composant">
+     <div class="row"><input class="field" id="cq" type="number" min="1" value="10"><select class="field" id="ct"><option value="bread">Pain / ressource</option><option value="coin">Pièce / jeton rond</option></select></div>
+     <div style="font-size:12px;color:#777">Couleur visuelle</div><div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" title="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div>`;
+     chooser.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{chooser.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel")});
+   }
+ }
+ body.querySelector("#chooseMeeple").onclick=()=>{mode="meeple";body.querySelector("#chooseMeeple").classList.add("primary");body.querySelector("#chooseOther").classList.remove("primary");renderChooser()};
+ body.querySelector("#chooseOther").onclick=()=>{mode="other";body.querySelector("#chooseOther").classList.add("primary");body.querySelector("#chooseMeeple").classList.remove("primary");renderChooser()};
+ renderChooser();
+ document.querySelector("#confirm").onclick=()=>{
+   let q=+chooser.querySelector("#cq").value||1, i=+chooser.querySelector(".sw.sel").dataset.i;
+   let c= mode==="meeple"
+     ? {id:"c"+Date.now(),name:"Meeple "+colors[i][0].toLowerCase(),type:"meeple",color:colors[i][1],qty:q}
+     : {id:"c"+Date.now(),name:chooser.querySelector("#cn").value.trim()||"Composant",type:chooser.querySelector("#ct").value,color:colors[i][1],qty:q};
+   game().components.push(c);take(c.id,zoneId);closeModal();render();
+ };
+ document.querySelector("#cancel").onclick=closeModal;
+ document.querySelector("#modal").classList.add("show");
 }
 function closeModal(){document.querySelector("#modal").classList.remove("show")}
 document.querySelector("#cancel").onclick=closeModal;
 document.querySelector("#gameSelect").onchange=e=>{current=e.target.value;render()};
 document.querySelector("#reset").onclick=()=>{if(confirm("Remettre tous les composants en réserve ?")){game().placed={};render()}};
+document.querySelector("#addMeeple").onclick=()=>openAddComponent(game().zones[0].id);
 document.querySelector("#addZone").onclick=()=>{let n=prompt("Nom de la nouvelle zone","Nouvelle zone");if(n?.trim()){game().zones.push({id:"z"+Date.now(),name:n.trim()});render()}};
 document.querySelector("#newGame").onclick=()=>{let n=prompt("Nom du jeu");if(!n?.trim())return;games[n.trim()]={components:defaults.map(x=>({...x})),zones:[{id:"z1",name:"Table principale"}],placed:{}};current=n.trim();render()};
 document.querySelector("#confirm").onclick=()=>{};
