@@ -1,71 +1,153 @@
 <!doctype html>
-<html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5f5f5"><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Table Meeples">
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f3efe7">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon.svg">
-<title>Table Meeples</title>
+<title>Table Meeples V2</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif;color:#1c1c1e;background:#f2f2f7}
-*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{min-height:44px;border:0;border-radius:12px;background:#e5e5ea;color:#111;padding:0 13px}
-header{padding:max(14px,env(safe-area-inset-top)) 16px 10px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid #ddd}
-.head{display:flex;align-items:center;justify-content:space-between;gap:8px}.title{font-weight:700;font-size:20px}.sub{font-size:13px;color:#6e6e73;margin-top:2px}
-main{padding:12px 12px max(24px,env(safe-area-inset-bottom));max-width:900px;margin:auto}
-.panel{background:#fff;border-radius:16px;margin-bottom:12px;padding:12px;box-shadow:0 1px 2px #0000000d}.section-title{font-weight:700;margin-bottom:10px}
-.reserve{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px}.res{display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 4px;border-radius:14px;background:#f2f2f7}.res:disabled{opacity:.35}.name{font-size:12px;text-align:center;line-height:1.1}.qty{font-size:12px;color:#6e6e73;font-variant-numeric:tabular-nums}
-.table{min-height:300px;background:#e8e8ed;border-radius:14px;padding:12px}.groups{display:flex;flex-direction:column;gap:12px}.group{background:#fff;border-radius:14px;padding:10px}.ghead{display:flex;justify-content:space-between;align-items:center;font-weight:650;font-size:14px;margin-bottom:8px}.pieces{display:flex;flex-wrap:wrap;gap:7px}
-.piece{width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex:none;filter:drop-shadow(0 2px 2px #0002);touch-action:manipulation}
-.meeple{clip-path:polygon(30% 92%,34% 57%,28% 45%,26% 36%,31% 25%,40% 22%,44% 14%,50% 10%,56% 14%,60% 22%,69% 25%,74% 36%,72% 45%,66% 57%,70% 92%);border-radius:8px}
-.yellow{background:#d5ad22}.black{background:#252525}.red{background:#a9403d}.blue{background:#74abc8}.brown{background:#805337}
-.bread{width:54px;height:32px;background:#d98225;border-radius:45% 55% 50% 48%;margin:7px 0}
-.coin{border-radius:50%;background:linear-gradient(145deg,#fff,#aeb3b8);border:2px solid #777;color:#777;font-weight:800}
-.actions{display:flex;gap:8px;flex-wrap:wrap}.empty{text-align:center;color:#8e8e93;padding:45px 10px;font-size:14px}
-.modal{position:fixed;inset:0;background:#0005;display:none;align-items:flex-end;z-index:20}.modal.show{display:flex}.sheet{background:#fff;width:100%;border-radius:20px 20px 0 0;padding:18px max(18px,env(safe-area-inset-left)) max(22px,env(safe-area-inset-bottom));max-height:85%;overflow:auto}
-.field{margin:10px 0}.field label{display:block;font-size:13px;color:#6e6e73;margin-bottom:5px}.field input,.field select{width:100%;height:46px;border:1px solid #c7c7cc;border-radius:10px;padding:0 10px;background:#fff}
-.row{display:flex;gap:8px}.row>*{flex:1}.danger{background:#ff3b30;color:#fff}.primary{background:#007aff;color:#fff}
-@media(min-width:700px){.reserve{grid-template-columns:repeat(7,1fr)}.modal{align-items:center;justify-content:center}.sheet{max-width:480px;border-radius:20px}}
-</style></head>
-<body>
-<header><div class="head"><div><div class="title">Table Meeples</div><div class="sub" id="gameName"></div></div><select id="gameSelect"></select></div></header>
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#eee9df;color:#292722}
+button,input,select{font:inherit} button{border:0}
+.app{min-height:100vh;display:flex;flex-direction:column}
+header{padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:#f8f5ef;border-bottom:1px solid #d8d1c5;position:sticky;top:0;z-index:10}
+.title{font-size:22px;font-weight:800}.sub{font-size:12px;color:#746f66;margin-top:2px}
+.toolbar{display:flex;gap:8px;margin-top:9px;overflow:auto}.toolbar>*{flex:0 0 auto}
+select,.btn{background:white;border:1px solid #d1c9bc;border-radius:10px;padding:9px 11px}
+.btn{font-weight:700}.btn.primary{background:#2f2d29;color:white;border-color:#2f2d29}
+main{display:flex;flex-direction:column;gap:10px;padding:10px;flex:1}
+.panel{background:#f8f5ef;border:1px solid #d8d1c5;border-radius:14px;overflow:hidden}
+.panel h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid #ded8ce}
+.reserve{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}
+.card{background:white;border:1px solid #d7d0c4;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;min-height:60px}
+.piece{width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex:0 0 42px}
+.meeple{width:25px;height:31px;clip-path:polygon(30% 0,70% 0,78% 15%,100% 28%,84% 43%,75% 38%,78% 100%,55% 100%,50% 64%,45% 100%,22% 100%,25% 38%,16% 43%,0 28%,22% 15%)}
+.circle{width:34px;height:34px;border-radius:50%;border:3px solid #b6b0a7;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)}
+.bread{width:38px;height:24px;border-radius:48% 48% 44% 44%;transform:rotate(-8deg);border:2px solid #b88e54}
+.coin{width:34px;height:34px;border-radius:50%;border:3px solid #aaa;box-shadow:inset 0 0 0 2px #ddd,0 1px 2px #aaa}
+.card .info{min-width:0;flex:1}.name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qty{font-size:12px;color:#777;margin-top:2px}
+.add{background:#2f2d29;color:white;border-radius:9px;width:36px;height:36px;font-size:22px;line-height:1}
+.tableWrap{padding:9px}
+.zones{display:grid;gap:9px}
+.zone{background:#fffdf9;border:1px solid #d6cfc3;border-radius:12px;min-height:135px;overflow:hidden}
+.zoneHead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed #d8d1c5;background:#f5f1e8}
+.zoneTitle{font-weight:800;font-size:13px}.zoneBtns{display:flex;gap:5px}.small{padding:5px 8px;border-radius:8px;background:white;border:1px solid #d2cabf;font-size:12px}
+.groups{padding:10px;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-start}
+.group{display:flex;flex-direction:column;align-items:center;gap:4px;touch-action:none;user-select:none;cursor:grab}
+.stack{display:flex;align-items:flex-end;min-height:47px}.stack .piece{margin-left:-9px}.stack .piece:first-child{margin-left:0}
+.groupCount{font-size:11px;color:#6f6a61;font-weight:700}.empty{padding:25px 12px;text-align:center;color:#999;font-size:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:flex-end;z-index:50}.modal.show{display:flex}
+.sheet{background:#f8f5ef;width:100%;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet h3{margin:0 0 12px}.row{display:flex;gap:8px;margin:8px 0}.row>*{flex:1}.field{width:100%;padding:10px;border:1px solid #d2cabf;border-radius:10px;background:white}
+.palette{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0}.sw{height:34px;border-radius:9px;border:2px solid transparent}.sw.sel{border-color:#222;box-shadow:0 0 0 2px white inset}
+.footer{font-size:11px;color:#777;padding:4px 2px 12px;text-align:center}
+</style>
+</head>
+<body><div class="app">
+<header>
+  <div class="title">Table Meeples</div><div class="sub">V2 · sacs, réserves et table virtuelle</div>
+  <div class="toolbar">
+    <select id="gameSelect"></select>
+    <button class="btn" id="addZone">+ Zone</button>
+    <button class="btn" id="newGame">Nouveau jeu</button>
+    <button class="btn" id="reset">Tout remettre</button>
+  </div>
+</header>
 <main>
-<section class="panel"><div class="section-title">Réserve</div><div id="reserve" class="reserve"></div></section>
-<section class="panel"><div class="section-title">Table</div><div id="table" class="table"></div></section>
-<div class="actions"><button id="newGame">+ Nouveau jeu</button><button id="addComponent">+ Composant</button><button id="reset">Réinitialiser la table</button></div>
+<section class="panel"><h2>Réserve</h2><div class="reserve" id="reserve"></div></section>
+<section class="panel"><h2>Table</h2><div class="tableWrap"><div class="zones" id="zones"></div></div></section>
+<div class="footer">Touchez + pour prendre une pièce. Touchez un groupe pour le déplacer vers une autre zone.</div>
 </main>
-<div id="modal" class="modal"><div class="sheet"><div id="modalContent"></div></div></div>
+</div>
+
+<div class="modal" id="modal"><div class="sheet">
+<h3 id="modalTitle">Ajouter</h3><div id="modalBody"></div>
+<div class="row"><button class="btn" id="cancel">Annuler</button><button class="btn primary" id="confirm">Créer</button></div>
+</div></div>
+
 <script>
-const KEY="tableMeeples.pwa.v1";
-const defaultGame={name:"Paladins du Royaume de l’Ouest",components:[
-{name:"Meeple jaune",qty:10,type:"yellow"},{name:"Meeple noir",qty:10,type:"black"},{name:"Meeple rouge",qty:10,type:"red"},
-{name:"Meeple bleu clair",qty:10,type:"blue"},{name:"Meeple brun",qty:10,type:"brown"},{name:"Pain",qty:10,type:"bread"},{name:"Monnaie argentée",qty:20,type:"coin"}]};
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||{games:[defaultGame],current:0,table:[]};
-let table=data.table||[];
-function save(){data.table=table;localStorage.setItem(KEY,JSON.stringify(data))}
-function game(){return data.games[data.current]}
+const colors=[
+["Jaune","#e6c229"],["Noir","#282828"],["Rouge","#c9473b"],["Bleu clair","#79b8d1"],["Marron","#8b5e3c"],
+["Violet","#8e65b5"],["Vert","#5b9b63"],["Blanc","#f4f1e8"],["Orange","#df8a3a"],["Rose","#d889a8"],
+["Gris","#8d9297"],["Bleu foncé","#3f5f9a"],["Turquoise","#49a9a0"],["Bordeaux","#7f3040"],["Beige","#cdbb99"]
+];
+const defaults=[
+{id:"yellow",name:"Meeple jaune",type:"meeple",color:"#e6c229",qty:10},{id:"black",name:"Meeple noir",type:"meeple",color:"#282828",qty:10},
+{id:"red",name:"Meeple rouge",type:"meeple",color:"#c9473b",qty:10},{id:"blue",name:"Meeple bleu clair",type:"meeple",color:"#79b8d1",qty:10},
+{id:"brown",name:"Meeple marron",type:"meeple",color:"#8b5e3c",qty:10},{id:"violet",name:"Meeple violet",type:"meeple",color:"#8e65b5",qty:10},
+{id:"green",name:"Meeple vert",type:"meeple",color:"#5b9b63",qty:10},{id:"white",name:"Meeple blanc",type:"meeple",color:"#f4f1e8",qty:10},
+{id:"orange",name:"Meeple orange",type:"meeple",color:"#df8a3a",qty:10},{id:"pink",name:"Meeple rose",type:"meeple",color:"#d889a8",qty:10},
+{id:"grey",name:"Meeple gris",type:"meeple",color:"#8d9297",qty:10},{id:"navy",name:"Meeple bleu foncé",type:"meeple",color:"#3f5f9a",qty:10},
+{id:"teal",name:"Meeple turquoise",type:"meeple",color:"#49a9a0",qty:10},{id:"burgundy",name:"Meeple bordeaux",type:"meeple",color:"#7f3040",qty:10},
+{id:"beige",name:"Meeple beige",type:"meeple",color:"#cdbb99",qty:10},
+{id:"bread",name:"Pain",type:"bread",color:"#d9ad70",qty:10},{id:"silver",name:"Pièce argent",type:"coin",color:"#c7cbd0",qty:20}
+];
+let games=JSON.parse(localStorage.tmV2||"null")||{ "Paladins du Royaume de l’Ouest":{components:defaults.map(x=>({...x})),zones:[{id:"z1",name:"Table principale"}],placed:{}}};
+let current=localStorage.tmGameV2||Object.keys(games)[0];
+function save(){localStorage.tmV2=JSON.stringify(games);localStorage.tmGameV2=current}
+function game(){return games[current]}
 function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function icon(c){return `<span class="piece ${c.type==='bread'?'bread':c.type==='coin'?'coin':'meeple '+c.type}">${c.type==='coin'?'✦':''}</span>`}
+function comp(id){return game().components.find(x=>x.id===id)}
+function placedCount(id){let p=game().placed||{};return Object.values(p).flat().filter(x=>x===id).length}
+function icon(c){return `<div class="piece"><div class="${c.type==='meeple'?'meeple':c.type==='bread'?'bread':'coin'}" style="background:${c.color}"></div></div>`}
 function render(){
- document.getElementById("gameName").textContent=game().name;
- const gs=document.getElementById("gameSelect");gs.innerHTML=data.games.map((g,i)=>`<option value="${i}">${esc(g.name)}</option>`).join("");gs.value=data.current;
- const r=document.getElementById("reserve");r.innerHTML="";
- game().components.forEach((c,i)=>{const b=document.createElement("button");b.className="res";b.disabled=c.qty<=0;b.innerHTML=icon(c)+`<span class="name">${esc(c.name)}</span><span class="qty">${c.qty}</span>`;b.onclick=()=>take(i);r.appendChild(b)});
- const t=document.getElementById("table");t.innerHTML="";const groups=[];
- game().components.forEach((c,i)=>{const ids=table.filter(x=>x.component===i);if(ids.length)groups.push({c,i,ids})});
- if(!groups.length){t.innerHTML='<div class="empty">La table est vide.<br>Prends des composants dans la réserve.</div>';return}
- const wrap=document.createElement("div");wrap.className="groups";
- groups.forEach(g=>{const box=document.createElement("div");box.className="group";box.innerHTML=`<div class="ghead"><span>${esc(g.c.name)}</span><span>${g.ids.length}</span></div>`;const line=document.createElement("div");line.className="pieces";g.ids.forEach(item=>{const b=document.createElement("button");b.className="piece";b.innerHTML=icon(g.c);b.title="Remettre dans la réserve";b.onclick=()=>back(item.id);line.appendChild(b)});box.appendChild(line);wrap.appendChild(box)});t.appendChild(wrap)
+ const sel=document.querySelector("#gameSelect");sel.innerHTML=Object.keys(games).map(g=>`<option ${g===current?"selected":""}>${esc(g)}</option>`).join("");
+ const r=document.querySelector("#reserve");r.innerHTML="";
+ game().components.forEach(c=>{let avail=c.qty-placedCount(c.id);let d=document.createElement("div");d.className="card";d.innerHTML=`${icon(c)}<div class="info"><div class="name">${esc(c.name)}</div><div class="qty">${avail} disponible${avail>1?"s":""} / ${c.qty}</div></div><button class="add">+</button>`;d.querySelector(".add").onclick=()=>take(c.id);r.appendChild(d)});
+ renderZones();save();
 }
-function take(i){const c=game().components[i];if(c.qty<=0)return;c.qty--;table.push({id:crypto.randomUUID(),component:i});save();render()}
-function back(id){const x=table.find(x=>x.id===id);if(!x)return;game().components[x.component].qty++;table=table.filter(y=>y.id!==id);save();render()}
-function closeModal(){document.getElementById("modal").classList.remove("show")}
-function open(content){document.getElementById("modalContent").innerHTML=content;document.getElementById("modal").classList.add("show")}
-document.getElementById("gameSelect").onchange=e=>{data.current=+e.target.value;table=[];save();render()};
-document.getElementById("reset").onclick=()=>{if(confirm("Remettre tous les composants dans la réserve ?")){game().components.forEach(c=>{c.qty+=table.filter(x=>x.component===game().components.indexOf(c)).length});table=[];save();render()}};
-document.getElementById("newGame").onclick=()=>{open(`<h2>Nouveau jeu</h2><div class="field"><label>Nom du jeu</label><input id="gn" placeholder="Ex. Terraforming Mars"></div><div class="row"><button onclick="closeModal()">Annuler</button><button class="primary" onclick="createGame()">Créer</button></div>`)};
-window.createGame=()=>{const n=document.getElementById("gn").value.trim();if(!n)return;data.games.push({name:n,components:[]});data.current=data.games.length-1;table=[];save();closeModal();render()};
-document.getElementById("addComponent").onclick=()=>{open(`<h2>Nouveau composant</h2><div class="field"><label>Nom</label><input id="cn" placeholder="Ex. Meeple violet"></div><div class="field"><label>Quantité</label><input id="cq" type="number" min="0" max="999" value="10"></div><div class="field"><label>Aspect</label><select id="ct"><option value="yellow">Jaune</option><option value="black">Noir</option><option value="red">Rouge</option><option value="blue">Bleu clair</option><option value="brown">Brun</option><option value="bread">Pain</option><option value="coin">Monnaie argentée</option></select></div><div class="row"><button onclick="closeModal()">Annuler</button><button class="primary" onclick="createComponent()">Ajouter</button></div>`)};
-window.createComponent=()=>{const n=document.getElementById("cn").value.trim();const q=Math.max(0,Math.min(999,+document.getElementById("cq").value||0));if(!n)return;game().components.push({name:n,qty:q,type:document.getElementById("ct").value});save();closeModal();render()};
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+function take(id,zoneId){
+ let g=game(), c=comp(id); if(!c||placedCount(id)>=c.qty)return;
+ zoneId=zoneId||g.zones[0].id;(g.placed[zoneId]??=[]).push(id);render()
+}
+function moveGroup(id,from){
+ let g=game();let n=g.zones.find(z=>z.id!==from);if(!n)return;
+ let arr=g.placed[from]||[], count=arr.filter(x=>x===id).length;
+ if(!count)return;g.placed[from]=arr.filter(x=>x!==id);(g.placed[n.id]??=[]).push(...Array(count).fill(id));render()
+}
+function returnGroup(id,zoneId){
+ let g=game(),arr=g.placed[zoneId]||[];g.placed[zoneId]=arr.filter(x=>x!==id);render()
+}
+function renderZones(){
+ const z=document.querySelector("#zones");z.innerHTML="";
+ game().zones.forEach(zone=>{
+  let el=document.createElement("div");el.className="zone";
+  let arr=game().placed[zone.id]||[], ids=[...new Set(arr)];
+  el.innerHTML=`<div class="zoneHead"><div class="zoneTitle">${esc(zone.name)}</div><div class="zoneBtns"><button class="small addHere">+ composant</button><button class="small rename">Renommer</button></div></div><div class="groups"></div>`;
+  el.querySelector(".addHere").onclick=()=>openAddComponent(zone.id);
+  el.querySelector(".rename").onclick=()=>{let n=prompt("Nom de la zone",zone.name);if(n?.trim()){zone.name=n.trim();render()}};
+  let gs=el.querySelector(".groups");
+  if(!ids.length)gs.innerHTML='<div class="empty">Zone vide</div>';
+  ids.forEach(id=>{
+   let c=comp(id),count=arr.filter(x=>x===id).length;if(!c)return;
+   let gr=document.createElement("div");gr.className="group";gr.innerHTML=`<div class="stack">${Array.from({length:Math.min(count,6)},()=>icon(c)).join("")}</div><div class="groupCount">${esc(c.name)} × ${count}</div>`;
+   gr.onclick=()=>openGroup(id,zone.id);gs.appendChild(gr);
+  });
+  z.appendChild(el);
+ });
+}
+function openGroup(id,from){
+ let c=comp(id),g=game(),others=g.zones.filter(z=>z.id!==from);
+ let body=document.querySelector("#modalBody");document.querySelector("#modalTitle").textContent=c.name+" × "+(g.placed[from]||[]).filter(x=>x===id).length;
+ body.innerHTML=`<p style="margin:0 0 8px;color:#666">Choisir l’action :</p><div class="row"><button class="btn" id="ret">↩ Réserve</button>${others.length?`<select class="field" id="dest">${others.map(z=>`<option value="${z.id}">${esc(z.name)}</option>`).join("")}</select><button class="btn primary" id="move">Déplacer le groupe</button>`:""}</div>`;
+ document.querySelector("#ret").onclick=()=>{returnGroup(id,from);closeModal()};
+ if(others.length)document.querySelector("#move").onclick=()=>{let dest=document.querySelector("#dest").value,arr=g.placed[from]||[],n=arr.filter(x=>x===id).length;g.placed[from]=arr.filter(x=>x!==id);(g.placed[dest]??=[]).push(...Array(n).fill(id));closeModal();render()};
+ document.querySelector("#modal").classList.add("show");
+}
+function openAddComponent(zoneId){
+ let body=document.querySelector("#modalBody");document.querySelector("#modalTitle").textContent="Ajouter un composant";
+ body.innerHTML=`<input class="field" id="cn" placeholder="Nom du composant"><div class="row"><input class="field" id="cq" type="number" min="1" value="10" placeholder="Quantité"><select class="field" id="ct"><option value="meeple">Meeple</option><option value="bread">Pain / ressource</option><option value="coin">Pièce / jeton rond</option></select></div><div>Couleur</div><div class="palette">${colors.map((x,i)=>`<button class="sw ${i===0?"sel":""}" data-i="${i}" style="background:${x[1]}"></button>`).join("")}</div>`;
+ body.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{body.querySelectorAll(".sw").forEach(x=>x.classList.remove("sel"));b.classList.add("sel")});
+ document.querySelector("#confirm").onclick=()=>{let name=document.querySelector("#cn").value.trim();let qty=+document.querySelector("#cq").value||1;if(!name)return;let i=+body.querySelector(".sw.sel").dataset.i;let id="c"+Date.now();game().components.push({id,name,type:document.querySelector("#ct").value,color:colors[i][1],qty});take(id,zoneId);closeModal();render()};
+ document.querySelector("#cancel").onclick=closeModal;document.querySelector("#modal").classList.add("show");
+}
+function closeModal(){document.querySelector("#modal").classList.remove("show")}
+document.querySelector("#cancel").onclick=closeModal;
+document.querySelector("#gameSelect").onchange=e=>{current=e.target.value;render()};
+document.querySelector("#reset").onclick=()=>{if(confirm("Remettre tous les composants en réserve ?")){game().placed={};render()}};
+document.querySelector("#addZone").onclick=()=>{let n=prompt("Nom de la nouvelle zone","Nouvelle zone");if(n?.trim()){game().zones.push({id:"z"+Date.now(),name:n.trim()});render()}};
+document.querySelector("#newGame").onclick=()=>{let n=prompt("Nom du jeu");if(!n?.trim())return;games[n.trim()]={components:defaults.map(x=>({...x})),zones:[{id:"z1",name:"Table principale"}],placed:{}};current=n.trim();render()};
+document.querySelector("#confirm").onclick=()=>{};
 render();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");
 </script></body></html>
