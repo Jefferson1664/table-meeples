@@ -1,2 +1,2 @@
-# Table Meeples V4 corrigée
-Correction du composant Pièce, gestion des composants et suppression complète d'un composant.
+# Table Meeples V5
+Ajout de compteurs personnalisables : points de victoire, points de vie, or, énergie, etc. Création, modification de valeur, remise à zéro et suppression.

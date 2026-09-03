@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#f3efe7">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>Table Meeples V4.1</title>
+<title>Table Meeples V5</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -46,19 +46,25 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
 .menuList{display:grid;gap:8px}.menuList .btn{text-align:left}.managerRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #ddd}
 .danger{color:#a52b2b;border-color:#d9b1b1}.footer{text-align:center;color:#777;font-size:11px;padding:2px 4px 15px}
 @media(min-width:700px){main{grid-template-columns:1fr 1.4fr}.panel:first-child{grid-column:1}.panel:nth-child(2){grid-column:2;grid-row:1/3}}
+
+.counter{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:10px;margin:9px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.counterInfo{min-width:0}.counterName{font-weight:800;font-size:14px}.counterValue{font-size:25px;font-weight:900;min-width:55px;text-align:center}
+.counterBtns{display:flex;gap:6px}.counterBtns button{width:42px;height:38px;border-radius:10px;border:1px solid #d1c9bc;background:#f8f5ef;font-size:21px;font-weight:800}
+.counterBtns .reset{width:auto;font-size:12px;padding:0 8px}
+.managerSection{margin-top:10px}.managerTitle{font-weight:800;font-size:13px;margin:12px 0 6px}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
- <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V4</span></div>
+ <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5</span></div>
  <div class="sub">Jeux personnalisés · tables multiples · composants</div>
  <div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div>
 </header>
 <main>
  <section class="panel"><h2>Réserve · toucher l’image pour ajouter</h2><div class="reserve" id="reserve"></div></section>
  <section class="panel"><h2>Tables</h2><div class="zones" id="zones"></div></section>
- <div class="footer">Les composants sont regroupés automatiquement. Touchez une image sur la table pour retirer une seule pièce.</div>
+ <section class="panel"><h2>Compteurs</h2><div id="counters"></div></section><div class="footer">Les composants sont regroupés automatiquement. Touchez une image sur la table pour retirer une seule pièce.</div>
 </main>
 </div>
 
@@ -72,8 +78,8 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
 <input id="importFile" type="file" accept="application/json" hidden>
 
 <script>
-const KEY='tableMeeplesV4Data';
-const CUR='tableMeeplesV4Current';
+const KEY='tableMeeplesV5Data';
+const CUR='tableMeeplesV5Current';
 
 const colors=[
  ['Jaune','#e6c229'],['Noir','#282828'],['Rouge','#c9473b'],['Bleu clair','#79b8d1'],['Marron','#8b5e3c'],
@@ -129,6 +135,12 @@ function render(){
    return `<div class="card">${visual(c,'add')}<div class="info"><div class="name">${esc(c.name)}</div><div class="qty">Réserve : ${available} / ${Number(c.qty)||0}</div></div></div>`;
  }).join('');
 
+ $('counters').innerHTML=g.counters.length?g.counters.map(c=>`<div class="counter">
+   <div class="counterInfo"><div class="counterName">${esc(c.name)}</div></div>
+   <div class="counterValue">${Number(c.value)||0}</div>
+   <div class="counterBtns"><button data-counter-minus="${esc(c.id)}">−</button><button data-counter-plus="${esc(c.id)}">+</button><button class="reset" data-counter-reset="${esc(c.id)}">Réinitialiser</button></div>
+  </div>`).join(''):'<div class="empty">Aucun compteur. Ouvrez le Menu pour en créer.</div>';
+
  $('zones').innerHTML=g.tables.map((t,i)=>{
    let groups=g.components.map(c=>({c,n:Number(t.counts[c.id])||0})).filter(x=>x.n>0);
    return `<div class="zone" data-zone-id="${esc(t.id)}">
@@ -145,10 +157,51 @@ function openModal(title,body,fn=null){
 }
 function closeModal(){$('modal').classList.remove('show');modalAction=null}
 
+function createCounter(){
+ openModal('Créer un compteur',
+  `<div class="hint">Exemples : Points de victoire, Points de vie, Or, Énergie…</div>
+   <input class="field" id="counterName" placeholder="Nom du compteur" autocomplete="off">
+   <input class="field" id="counterValue" type="number" value="0" placeholder="Valeur initiale">`,()=>{
+    let g=game(); if(!g)return;
+    let name=$('counterName').value.trim(); if(!name)return;
+    let value=parseInt($('counterValue').value||'0',10); if(!Number.isFinite(value))value=0;
+    g.counters.push({id:uid(),name,value}); persist(); closeModal(); render();
+  });
+}
+
+function manageCounters(){
+ let g=game(); if(!g){menu();return}
+ let body=g.counters.length?g.counters.map(c=>`<div class="managerRow">
+  <div><b>${esc(c.name)}</b><div class="qty">Valeur : ${Number(c.value)||0}</div></div>
+  <button class="small danger" data-delete-counter="${esc(c.id)}">Supprimer</button>
+ </div>`).join(''):'<p>Aucun compteur.</p>';
+ openModal('Gérer les compteurs',body,null);
+}
+
+function deleteCounter(cid){
+ let g=game(); if(!g)return;
+ let c=g.counters.find(x=>x.id===cid); if(!c)return;
+ if(!confirm(`Supprimer le compteur « ${c.name} » ?`))return;
+ g.counters=g.counters.filter(x=>x.id!==cid); persist(); render(); manageCounters();
+}
+
+function changeCounter(cid,delta){
+ let g=game(); if(!g)return;
+ let c=g.counters.find(x=>x.id===cid); if(!c)return;
+ c.value=(Number(c.value)||0)+delta; persist(); render();
+}
+function resetCounter(cid){
+ let g=game(); if(!g)return;
+ let c=g.counters.find(x=>x.id===cid); if(!c)return;
+ c.value=0; persist(); render();
+}
+
 function menu(){
  let items=[
   ['new','Créer un jeu'],
   ['component','Créer un composant'],
+  ['counter','Créer un compteur'],
+  ['manageCounters','Gérer les compteurs'],
   ['manage','Gérer les composants'],
   ['save','Sauvegarder le jeu actuel'],
   ['import','Importer un jeu']
@@ -295,6 +348,12 @@ $('reserve').onclick=e=>{
  let x=e.target.closest('[data-action="add"]');if(x)chooseTable(x.dataset.cid);
 };
 
+$('counters').onclick=e=>{
+ let x=e.target.closest('[data-counter-plus]'); if(x){changeCounter(x.dataset.counterPlus,1);return}
+ x=e.target.closest('[data-counter-minus]'); if(x){changeCounter(x.dataset.counterMinus,-1);return}
+ x=e.target.closest('[data-counter-reset]'); if(x){resetCounter(x.dataset.counterReset);return}
+};
+
 $('zones').onclick=e=>{
  let rem=e.target.closest('[data-action="remove"]');
  if(rem){
@@ -310,7 +369,9 @@ $('modalBody').onclick=e=>{
    let a=m.dataset.menu;
    if(a==='new')newGame();
    else if(a==='component')component();
+   else if(a==='counter')createCounter();
    else if(a==='manage')manageComponents();
+   else if(a==='manageCounters')manageCounters();
    else if(a==='save'){exportGame();closeModal()}
    else if(a==='import'){importGame();closeModal()}
    else if(a==='delete'){
@@ -323,6 +384,7 @@ $('modalBody').onclick=e=>{
  }
  let p=e.target.closest('[data-pick-table]');
  if(p){addToTable($('modalTitle').dataset.cid||'',p.dataset.pickTable);return}
+ let dcounter=e.target.closest('[data-delete-counter]'); if(dcounter){deleteCounter(dcounter.dataset.deleteCounter);return}
  let ec=e.target.closest('[data-edit-comp]');
  if(ec){editComponent(ec.dataset.editComp);return}
  let dc=e.target.closest('[data-delete-comp]');
