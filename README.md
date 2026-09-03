@@ -1,2 +1,2 @@
-# Table Meeples V4
-Version V4 : gestion des composants, suppression des composants et correction du composant Pièce.
+# Table Meeples V4 corrigée
+Correction du composant Pièce, gestion des composants et suppression complète d'un composant.
