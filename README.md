@@ -1,11 +1,9 @@
-# Table Meeples V6.1
+# Table Meeples V5.5
 
-PWA Table Meeples avec :
-- jeux personnalisés et tables multiples ;
-- composants et compteurs persistants ;
-- tirage aléatoire des cartes Civilization: A New Dawn avec traduction française ;
-- Chaos Bags Arkham Horror JCE : création de plusieurs sacs, modèles Facile/Standard/Difficile/Expert, ajout/retrait de jetons, quantités multiples, tirage pondéré et historique des 5 derniers tirages.
+Application PWA de gestion de composants de jeux de société, avec tables multiples, compteurs personnalisables et tirage aléatoire de cartes.
 
-Les visuels du Chaos Bag utilisent des photographies de vrais jetons. Les visuels du set de base proviennent d'une photo du set Gamegenic ; les visuels Bénédiction/Malédiction et Givre utilisent des photographies de jetons physiques correspondants.
+Le menu « Tirer une carte » utilise les 20 cartes du fichier fourni, en excluant les pages 1, 7, 13 et 19. Lors d’un tirage, la carte originale apparaît à gauche et sa traduction française dans un encadré adjacent. Sur petit écran, les deux encadrés sont empilés.
 
-Le Chaos Bag conserve le jeton tiré dans le sac immédiatement après le tirage, conformément au fonctionnement demandé pour cette application.
+
+## V6 – Chaos Bag
+Ajout de Chaos Bags Arkham Horror JCE : sacs multiples, modèles Facile/Standard/Difficile/Expert, ajout/retrait de jetons par toucher, tirage aléatoire pondéré, retour immédiat du jeton dans le sac et historique des 5 derniers tirages. Les jetons Core, Bénédiction, Malédiction et Givre sont disponibles.
