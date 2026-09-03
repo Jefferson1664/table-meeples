@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#f3efe7">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>Table Meeples V5</title>
+<title>Table Meeples V5.3</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -52,12 +52,16 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
 .counterBtns{display:flex;gap:6px}.counterBtns button{width:42px;height:38px;border-radius:10px;border:1px solid #d1c9bc;background:#f8f5ef;font-size:21px;font-weight:800}
 .counterBtns .reset{width:auto;font-size:12px;padding:0 8px}
 .managerSection{margin-top:10px}.managerTitle{font-weight:800;font-size:13px;margin:12px 0 6px}
+.cardDraw{display:grid;gap:12px;text-align:center}
+.cardDraw img{width:min(100%,360px);max-height:62vh;object-fit:contain;border:1px solid #d1c9bc;border-radius:12px;background:#fff;display:block;margin:auto}
+.cardDrawMeta{font-size:12px;color:#716b62}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header>
- <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5.2</span></div>
+ <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5.3</span></div>
  <div class="sub">Jeux personnalisés · tables multiples · composants</div>
  <div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div>
 </header>
@@ -203,6 +207,7 @@ function menu(){
  let items=[
   ['new','Créer un jeu'],
   ['component','Créer un composant'],
+  ['drawCard','Tirer une carte'],
   ['counter','Créer un compteur'],
   ['manageCounters','Gérer les compteurs'],
   ['manage','Gérer les composants'],
@@ -323,6 +328,20 @@ function removeOne(tid,cid){
  t.counts[cid]--;if(t.counts[cid]<=0)delete t.counts[cid];persist();render();
 }
 
+
+const drawCards=[{"page":2,"file":"card_02.jpg"},{"page":3,"file":"card_03.jpg"},{"page":4,"file":"card_04.jpg"},{"page":5,"file":"card_05.jpg"},{"page":6,"file":"card_06.jpg"},{"page":8,"file":"card_08.jpg"},{"page":9,"file":"card_09.jpg"},{"page":10,"file":"card_10.jpg"},{"page":11,"file":"card_11.jpg"},{"page":12,"file":"card_12.jpg"},{"page":14,"file":"card_14.jpg"},{"page":15,"file":"card_15.jpg"},{"page":16,"file":"card_16.jpg"},{"page":17,"file":"card_17.jpg"},{"page":18,"file":"card_18.jpg"},{"page":20,"file":"card_20.jpg"},{"page":21,"file":"card_21.jpg"},{"page":22,"file":"card_22.jpg"},{"page":23,"file":"card_23.jpg"},{"page":24,"file":"card_24.jpg"}];
+
+function drawCard(){
+  if(!drawCards.length)return;
+  const card=drawCards[Math.floor(Math.random()*drawCards.length)];
+  openModal('Tirage de carte',`<div class="cardDraw">
+    <img src="./cards/${card.file}" alt="Carte tirée au hasard">
+    <div class="cardDrawMeta">Carte tirée au hasard · page ${card.page} du fichier source</div>
+    <button type="button" class="btn primary" id="drawAgainBtn">Tirer une autre carte</button>
+  </div>`,null);
+  $('drawAgainBtn').onclick=e=>{e.preventDefault();drawCard()};
+}
+
 function exportGame(){
  let g=game();if(!g)return;
  let blob=new Blob([JSON.stringify(g,null,2)],{type:'application/json'});
@@ -378,6 +397,7 @@ $('modalBody').onclick=e=>{
    let a=m.dataset.menu;
    if(a==='new')newGame();
    else if(a==='component')component();
+   else if(a==='drawCard')drawCard();
    else if(a==='counter')createCounter();
    else if(a==='manage')manageComponents();
    else if(a==='manageCounters')manageCounters();
