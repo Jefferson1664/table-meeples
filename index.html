@@ -57,7 +57,7 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
 <body>
 <div class="app">
 <header>
- <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5</span></div>
+ <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5.2</span></div>
  <div class="sub">Jeux personnalisés · tables multiples · composants</div>
  <div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div>
 </header>
@@ -72,7 +72,7 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
  <div class="sheet">
   <h3 id="modalTitle"></h3>
   <div id="modalBody"></div>
-  <div class="row"><button class="btn" id="cancelBtn">Annuler</button><button class="btn primary" id="confirmBtn">Valider</button></div>
+  <div class="row"><button type="button" class="btn" id="cancelBtn">Annuler</button><button type="button" class="btn primary" id="confirmBtn">Valider</button></div>
  </div>
 </div>
 <input id="importFile" type="file" accept="application/json" hidden>
@@ -95,6 +95,8 @@ const icons=[
 let games={};
 try{games=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){games={}};
 let currentId=localStorage.getItem(CUR)||'';
+Object.values(games).forEach(normalizeGame);
+if(Object.keys(games).length) localStorage.setItem(KEY,JSON.stringify(games));
 let modalAction=null, selectedColor=colors[0][1], selectedIcon='meeple';
 
 const $=id=>document.getElementById(id);
@@ -106,6 +108,7 @@ function normalizeGame(g){
  if(!g.tables && g.placed) g.tables=g.placed;
  if(!g.tables) g.tables=[{id:uid(),name:'Table principale',counts:{}}];
  if(!g.components) g.components=[];
+ if(!g.counters) g.counters=[];
  g.tables.forEach(t=>{if(!t.counts)t.counts={}});
  delete g.placed;
  return g;
@@ -213,15 +216,15 @@ function menu(){
 function newGame(){
  openModal('Créer un jeu','<input class="field" id="gameName" placeholder="Nom du jeu" autocomplete="off">',()=>{
   let n=$('gameName').value.trim();if(!n)return;
-  currentId=uid();games[currentId]={id:currentId,name:n,components:[],tables:[{id:uid(),name:'Table principale',counts:{}}]};
+  currentId=uid();games[currentId]={id:currentId,name:n,components:[],counters:[],tables:[{id:uid(),name:'Table principale',counts:{}}]};
   persist();closeModal();render();
  });
 }
 
 function component(){
  selectedIcon='meeple';selectedColor=colors[0][1];
- let choices=icons.map(x=>`<button class="choice ${x[0]==='meeple'?'selected':''}" data-icon="${x[0]}">${x[1]}</button>`).join('');
- let pal=colors.map(x=>`<button class="sw ${x[1]===selectedColor?'selected':''}" title="${x[0]}" style="background:${x[1]}" data-color="${x[1]}"></button>`).join('');
+ let choices=icons.map(x=>`<button type="button" class="choice ${x[0]==='meeple'?'selected':''}" data-icon="${x[0]}">${x[1]}</button>`).join('');
+ let pal=colors.map(x=>`<button type="button" class="sw ${x[1]===selectedColor?'selected':''}" title="${x[0]}" style="background:${x[1]}" data-color="${x[1]}"></button>`).join('');
  openModal('Créer un composant',
   `<div class="hint">Type de composant</div><div class="grid">${choices}</div>
    <div class="hint">Couleur · 15 couleurs disponibles</div><div class="palette">${pal}</div>
@@ -262,8 +265,8 @@ function manageComponents(){
 function editComponent(cid){
  let g=game(),c=g?.components.find(x=>x.id===cid);if(!c)return;
  selectedIcon=c.type;selectedColor=c.color||colors[0][1];
- let choices=icons.map(x=>`<button class="choice ${x[0]===selectedIcon?'selected':''}" data-icon="${x[0]}">${x[1]}</button>`).join('');
- let pal=colors.map(x=>`<button class="sw ${x[1]===selectedColor?'selected':''}" title="${x[0]}" style="background:${x[1]}" data-color="${x[1]}"></button>`).join('');
+ let choices=icons.map(x=>`<button type="button" class="choice ${x[0]===selectedIcon?'selected':''}" data-icon="${x[0]}">${x[1]}</button>`).join('');
+ let pal=colors.map(x=>`<button type="button" class="sw ${x[1]===selectedColor?'selected':''}" title="${x[0]}" style="background:${x[1]}" data-color="${x[1]}"></button>`).join('');
  openModal('Modifier le composant',
   `<div class="hint">Type</div><div class="grid">${choices}</div><div class="hint">Couleur</div><div class="palette">${pal}</div>
    <input class="field" id="compName" value="${esc(c.name)}"><input class="field" id="compQty" type="number" min="1" value="${Number(c.qty)||1}">`,()=>{
@@ -312,7 +315,7 @@ function addToTable(cid,tid){
 function chooseTable(cid){
  let g=game();if(!g)return;
  if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}
- openModal('Sur quelle table ajouter ?',`<div class="menuList">${g.tables.map(t=>`<button class="btn" data-pick-table="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>`,null);
+ openModal('Sur quelle table ajouter ?',`<div class="menuList">${g.tables.map(t=>`<button type="button" class="btn" data-pick-table="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>`,null);
 }
 
 function removeOne(tid,cid){
@@ -340,9 +343,15 @@ $('importFile').onchange=e=>{
 };
 
 $('gameSelect').onchange=e=>{currentId=e.target.value;persist();render()};
-$('menuBtn').onclick=menu;$('tableBtn').onclick=addTable;$('cancelBtn').onclick=closeModal;
-$('confirmBtn').onclick=()=>{if(modalAction)modalAction()};
-$('modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
+$('menuBtn').addEventListener('click',e=>{e.preventDefault();menu()});
+$('tableBtn').addEventListener('click',e=>{e.preventDefault();addTable()});
+$('cancelBtn').addEventListener('click',e=>{e.preventDefault();closeModal()});
+$('confirmBtn').addEventListener('click',e=>{
+  e.preventDefault();
+  const action=modalAction;
+  if(typeof action==='function') action();
+});
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
 
 $('reserve').onclick=e=>{
  let x=e.target.closest('[data-action="add"]');if(x)chooseTable(x.dataset.cid);
@@ -396,7 +405,7 @@ const originalChooseTable=chooseTable;
 chooseTable=function(cid){
  let g=game();if(!g)return;
  if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}
- openModal('Sur quelle table ajouter ?',`<div class="menuList">${g.tables.map(t=>`<button class="btn" data-pick-table="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>`,null);
+ openModal('Sur quelle table ajouter ?',`<div class="menuList">${g.tables.map(t=>`<button type="button" class="btn" data-pick-table="${esc(t.id)}">${esc(t.name)}</button>`).join('')}</div>`,null);
  $('modalTitle').dataset.cid=cid;
 };
 render();
