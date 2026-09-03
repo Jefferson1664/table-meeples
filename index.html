@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#f3efe7">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>Table Meeples V5.5</title>
+<title>Table Meeples V6</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -63,13 +63,15 @@ main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px sol
 .cardDrawMeta{font-size:12px;color:#716b62;text-align:center}
 @media(max-width:700px){.cardDrawGrid{grid-template-columns:1fr}.cardDrawTranslation{max-height:none}}
 
+
+.chaosGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:9px}.chaosTile{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:7px 5px;text-align:center;position:relative;min-height:76px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.chaosTile:active{transform:scale(.98)}.chaosIcon{width:50px;height:50px;margin:0 auto 3px;display:block}.chaosQty{font-size:12px;font-weight:800;color:#5d584f}.chaosBadge{position:absolute;right:5px;top:5px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:#2f2d29;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}.bagSummary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#f5f1e8;border-bottom:1px solid #ded8ce}.bagName{font-weight:850}.bagCount{font-size:12px;color:#716b62}.chaosBagActions{display:flex;gap:7px;flex-wrap:wrap;padding:9px}.chaosDraw{display:grid;gap:14px;text-align:center}.drawToken{width:min(210px,58vw);height:min(210px,58vw);margin:0 auto;display:block}.drawResult{font-size:13px;color:#716b62}.drawResult strong{display:block;font-size:18px;color:#292722;margin-bottom:3px}.history{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding-top:4px}.history img{width:44px;height:44px}@media(max-width:430px){.chaosGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.chaosTile{min-height:72px}.chaosIcon{width:46px;height:46px}}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
- <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V5.5</span></div>
- <div class="sub">Jeux personnalisés · tables multiples · composants</div>
+ <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V6</span></div>
+ <div class="sub">Jeux personnalisés · tables multiples · composants · Chaos Bag</div>
  <div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div>
 </header>
 <main>
@@ -109,6 +111,32 @@ let currentId=localStorage.getItem(CUR)||'';
 Object.values(games).forEach(normalizeGame);
 if(Object.keys(games).length) localStorage.setItem(KEY,JSON.stringify(games));
 let modalAction=null, selectedColor=colors[0][1], selectedIcon='meeple';
+let chaosBags={};
+let currentChaosBagId=localStorage.getItem('tableMeeplesCurrentChaosBag')||'';
+try{chaosBags=JSON.parse(localStorage.getItem('tableMeeplesChaosBags')||'{}')||{}}catch(e){chaosBags={}}
+const chaosTypes=[
+ {id:'p1',label:'+1',file:'p1.svg'},{id:'0',label:'0',file:'0.svg'},{id:'m1',label:'−1',file:'m1.svg'},{id:'m2',label:'−2',file:'m2.svg'},
+ {id:'m3',label:'−3',file:'m3.svg'},{id:'m4',label:'−4',file:'m4.svg'},{id:'m5',label:'−5',file:'m5.svg'},{id:'m6',label:'−6',file:'m6.svg'},
+ {id:'m7',label:'−7',file:'m7.svg'},{id:'m8',label:'−8',file:'m8.svg'},{id:'skull',label:'Crâne',file:'skull.svg'},
+ {id:'cultist',label:'Cultiste',file:'cultist.svg'},{id:'tablet',label:'Tablette',file:'tablet.svg'},{id:'elder',label:'Être ancien',file:'elder.svg'},
+ {id:'autofail',label:'Échec automatique',file:'autofail.svg'},{id:'elder_sign',label:'Signe des Anciens',file:'elder_sign.svg'},
+ {id:'bless',label:'Bénédiction',file:'bless.svg'},{id:'curse',label:'Malédiction',file:'curse.svg'},{id:'frost',label:'Givre',file:'frost.svg'}
+];
+const chaosPresets={
+ 'vide':[],
+ 'facile':['p1','p1','0','0','0','m1','m1','m1','m2','m2','skull','skull','cultist','tablet','elder','elder_sign'],
+ 'standard':['p1','0','0','m1','m1','m1','m2','m2','m3','m4','skull','skull','cultist','tablet','elder','elder_sign'],
+ 'difficile':['0','0','0','m1','m1','m2','m2','m3','m3','m4','m5','skull','skull','cultist','tablet','elder_sign'],
+ 'expert':['0','m1','m1','m2','m2','m3','m3','m4','m4','m5','m6','m8','skull','skull','cultist','tablet','elder_sign']
+};
+function persistChaos(){localStorage.setItem('tableMeeplesChaosBags',JSON.stringify(chaosBags));localStorage.setItem('tableMeeplesCurrentChaosBag',currentChaosBagId)}
+function currentChaos(){return chaosBags[currentChaosBagId]||null}
+function ensureChaosBag(b){if(!b.tokens)b.tokens={};if(!b.history)b.history=[];return b}
+function chaosTotal(b){return Object.values(b?.tokens||{}).reduce((n,v)=>n+(Number(v)||0),0)}
+function chaosIcon(id,extra=''){let t=chaosTypes.find(x=>x.id===id);return t?`<img class="chaosIcon ${extra}" src="./chaos/${t.file}" alt="${esc(t.label)}">`:''}
+function presetTokens(name){let out={};(chaosPresets[name]||[]).forEach(id=>out[id]=(out[id]||0)+1);return out}
+Object.values(chaosBags).forEach(ensureChaosBag);if(!currentChaosBagId||!chaosBags[currentChaosBagId]){let ids=Object.keys(chaosBags);currentChaosBagId=ids[0]||'';persistChaos()}
+
 
 const $=id=>document.getElementById(id);
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
@@ -215,6 +243,7 @@ function menu(){
   ['new','Créer un jeu'],
   ['component','Créer un composant'],
   ['drawCard','Tirer une carte'],
+  ['chaosBag','Chaos Bag'],
   ['counter','Créer un compteur'],
   ['manageCounters','Gérer les compteurs'],
   ['manage','Gérer les composants'],
@@ -357,6 +386,14 @@ function drawCard(){
   $('drawAgainBtn').onclick=e=>{e.preventDefault();drawCard()};
 }
 
+
+function createChaosBag(){openModal('Créer un Chaos Bag',`<input class="field" id="chaosBagName" placeholder="Nom du sac" autocomplete="off"><div class="hint">Choisissez un modèle de départ. Le contenu restera entièrement modifiable.</div><select class="field" id="chaosPreset"><option value="vide">Sac vide</option><option value="facile">Facile</option><option value="standard" selected>Standard</option><option value="difficile">Difficile</option><option value="expert">Expert</option></select>`,()=>{let name=$('chaosBagName').value.trim();if(!name)return;let id=uid(),preset=$('chaosPreset').value;chaosBags[id]={id,name,tokens:presetTokens(preset),history:[]};currentChaosBagId=id;persistChaos();closeModal();manageChaosBags()})}
+function manageChaosBags(){let bags=Object.values(chaosBags);let body=`<div class="hint">Sac actif : choisissez un sac puis modifiez son contenu.</div>`+bags.map(b=>`<div class="managerRow"><div style="min-width:0"><b>${esc(b.name)}</b><div class="qty">${chaosTotal(b)} jeton${chaosTotal(b)>1?'s':''}${b.id===currentChaosBagId?' · actif':''}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="small ${b.id===currentChaosBagId?'primary':''}" data-chaos-open="${esc(b.id)}">${b.id===currentChaosBagId?'Modifier':'Choisir'}</button><button type="button" class="small danger" data-chaos-delete="${esc(b.id)}">Supprimer</button></div></div>`).join('');if(!bags.length)body+='<p>Aucun Chaos Bag. Créez-en un.</p>';body+=`<div class="row"><button type="button" class="btn primary" id="newChaosBagBtn">+ Créer un sac</button></div>`;openModal('Chaos Bags',body,null)}
+function editChaosBag(id=currentChaosBagId){let b=chaosBags[id];if(!b)return;currentChaosBagId=id;persistChaos();let total=chaosTotal(b);let body=`<div class="bagSummary"><div><div class="bagName">${esc(b.name)}</div><div class="bagCount">${total} jeton${total>1?'s':''}</div></div><button type="button" class="small" id="renameChaosBtn">Renommer</button></div><div class="hint">Touchez un jeton pour ajouter un exemplaire. Les jetons présents sont regroupés avec leur quantité.</div><div class="chaosGrid">${chaosTypes.map(t=>{let n=Number(b.tokens[t.id])||0;return `<button type="button" class="chaosTile" data-chaos-add="${t.id}" aria-label="Ajouter ${esc(t.label)}">${chaosIcon(t.id)}${n?`<span class="chaosBadge">${n}</span>`:''}<div class="chaosQty">${n?'× '+n:'+'}</div></button>`}).join('')}</div><div class="panel" style="margin:0 9px 9px"><h2>Jetons dans le sac · toucher pour retirer 1</h2><div class="chaosGrid">${chaosTypes.filter(t=>(Number(b.tokens[t.id])||0)>0).map(t=>`<button type="button" class="chaosTile" data-chaos-remove="${t.id}" aria-label="Retirer un ${esc(t.label)}">${chaosIcon(t.id)}<span class="chaosBadge">${Number(b.tokens[t.id])||0}</span></button>`).join('')||'<div class="empty" style="grid-column:1/-1">Sac vide</div>'}</div></div><div class="chaosBagActions"><button type="button" class="btn primary" id="drawChaosBtn">Tirer un jeton</button><button type="button" class="btn" id="chaosBackBtn">Retour</button></div>`;openModal('Construire le Chaos Bag',body,null)}
+function renameChaosBag(){let b=currentChaos();if(!b)return;openModal('Renommer le Chaos Bag',`<input class="field" id="chaosRename" value="${esc(b.name)}" autocomplete="off">`,()=>{let n=$('chaosRename').value.trim();if(!n)return;b.name=n;persistChaos();editChaosBag()})}
+function drawChaosToken(){let b=currentChaos();if(!b||chaosTotal(b)<=0){alert('Le Chaos Bag est vide.');return}let pool=[];Object.entries(b.tokens).forEach(([id,n])=>{for(let i=0;i<(Number(n)||0);i++)pool.push(id)});let id=pool[Math.floor(Math.random()*pool.length)];let t=chaosTypes.find(x=>x.id===id);b.history=[id,...(b.history||[])].slice(0,5);persistChaos();let hist=(b.history||[]).map(x=>chaosIcon(x)).join('');openModal('Tirage du Chaos Bag',`<div class="chaosDraw">${chaosIcon(id,'drawToken')}<div class="drawResult"><strong>${esc(t?.label||'Jeton')}</strong>${chaosTotal(b)} jetons dans le sac</div><div class="hint">Le jeton revient immédiatement dans le sac.</div><div class="history" aria-label="Derniers tirages">${hist}</div><button type="button" class="btn primary" id="drawChaosAgainBtn">Tirer à nouveau</button><button type="button" class="btn" id="editChaosAfterDrawBtn">Modifier le sac</button></div>`,null)}
+function changeChaos(id,delta){let b=currentChaos();if(!b)return;let n=(Number(b.tokens[id])||0)+delta;if(n<=0)delete b.tokens[id];else b.tokens[id]=n;persistChaos();editChaosBag()}
+
 function exportGame(){
  let g=game();if(!g)return;
  let blob=new Blob([JSON.stringify(g,null,2)],{type:'application/json'});
@@ -413,6 +450,7 @@ $('modalBody').onclick=e=>{
    if(a==='new')newGame();
    else if(a==='component')component();
    else if(a==='drawCard')drawCard();
+   else if(a==='chaosBag')manageChaosBags();
    else if(a==='counter')createCounter();
    else if(a==='manage')manageComponents();
    else if(a==='manageCounters')manageCounters();
@@ -420,19 +458,24 @@ $('modalBody').onclick=e=>{
    else if(a==='import'){importGame();closeModal()}
    else if(a==='delete'){
      let g=game();
-     if(g&&confirm(`Supprimer définitivement le jeu « ${g.name} » ?`)){
-       delete games[currentId];currentId=Object.keys(games)[0]||'';persist();closeModal();render();
-     }
+     if(g&&confirm(`Supprimer définitivement le jeu « ${g.name} » ?`)){delete games[currentId];currentId=Object.keys(games)[0]||'';persist();closeModal();render()}
    }
    return;
  }
  let p=e.target.closest('[data-pick-table]');
  if(p){addToTable($('modalTitle').dataset.cid||'',p.dataset.pickTable);return}
- let dcounter=e.target.closest('[data-delete-counter]'); if(dcounter){deleteCounter(dcounter.dataset.deleteCounter);return}
- let ec=e.target.closest('[data-edit-comp]');
- if(ec){editComponent(ec.dataset.editComp);return}
- let dc=e.target.closest('[data-delete-comp]');
- if(dc){deleteComponent(dc.dataset.deleteComp);return}
+ let dcounter=e.target.closest('[data-delete-counter]');if(dcounter){deleteCounter(dcounter.dataset.deleteCounter);return}
+ let ec=e.target.closest('[data-edit-comp]');if(ec){editComponent(ec.dataset.editComp);return}
+ let dc=e.target.closest('[data-delete-comp]');if(dc){deleteComponent(dc.dataset.deleteComp);return}
+ let ca=e.target.closest('[data-chaos-open]');if(ca){editChaosBag(ca.dataset.chaosOpen);return}
+ let cd=e.target.closest('[data-chaos-delete]');if(cd){let bag=chaosBags[cd.dataset.chaosDelete];if(bag&&confirm(`Supprimer le Chaos Bag « ${bag.name} » ?`)){delete chaosBags[bag.id];if(currentChaosBagId===bag.id)currentChaosBagId=Object.keys(chaosBags)[0]||'';persistChaos();manageChaosBags()}return}
+ let add=e.target.closest('[data-chaos-add]');if(add){changeChaos(add.dataset.chaosAdd,1);return}
+ let rem=e.target.closest('[data-chaos-remove]');if(rem){changeChaos(rem.dataset.chaosRemove,-1);return}
+ if(e.target.id==='newChaosBagBtn'){createChaosBag();return}
+ if(e.target.id==='renameChaosBtn'){renameChaosBag();return}
+ if(e.target.id==='drawChaosBtn'||e.target.id==='drawChaosAgainBtn'){drawChaosToken();return}
+ if(e.target.id==='editChaosAfterDrawBtn'){editChaosBag();return}
+ if(e.target.id==='chaosBackBtn'){manageChaosBags();return}
 };
 
 // Keep the component id for the table-selection modal without relying on global DOM hacks.
