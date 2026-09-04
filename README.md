@@ -1,20 +1,9 @@
-# Arkham Horror LCG — English / Français
+# Arkham Bilingual V4
 
-Site statique destiné à GitHub Pages.
+Version corrigée : les cartes sont filtrées par `encounter_name` (nom réel du set) et non par `encounter_code`.
 
-## Installation
+Pour chaque scénario, la colonne de gauche affiche les encounter sets utilisés, et les cartes sont affichées anglais/français côte à côte.
 
-1. Créer un dépôt GitHub, par exemple `arkham-bilingual`.
-2. Décompresser ce dossier et envoyer `index.html`, `css/` et `js/` à la racine du dépôt.
-3. Dans GitHub : Settings → Pages → Deploy from branch → `main` / root.
-4. Ouvrir l'URL GitHub Pages.
+Le premier scénario, **The Gathering**, est configuré avec ses 6 sets : The Gathering, Rats, Ghouls, Striking Fear, Ancient Evils et Chilling Cold. Cette logique évite le problème « aucune carte trouvée » causé par l'utilisation d'identifiants qui ne correspondent pas aux noms des sets.
 
-## Fonctionnement
-
-- Données cartes : API publique ArkhamDB.
-- Traductions françaises : API française ArkhamDB.
-- Classement : campagne → scénario → encounter sets → cartes.
-- Anglais à gauche et français à droite.
-- Recherche globale et boutons EN / FR.
-
-Les textes et illustrations des cartes restent la propriété de leurs ayants droit. Ce projet est un outil personnel/non officiel et n'est pas affilié à Fantasy Flight Games.
+Déploiement : déposer le contenu de `arkham-v2/` dans un dépôt GitHub puis activer GitHub Pages.
