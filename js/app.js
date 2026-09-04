@@ -1,11 +1,11 @@
-const API='https://arkhamdb.com/api/public';
 const GH='https://raw.githubusercontent.com/Kamalisk/arkhamdb-json-data/master';
 const MAP_XLSX='https://raw.githubusercontent.com/erikoliver/arkham-lcg-tools/master/Scenario%20Mapping.xlsx';
+const CYCLES=['core','dwl','ptc','tfa','tcu','tde','tic','eoe','tsk','fhv','tdc','core_ch2'];
 let all=[], selectedScenario=null, langMode='both', frMap=new Map(), scenarioSets=new Map(), setNames=new Map();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=v=>String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
-async function get(url,options={}){const r=await fetch(url,{...options,cache:'no-store'});if(!r.ok)throw Error(`${r.status} ${url}`);return r.json()}
+async function get(url){const r=await fetch(url,{cache:'force-cache'});if(!r.ok)throw Error(`${r.status} ${url}`);return r.json()}
 const campaigns=[
 {name:'The Night of the Zealot',fr:'La Nuit de la Zélatrice',scenarios:[['The Gathering','torch'],['The Midnight Masks','arkham'],['The Devourer Below','tentacles']]},
 {name:'The Dunwich Legacy',fr:'L’Héritage de Dunwich',scenarios:[['Extracurricular Activity','extracurricular_activity'],['The House Always Wins','the_house_always_wins'],['The Miskatonic Museum','the_miskatonic_museum'],['The Essex County Express','essex_county_express'],['Blood on the Altar','blood_on_the_altar'],['Undimensioned and Unseen','undimensioned_and_unseen'],['Where Doom Awaits','where_doom_awaits'],['Lost in Time and Space','lost_in_time_and_space']]},
@@ -19,49 +19,92 @@ const campaigns=[
 {name:'The Feast of Hemlock Vale',fr:'La Fête de Hemlock Vale',scenarios:[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Longest Night','the_longest_night'],['The Thing in the Woods','the_thing_in_the_woods'],['The Dying Light','the_dying_light']]},
 {name:'The Drowned City',fr:'La Cité engloutie',scenarios:[['Dead Heat','dead_heat_tdc'],['The Apiary','the_apiary'],['The Grand Voyage','the_grand_voyage'],['The Tides of Fate','the_tides_of_fate'],['The Devil in the Flesh','the_devil_in_the_flesh'],['The Ennui','the_ennui'],['The Obsidian Gates','the_obsidian_gates'],['The Depths of Yoth','the_depths_of_yoth_tdc']]}
 ];
+
 async function init(){
- $('tree').innerHTML='<div class="empty">Chargement des cartes et de la correspondance des scénarios…</div>';
- try{const [en]=await Promise.all([get(API+'/cards/?encounter=1'),loadScenarioMapping()]);all=Array.isArray(en)?en:[];indexSetNames();buildTree();bindGlobal();
-   if(!all.length)throw Error('ArkhamDB n’a renvoyé aucune carte.');
- }catch(e){$('tree').innerHTML=`<div class="empty error"><b>Impossible de charger les données</b><br><br>${esc(e.message)}<br><br>Recharge la page. Si le problème persiste, vérifie la connexion à ArkhamDB.</div>`;console.error(e)}
+ $('tree').innerHTML='<div class="empty">Chargement des données de cartes…</div>';
+ try{
+   await loadCardsFromRepository();
+   await loadScenarioMapping();
+   indexSetNames();
+   buildTree(); bindGlobal();
+   if(!all.length) throw Error('Aucune carte de scénario n’a été chargée.');
+ }catch(e){console.error(e);$('tree').innerHTML=`<div class="empty error"><b>Impossible de charger les données</b><br><br>${esc(e.message)}<br><br>Recharge la page. Le site utilise les données publiques du dépôt ArkhamDB.</div>`}
 }
+
+async function loadCardsFromRepository(){
+ const packs=await get(`${GH}/packs.json`);
+ const wanted=packs.filter(p=>CYCLES.includes(p.cycle_code)&&p.code);
+ const chunks=await Promise.all(wanted.map(async p=>{
+   const url=`${GH}/pack/${encodeURIComponent(p.code)}/${encodeURIComponent(p.code)}_encounter.json`;
+   try{const data=await get(url);return Array.isArray(data)?data:[]}catch(e){return []}
+ }));
+ all=chunks.flat();
+ // Deduplicate by card code while keeping the first complete record.
+ const byCode=new Map(); for(const c of all){if(c&&c.code&&!byCode.has(c.code))byCode.set(c.code,c)} all=[...byCode.values()];
+}
+
 async function loadScenarioMapping(){
  try{
-  const r=await fetch(MAP_XLSX,{cache:'no-store'}); if(!r.ok)throw Error('mapping unavailable');
+  const r=await fetch(MAP_XLSX,{cache:'force-cache'}); if(!r.ok)throw Error('mapping unavailable');
+  if(typeof XLSX==='undefined')throw Error('SheetJS unavailable');
   const buf=await r.arrayBuffer(); const wb=XLSX.read(buf,{type:'array'});
-  wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});
-    for(const row of rows){const vals=row.map(v=>String(v).trim()).filter(Boolean);if(vals.length<2)continue;
-      const scenario=vals[0]; const sets=vals.slice(1).filter(v=>norm(v)!==norm(scenario));
-      if(scenario && sets.length) scenarioSets.set(norm(scenario),sets);
+  const known=new Map(campaigns.flatMap(c=>c.scenarios.map(s=>[norm(s[0]),s[0]])));
+  for(const sn of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});
+   // Accept both row-oriented and column-oriented mapping sheets.
+   for(let r=0;r<rows.length;r++){
+    const row=rows[r].map(v=>String(v??'').trim());
+    for(let col=0;col<row.length;col++){
+      const key=norm(row[col]); if(!known.has(key))continue;
+      const vals=[];
+      for(const v of row) if(v && norm(v)!==key) vals.push(v);
+      for(let rr=0;rr<rows.length;rr++){const v=String(rows[rr]?.[col]??'').trim();if(v&&rr!==r)vals.push(v)}
+      const cleaned=[...new Set(vals.filter(v=>norm(v)!==key))];
+      if(cleaned.length)scenarioSets.set(key,cleaned);
     }
-  });
- }catch(e){console.warn('Scenario Mapping.xlsx indisponible; fallback aux encounter codes',e)}
+   }
+  }
+ }catch(e){console.warn('Scenario Mapping indisponible; le scénario lui-même sera conservé.',e)}
 }
-function indexSetNames(){for(const c of all){if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)}
- // Make the fallback resilient: the scenario's own encounter code is always included.
+
+function indexSetNames(){for(const c of all){if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)}}
+function buildTree(){
+ const root=$('tree');root.innerHTML='';
+ campaigns.forEach(c=>{
+   const box=document.createElement('div');box.className='campaign';
+   const head=document.createElement('button');head.className='campHead';head.type='button';head.setAttribute('aria-expanded','true');
+   head.innerHTML=`<span class="arrow">▾</span><span class="campName">${esc(c.name)}</span><small>${esc(c.fr)}</small>`;
+   const list=document.createElement('div');list.className='scenarios';
+   c.scenarios.forEach(s=>{const b=document.createElement('button');b.className='scenario';b.type='button';b.innerHTML=`<span>${esc(s[0])}</span>`;b.onclick=()=>selectScenario(s,b,c);list.appendChild(b)});
+   head.onclick=()=>{const open=!list.hidden;list.hidden=open;head.setAttribute('aria-expanded',String(!open));head.querySelector('.arrow').textContent=open?'▸':'▾';};
+   box.append(head,list);root.appendChild(box);
+ });
 }
-function buildTree(){const root=$('tree');root.innerHTML='';campaigns.forEach(c=>{const box=document.createElement('div');box.className='campaign';box.innerHTML=`<button class="campHead" aria-expanded="true"><span class="arrow">▾</span><span class="campName">${esc(c.name)}</span><small>${esc(c.fr)}</small></button><div class="scenarios"></div>`;const list=box.querySelector('.scenarios');c.scenarios.forEach(s=>{const b=document.createElement('button');b.className='scenario';b.innerHTML=`<span>${esc(s[0])}</span>`;b.onclick=()=>selectScenario(s,b,c);list.appendChild(b)});box.querySelector('.campHead').onclick=()=>{const open=list.hidden===false;list.hidden=open;box.querySelector('.campHead').setAttribute('aria-expanded',String(!open));box.querySelector('.arrow').textContent=open?'▸':'▾';};root.appendChild(box)})}
 function selectScenario(s,el,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));el.classList.add('active');selectedScenario={name:s[0],code:s[1],campaign:c.name};renderScenario()}
-function bindGlobal(){$('search').addEventListener('input',()=>renderScenario());$('hideFr').onclick=()=>{langMode='en';renderScenario()};$('hideEn').onclick=()=>{langMode='fr';renderScenario()};$('both').onclick=()=>{langMode='both';renderScenario()};$('reset').onclick=()=>{$('search').value='';langMode='both';renderScenario()}}
-function getScenarioSetCodes(){const s=selectedScenario;const raw=scenarioSets.get(norm(s.name))||[];const codes=[];
- // mapping rows may contain names or codes; resolve both.
- for(const value of raw){const n=norm(value);for(const [code,name] of setNames){if(norm(code)===n||norm(name)===n){codes.push(code);break}}if(!codes.includes(value)&&all.some(c=>c.encounter_code===value))codes.push(value)}
+function bindGlobal(){$('search').addEventListener('input',renderScenario);$('hideFr').onclick=()=>{langMode='en';renderScenario()};$('hideEn').onclick=()=>{langMode='fr';renderScenario()};$('both').onclick=()=>{langMode='both';renderScenario()};$('reset').onclick=()=>{$('search').value='';langMode='both';renderScenario()}}
+
+function getScenarioSetCodes(){
+ const s=selectedScenario;const raw=scenarioSets.get(norm(s.name))||[];const codes=[];
+ const lookup=new Map();for(const c of all){if(c.encounter_code){lookup.set(norm(c.encounter_code),c.encounter_code);if(c.encounter_name)lookup.set(norm(c.encounter_name),c.encounter_code)}}
+ for(const value of raw){const code=lookup.get(norm(value));if(code&&!codes.includes(code))codes.push(code)}
+ // Always include the scenario's own set, even if the external mapping is unavailable.
  if(!codes.includes(s.code))codes.unshift(s.code);
- // Some mapping files contain only the set name of the scenario; retain its code and avoid duplicates.
- return [...new Set(codes)];
+ return codes;
 }
-function cardSet(c){return c.encounter_code||''}
 async function loadFrenchFor(cards){
  const packs=[...new Set(cards.map(c=>String(c.pack_code||'').toLowerCase()).filter(Boolean))];
- await Promise.all(packs.map(async pack=>{const url=`${GH}/translations/fr/pack/${encodeURIComponent(pack)}/${encodeURIComponent(pack)}_encounter.json`;try{const data=await get(url);if(Array.isArray(data))data.forEach(x=>frMap.set(x.code,x));}catch(e){}}));
+ await Promise.all(packs.map(async pack=>{const url=`${GH}/translations/fr/pack/${encodeURIComponent(pack)}/${encodeURIComponent(pack)}_encounter.json`;try{const data=await get(url);if(Array.isArray(data))data.forEach(x=>frMap.set(x.code,x))}catch(e){}}));
 }
-async function renderScenario(){if(!selectedScenario)return;const q=norm($('search').value);const codes=getScenarioSetCodes();let cards=all.filter(c=>codes.includes(cardSet(c)));
- cards=cards.filter(c=>!q||norm(`${c.name} ${c.text||''} ${c.encounter_name||''} ${c.code}`).includes(q));
- $('welcome').style.display='none';$('cards').innerHTML=`<div class="scenarioHead"><div><div class="eyebrow">${esc(selectedScenario.campaign)}</div><h2>${esc(selectedScenario.name)}</h2><div class="sub">${codes.length} encounter sets · chargement des traductions…</div></div><div class="count">${cards.length} cartes</div></div><div class="empty">Chargement…</div>`;
- await loadFrenchFor(cards); if(q)cards=cards.filter(c=>norm(`${c.name} ${c.text||''} ${c.encounter_name||''} ${frMap.get(c.code)?.name||''} ${frMap.get(c.code)?.text||''} ${c.code}`).includes(q));
- const groups=[];for(const code of codes){const gc=cards.filter(c=>cardSet(c)===code);if(gc.length)groups.push({code,name:setNames.get(code)||gc[0].encounter_name||code,cards:gc.sort((a,b)=>(a.position||0)-(b.position||0))});}
+async function renderScenario(){
+ if(!selectedScenario)return;
+ const q=norm($('search').value);const codes=getScenarioSetCodes();let cards=all.filter(c=>codes.includes(c.encounter_code));
+ $('welcome').style.display='none';
+ $('cards').innerHTML=`<div class="scenarioHead"><div><div class="eyebrow">${esc(selectedScenario.campaign)}</div><h2>${esc(selectedScenario.name)}</h2><div class="sub">${codes.length} encounter sets · recherche en cours…</div></div><div class="count">${cards.length} cartes</div></div><div class="empty">Chargement des traductions…</div>`;
+ await loadFrenchFor(cards);
+ cards=cards.filter(c=>!q||norm(`${c.name} ${c.text||''} ${c.encounter_name||''} ${frMap.get(c.code)?.name||''} ${frMap.get(c.code)?.text||''} ${c.code}`).includes(q));
+ const groups=[];for(const code of codes){const gc=cards.filter(c=>c.encounter_code===code);if(gc.length)groups.push({code,name:setNames.get(code)||gc[0].encounter_name||code,cards:gc.sort((a,b)=>(a.position||0)-(b.position||0))});}
  const missing=codes.filter(code=>!groups.some(g=>g.code===code));
- $('cards').innerHTML=`<div class="scenarioHead"><div><div class="eyebrow">${esc(selectedScenario.campaign)}</div><h2>${esc(selectedScenario.name)}</h2><div class="sub">${groups.length} encounter sets · toutes les cartes disponibles pour ces sets</div></div><div class="count">${cards.length} cartes</div></div>${missing.length?`<div class="warning">Sets demandés mais absents des données chargées : ${missing.map(x=>esc(setNames.get(x)||x)).join(', ')}</div>`:''}${groups.map(g=>`<div class="set"><div class="setHead"><h3>${esc(g.name)}</h3><span>${g.cards.length}</span></div><div class="paired">${g.cards.map(pair).join('')}</div></div>`).join('')||'<div class="empty">Aucune carte trouvée. Consulte le diagnostic ci-dessous.</div>'}<details class="diag"><summary>Diagnostic</summary><p>Encounter codes recherchés : <code>${esc(codes.join(', '))}</code></p><p>Cartes de scénario chargées : ${all.length}</p><p>Sets trouvés : ${groups.length}</p></details>`;
+ $('cards').innerHTML=`<div class="scenarioHead"><div><div class="eyebrow">${esc(selectedScenario.campaign)}</div><h2>${esc(selectedScenario.name)}</h2><div class="sub">${groups.length} encounter sets · toutes les cartes de ces sets</div></div><div class="count">${cards.length} cartes</div></div>${missing.length?`<div class="warning">Sets demandés mais absents des données chargées : ${missing.map(x=>esc(setNames.get(x)||x)).join(', ')}</div>`:''}${groups.map(g=>`<div class="set"><div class="setHead"><h3>${esc(g.name)}</h3><span>${g.cards.length}</span></div><div class="paired">${g.cards.map(pair).join('')}</div></div>`).join('')||'<div class="empty">Aucune carte trouvée. Ouvre le diagnostic ci-dessous.</div>'}<details class="diag"><summary>Diagnostic</summary><p>Encounter codes recherchés : <code>${esc(codes.join(', '))}</code></p><p>Cartes de scénario chargées : ${all.length}</p><p>Cartes correspondant aux sets : ${cards.length}</p><p>Sets trouvés : ${groups.length}</p></details>`;
 }
 function pair(c){const fr=frMap.get(c.code);const ei=image(c),fi=image(fr);return `<article class="pair ${langMode}"><div class="side en">${langMode!=='fr'?cardFace(c,ei,'English'):''}</div><div class="side fr">${langMode!=='en'?cardFace(fr||{name:'Traduction française indisponible',code:c.code},fi||ei,'Français'):''}</div></article>`}
 function cardFace(c,src,label){return `<div class="lang">${label}</div><div class="card">${src?`<img loading="lazy" src="${esc(src)}" alt="${esc(c.name||'')}">`:'<div class="noimg">Image indisponible</div>'}<div class="meta"><b>${esc(c.name||'')}</b><span>${esc(c.code||'')}</span></div></div>`}
