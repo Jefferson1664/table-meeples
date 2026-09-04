@@ -1,4 +1,4 @@
-# Arkham Bilingual — Version 0.8
+# Arkham Bilingual — Version 1.0
 
 Site statique pour consulter les cartes de scénario d'Arkham Horror: The Card Game en anglais et en français.
 
