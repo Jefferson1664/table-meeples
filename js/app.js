@@ -1,6 +1,4 @@
 const GH='https://raw.githubusercontent.com/Kamalisk/arkhamdb-json-data/master';
-const VERSION='1.1';
-const CARD_CDN='https://assets.arkhamhorror.app/img/arkham';
 const MAP_XLSX='https://raw.githubusercontent.com/erikoliver/arkham-lcg-tools/master/Scenario%20Mapping.xlsx';
 const CYCLES=['core','dwl','ptc','tfa','tcu','tde','tic','eoe','tsk','fhv','tdc','core_ch2'];
 let all=[], selectedScenario=null, langMode='both', frMap=new Map(), scenarioSets=new Map(), setNames=new Map();
@@ -109,23 +107,52 @@ async function renderScenario(){
  $('cards').innerHTML=`<div class="scenarioHead"><div><div class="eyebrow">${esc(selectedScenario.campaign)}</div><h2>${esc(selectedScenario.name)}</h2><div class="sub">${groups.length} encounter sets · toutes les cartes de ces sets</div></div><div class="count">${cards.length} cartes</div></div>${missing.length?`<div class="warning">Sets demandés mais absents des données chargées : ${missing.map(x=>esc(setNames.get(x)||x)).join(', ')}</div>`:''}${groups.map(g=>`<div class="set"><div class="setHead"><h3>${esc(g.name)}</h3><span>${g.cards.length}</span></div><div class="paired">${g.cards.map(pair).join('')}</div></div>`).join('')||'<div class="empty">Aucune carte trouvée. Ouvre le diagnostic ci-dessous.</div>'}<details class="diag"><summary>Diagnostic</summary><p>Encounter codes recherchés : <code>${esc(codes.join(', '))}</code></p><p>Cartes de scénario chargées : ${all.length}</p><p>Cartes correspondant aux sets : ${cards.length}</p><p>Sets trouvés : ${groups.length}</p></details>`;
 }
 function pair(c){
- const fr=frMap.get(c.code);
- const ei=cardImageUrl(c.code,false,c);
- const fi=cardImageUrl(c.code,true,fr||c);
- return `<article class="pair ${langMode}"><div class="side en">${langMode!=='fr'?cardFace(c,ei,'English',false):''}</div><div class="side fr">${langMode!=='en'?cardFace(fr||c,fi,'Français',true):''}</div></article>`
+ const ei=englishImageUrl(c.code);
+ const fi=frenchImageUrl(c.code);
+ return `<article class="pair ${langMode}">
+   <div class="side en">${langMode!=='fr'?cardFace(c,ei,'English',false):''}</div>
+   <div class="side fr">${langMode!=='en'?cardFace(c,fi,'Français',true):''}</div>
+ </article>`;
 }
-function cardImageUrl(code,isFrench,c){
- const n=String(code||'').trim();
- // English: keep the source that was already working in V8/V9 (ArkhamDB).
- // French: use the real French scanned card from the Arkham Horror asset CDN.
- if(!isFrench) return image(c) || (n ? `https://assets.arkhamhorror.app/img/arkham/cards/${encodeURIComponent(n)}.avif` : '');
- if(!n || !/^\d/.test(n)) return '';
- return `https://assets.arkhamhorror.app/img/arkham/fr/cards/${encodeURIComponent(n)}.avif`;
-}
+
 function cardFace(c,src,label,isFrench){
  const missing=isFrench?'Image française indisponible':'Image anglaise indisponible';
- return `<div class="lang">${label}</div><div class="card">${src?`<img loading="lazy" src="${esc(src)}" alt="${esc(c?.name||'')}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`:'<img style="display:none"><div class="noimg">'+missing+'</div>'}<div class="noimg" style="display:none">${missing}</div><div class="meta"><b>${esc(c?.name||'')}</b><span>${esc(c?.code||'')}</span></div></div>`
+ const code=esc(c?.code||'');
+ const name=esc(c?.name||'');
+ const safeSrc=esc(src||'');
+ return `<div class="lang">${label}</div><div class="card">
+   ${src?`<img class="cardImg" loading="lazy" src="${safeSrc}" alt="${name}" data-code="${code}" data-lang="${isFrench?'fr':'en'}" onerror="retryImage(this)">`:`<div class="noimg">${missing}</div>`}
+   <div class="noimg imgError" style="display:none">${missing}</div>
+   <div class="meta"><b>${name}</b><span>${code}</span></div>
+ </div>`;
 }
-function formatText(v){return esc(v).replace(/\n/g,'<br>')}
-function image(c){let u=c?.imagesrc||c?.imagesrc_front||c?.image_url||'';if(!u)return '';if(u.startsWith('//'))return 'https:'+u;if(u.startsWith('/'))return 'https://arkhamdb.com'+u;return u}
-init();
+
+function englishImageUrl(code){
+ const n=String(code||'').trim();
+ return n ? `https://arkhamdb.com/bundles/cards/${n}.png` : '';
+}
+
+function frenchImageUrl(code){
+ const n=String(code||'').trim();
+ return n ? `https://assets.arkhamhorror.app/img/arkham/fr/cards/${n}.avif` : '';
+}
+
+function retryImage(img){
+ const lang=img.dataset.lang;
+ const code=img.dataset.code;
+ const attempts=lang==='fr'
+   ? [
+       `https://assets.arkhamhorror.app/img/arkham/fr/cards/${code}.avif`,
+       `https://assets.arkhamhorror.app/img/arkham/fr/cards/${code}.webp`,
+       `https://assets.arkhamhorror.app/img/arkham/fr/cards/${code}.png`
+     ]
+   : [
+       `https://arkhamdb.com/bundles/cards/${code}.png`,
+       `https://arkhamdb.com/bundles/cards/${code}.jpg`
+     ];
+ const i=Number(img.dataset.attempt||0)+1;
+ if(i<attempts.length){img.dataset.attempt=String(i);img.src=attempts[i];return;}
+ img.style.display='none';
+ const err=img.parentElement.querySelector('.imgError');
+ if(err)err.style.display='block';
+}
