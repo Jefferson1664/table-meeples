@@ -1,9 +1,20 @@
-# Arkham LCG — cartes bilingues
+# Arkham Horror LCG — cartes bilingues
 
-Version corrigée : les cartes anglaises sont chargées depuis l'API publique ArkhamDB (`/cards/?encounter=1`). Les traductions françaises sont chargées, lorsque disponibles, depuis le dépôt de données ArkhamDB sur GitHub. La sélection d'un scénario filtre par les vrais `encounter_code`.
+Site statique pour GitHub Pages.
 
-## GitHub Pages
-Déposez le contenu de ce dossier dans un dépôt GitHub puis activez Settings → Pages → Deploy from branch → main / root.
+- Arborescence campagne → scénario.
+- Cartes English / Français côte à côte.
+- Les cartes sont chargées depuis l'API publique ArkhamDB avec `encounter=1`.
+- La correspondance scénario → encounter sets utilise `Scenario Mapping.xlsx` lorsqu'elle est disponible, avec un fallback sur le set propre au scénario.
+- Les traductions françaises sont récupérées depuis le dépôt communautaire `Kamalisk/arkhamdb-json-data`.
 
-## Correction importante
-La version précédente appelait un endpoint français qui pouvait échouer et annulait tout le `Promise.all`, ce qui laissait la liste des cartes vide. Cette version ne dépend plus de cet endpoint pour démarrer.
+## Installation
+
+Déposer le contenu du dossier sur un repository GitHub puis activer GitHub Pages sur la branche principale, dossier `/`.
+
+Le site nécessite une connexion Internet pour récupérer les données.
+
+
+## Version 0.7
+
+Cette version ajoute une présentation plus explicite du fonctionnement du site, l’affichage du numéro de version et une mention claire de la logique de classement par campagne, scénario et encounter sets.

@@ -1,22 +1,8 @@
 <!doctype html>
 <html lang="fr">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arkham LCG — English / Français</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Arkham — cartes bilingues</title><link rel="stylesheet" href="css/style.css"></head>
 <body>
-<header>
-  <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes bilingues</span></div>
-  <input id="search" type="search" placeholder="Rechercher une carte, un set…">
-  <div class="tools"><button id="hideFr">FR</button><button id="hideEn">EN</button><button id="reset">Tout afficher</button></div>
-</header>
-<main>
-<aside><div class="sideTitle">Campagnes & scénarios</div><div class="hint">Cliquez sur un scénario pour afficher toutes les cartes de ses encounter sets.</div><div id="tree">Chargement…</div></aside>
-<section>
-  <div id="welcome"><h2>Sélectionnez un scénario</h2><p>Campagne → scénario → encounter sets → cartes.</p><p class="note">Les cartes sont chargées depuis les données publiques d’ArkhamDB.</p></div>
-  <div id="cards"></div>
-</section>
-</main>
-<script src="js/app.js"></script>
+<header><div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 0.7</span></div><input id="search" placeholder="Rechercher une carte…" autocomplete="off"><div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div></header>
+<main><aside><div class="sideTitle">Campagnes & scénarios</div><div class="hint">Clique un scénario pour afficher toutes ses cartes.</div><div id="tree"><div class="empty">Chargement…</div></div></aside><section><div id="welcome"><h2>Sélectionne un scénario</h2><p>Ce site permet de consulter les cartes nécessaires à chaque scénario d’Arkham Horror: The Card Game.</p><p>Choisis une campagne puis un scénario dans le menu de gauche. Les cartes anglaises sont affichées à gauche et les cartes françaises correspondantes à droite.</p><p class="note">Le classement regroupe les cartes par encounter sets utilisés par le scénario. Les cartes disponibles sont chargées depuis ArkhamDB ; les traductions françaises proviennent des données communautaires disponibles sur GitHub.</p><p class="note">Version 0.7 — interface bilingue et navigation par campagnes/scénarios.</p></div><div id="cards"></div></section></main><footer>Arkham Horror LCG — cartes bilingues · Version 0.7 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="js/app.js"></script>
 </body></html>
