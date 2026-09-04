@@ -1,9 +1,20 @@
-# Table Meeples V5.5
+# Arkham Horror LCG — English / Français
 
-Application PWA de gestion de composants de jeux de société, avec tables multiples, compteurs personnalisables et tirage aléatoire de cartes.
+Site statique destiné à GitHub Pages.
 
-Le menu « Tirer une carte » utilise les 20 cartes du fichier fourni, en excluant les pages 1, 7, 13 et 19. Lors d’un tirage, la carte originale apparaît à gauche et sa traduction française dans un encadré adjacent. Sur petit écran, les deux encadrés sont empilés.
+## Installation
 
+1. Créer un dépôt GitHub, par exemple `arkham-bilingual`.
+2. Décompresser ce dossier et envoyer `index.html`, `css/` et `js/` à la racine du dépôt.
+3. Dans GitHub : Settings → Pages → Deploy from branch → `main` / root.
+4. Ouvrir l'URL GitHub Pages.
 
-## V6 – Chaos Bag
-Ajout de Chaos Bags Arkham Horror JCE : sacs multiples, modèles Facile/Standard/Difficile/Expert, ajout/retrait de jetons par toucher, tirage aléatoire pondéré, retour immédiat du jeton dans le sac et historique des 5 derniers tirages. Les jetons Core, Bénédiction, Malédiction et Givre sont disponibles.
+## Fonctionnement
+
+- Données cartes : API publique ArkhamDB.
+- Traductions françaises : API française ArkhamDB.
+- Classement : campagne → scénario → encounter sets → cartes.
+- Anglais à gauche et français à droite.
+- Recherche globale et boutons EN / FR.
+
+Les textes et illustrations des cartes restent la propriété de leurs ayants droit. Ce projet est un outil personnel/non officiel et n'est pas affilié à Fantasy Flight Games.
