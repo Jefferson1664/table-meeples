@@ -1,5 +1,5 @@
 const GH='https://raw.githubusercontent.com/Kamalisk/arkhamdb-json-data/master';
-const VERSION='1.0';
+const VERSION='1.1';
 const CARD_CDN='https://assets.arkhamhorror.app/img/arkham';
 const MAP_XLSX='https://raw.githubusercontent.com/erikoliver/arkham-lcg-tools/master/Scenario%20Mapping.xlsx';
 const CYCLES=['core','dwl','ptc','tfa','tcu','tde','tic','eoe','tsk','fhv','tdc','core_ch2'];
@@ -115,13 +115,16 @@ function pair(c){
  return `<article class="pair ${langMode}"><div class="side en">${langMode!=='fr'?cardFace(c,ei,'English',false):''}</div><div class="side fr">${langMode!=='en'?cardFace(fr||c,fi,'Français',true):''}</div></article>`
 }
 function cardImageUrl(code,isFrench,c){
- const n=String(code||'');
- if(!/^\d/.test(n)) return image(c);
- const base=isFrench?'https://assets.arkhamhorror.app/img/arkham/fr/cards/':'https://assets.arkhamhorror.app/img/arkham/cards/';
- return `${base}${encodeURIComponent(n)}.avif`;
+ const n=String(code||'').trim();
+ // English: keep the source that was already working in V8/V9 (ArkhamDB).
+ // French: use the real French scanned card from the Arkham Horror asset CDN.
+ if(!isFrench) return image(c) || (n ? `https://assets.arkhamhorror.app/img/arkham/cards/${encodeURIComponent(n)}.avif` : '');
+ if(!n || !/^\d/.test(n)) return '';
+ return `https://assets.arkhamhorror.app/img/arkham/fr/cards/${encodeURIComponent(n)}.avif`;
 }
 function cardFace(c,src,label,isFrench){
- return `<div class="lang">${label}</div><div class="card">${src?`<img loading="lazy" src="${esc(src)}" alt="${esc(c?.name||'')}" onerror="this.closest('.card').classList.add('image-error')">`:'<div class="noimg">Image indisponible</div>'}<div class="meta"><b>${esc(c?.name||'')}</b><span>${esc(c?.code||'')}</span></div></div>`
+ const missing=isFrench?'Image française indisponible':'Image anglaise indisponible';
+ return `<div class="lang">${label}</div><div class="card">${src?`<img loading="lazy" src="${esc(src)}" alt="${esc(c?.name||'')}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`:'<img style="display:none"><div class="noimg">'+missing+'</div>'}<div class="noimg" style="display:none">${missing}</div><div class="meta"><b>${esc(c?.name||'')}</b><span>${esc(c?.code||'')}</span></div></div>`
 }
 function formatText(v){return esc(v).replace(/\n/g,'<br>')}
 function image(c){let u=c?.imagesrc||c?.imagesrc_front||c?.image_url||'';if(!u)return '';if(u.startsWith('//'))return 'https:'+u;if(u.startsWith('/'))return 'https://arkhamdb.com'+u;return u}
