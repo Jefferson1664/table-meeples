@@ -30,7 +30,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.8</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.9</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -42,13 +42,13 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.8</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.9</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.8 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.9 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -68,7 +68,7 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all';
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),packNames=new Map(),typeFilter='all';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
@@ -83,6 +83,7 @@ async function init(){
   if(!Array.isArray(all)||!all.length)throw Error('Aucune carte de scénario reçue');
   const ded=new Map();all.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});all=[...ded.values()];
   all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+  try{const packs=await json(API+'/packs/',15000);if(Array.isArray(packs))packs.forEach(p=>{if(p&&p.code)packNames.set(p.code,p.name||p.code)})}catch(e){}
   buildTree();bind();
   // Mapping is optional and has a hard timeout; it can NEVER block the application.
   loadMapping().catch(()=>{});
@@ -135,49 +136,42 @@ function codesForScenario(){
  return out;
 }
 async function loadFrench(cards){
- const packs=[...new Set(cards.map(c=>c.pack_code).filter(Boolean))];
- // Only packs used by the selected scenario are requested.
- await Promise.all(packs.map(async p=>{
-  if([...fr.values()].some(x=>x.pack_code===p))return;
-  try{const d=await json(GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p)+'_encounter.json',15000);if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))}catch(e){}
+ const encounterPacks=[...new Set(cards.filter(c=>c.encounter_code).map(c=>c.pack_code).filter(Boolean))];
+ const playerPacks=[...new Set(cards.filter(c=>!c.encounter_code).map(c=>c.pack_code).filter(Boolean))];
+ await Promise.all(encounterPacks.map(async p=>{
+  const key='e:'+p;if(fr.has(key))return;
+  try{const d=await json(GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p)+'_encounter.json',15000);if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x));fr.set(key,true)}catch(e){}
+ }));
+ await Promise.all(playerPacks.map(async p=>{
+  const key='p:'+p;if(fr.has(key))return;
+  try{const d=await json(GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p)+'.json',15000);if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x));fr.set(key,true)}catch(e){}
  }));
 }
+function isPlayerType(t){return ['asset','event','skill','investigator','weakness'].includes(t)}
+function cardPoolForFilter(){
+ if(isPlayerType(typeFilter))return all.filter(c=>c.type_code===typeFilter && !c.encounter_code);
+ const codes=codesForScenario();
+ return all.filter(c=>{const code=c.encounter_code||'',name=c.encounter_name||'';return codes.includes(code)||codes.some(x=>norm(x)===norm(name))});
+}
 async function render(){
- if(!selected)return;
- const q=norm($('search').value),codes=codesForScenario(); if($('typeSelect')) $('typeSelect').value=typeFilter;
+ const q=norm($('search').value);if($('typeSelect'))$('typeSelect').value=typeFilter;
  $('welcome').style.display='none';
- let cards=all.filter(c=>{
-    const code=c.encounter_code||'';
-    const name=c.encounter_name||'';
-    return codes.includes(code) || codes.some(x=>norm(x)===norm(name));
-  });
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+codes.length+' encounter sets · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' cartes</div></div><div class="empty">Chargement…</div>';
+ const globalType=isPlayerType(typeFilter);
+ if(!selected && !globalType){$('cards').innerHTML='<div class="empty">Choisis un scénario.</div>';return}
+ let cards=cardPoolForFilter();
+ $('cards').innerHTML='<div class="empty">Chargement des cartes…</div>';
  await loadFrench(cards);
  cards=cards.filter(c=>(typeFilter==='all'||c.type_code===typeFilter)&&(!q||norm([c.name,c.text,c.encounter_name,c.code,fr.get(c.code)?.name,fr.get(c.code)?.text].join(' ')).includes(q)));
- const groups=codes.map(code=>{
-    const cs=cards.filter(c=>c.encounter_code===code || norm(c.encounter_name)===norm(code))
-      .sort((a,b)=>(a.position||0)-(b.position||0));
-    return cs.length?{code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs}:null
-  }).filter(Boolean);
+ if(globalType){
+   const groupsMap=new Map();cards.forEach(c=>{const k=c.pack_code||'unknown';if(!groupsMap.has(k))groupsMap.set(k,[]);groupsMap.get(k).push(c)});
+   const groups=[...groupsMap.entries()].sort((a,b)=>(packNames.get(a[0])||a[0]).localeCompare(packNames.get(b[0])||b[0]));
+   $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">Cartes joueur</div><h2>'+esc(cardTypeLabel({type_code:typeFilter}))+'s</h2><div class="sub">Cartes recherchées dans l’ensemble des paquets joueur</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(([code,cs])=>'<div class="set"><div class="setHead"><h3>'+esc(packNames.get(code)||code)+'</h3><span>'+cs.length+'</span></div><div class="paired">'+cs.sort((a,b)=>(a.position||0)-(b.position||0)).map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée.</div>');
+   return;
+ }
+ const codes=codesForScenario();
+ const groups=codes.map(code=>{const cs=cards.filter(c=>c.encounter_code===code||norm(c.encounter_name)===norm(code)).sort((a,b)=>(a.position||0)-(b.position||0));return cs.length?{code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs}:null}).filter(Boolean);
  const miss=codes.filter(code=>!groups.some(g=>g.code===code));
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' encounter sets · toutes les cartes des sets connus pour ce scénario</div></div><div class="count">'+cards.length+' cartes</div></div>'+
- (miss.length?'<div class="warning">Sets sans cartes dans les données : '+miss.map(x=>esc(setNames.get(x)||x)).join(', ')+'</div>':'')+
- groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+
- (groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+
- '<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes encounter chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
-}
-function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.3.6';
-}
-function pair(c){
-  const f=fr.get(c.code);
-  const enImg=c.imagesrc||c.imagesrc_front||c.image_url||'';
-  const ei=enImg?(enImg.startsWith('//')?'https:'+enImg:enImg.startsWith('/')?'https://arkhamdb.com'+enImg:enImg):'';
-  const fi=frenchImageUrl(c.code);
-  return '<article class="pair '+mode+'">'+
-    '<div class="side en">'+(mode!=='fr'?face(ei,c.name,'English',c.code,c):'')+'</div>'+
-    '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c):'')+'</div>'+
-    '</article>';
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' encounter sets · toutes les cartes des sets connus pour ce scénario</div></div><div class="count">'+cards.length+' cartes</div></div>'+(miss.length?'<div class="warning">Sets sans cartes dans les données : '+miss.map(x=>esc(setNames.get(x)||x)).join(', ')+'</div>':'')+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function cardTypeLabel(c){const m={asset:'Soutien',event:'Événement',skill:'Compétence',enemy:'Ennemi',treachery:'Traîtrise',location:'Lieu',act:'Acte',agenda:'Intrigue',scenario:'Scénario',story:'Histoire',investigator:'Investigateur',weakness:'Faiblesse'};return m[c?.type_code]||c?.type_code||''}
 function face(src,name,label,code,c){
