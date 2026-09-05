@@ -1,11 +1,9 @@
-# Table Meeples + Arkham Horror — V1.4.0
+# Table Meeples V5.5
 
-Cette version fusionne dans un même `index.html` :
-- le catalogue bilingue des cartes de scénario d'Arkham Horror: The Card Game ;
-- la Programmation Meeples, accessible depuis le premier bouton du menu de gauche.
+Application PWA de gestion de composants de jeux de société, avec tables multiples, compteurs personnalisables et tirage aléatoire de cartes.
 
-Le bouton **Programmation Meeples** ouvre directement l'application Meeples dans la même page. Les menus Arkham restent disponibles pour revenir aux campagnes et scénarios.
+Le menu « Tirer une carte » utilise les 20 cartes du fichier fourni, en excluant les pages 1, 7, 13 et 19. Lors d’un tirage, la carte originale apparaît à gauche et sa traduction française dans un encadré adjacent. Sur petit écran, les deux encadrés sont empilés.
 
-Les données de la Programmation Meeples sont conservées localement dans le navigateur. Les images du Chaos Bag et les cartes du projet sont conservées dans les dossiers `chaos/` et `cards/`.
 
-Version : **1.4.0**
+## V6 – Chaos Bag
+Ajout de Chaos Bags Arkham Horror JCE : sacs multiples, modèles Facile/Standard/Difficile/Expert, ajout/retrait de jetons par toucher, tirage aléatoire pondéré, retour immédiat du jeton dans le sac et historique des 5 derniers tirages. Les jetons Core, Bénédiction, Malédiction et Givre sont disponibles.

@@ -11,9 +11,11 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
 .brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
-main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px);position:relative}
+main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
 aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
-.sideTitle{font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:4px 0;cursor:pointer;color:var(--ink);font-size:inherit}.sideTitle:hover{text-decoration:underline}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+.mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:4px 0;cursor:pointer;color:var(--ink)}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}.meeplesWrap{display:none}
+#meeplesView{display:none;position:absolute;z-index:5;top:0;right:0;bottom:0;left:300px;background:#eee9df}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}.sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+.playerMenu{margin:0 0 12px;padding:0 0 10px;border-bottom:1px solid var(--line)}.playerMenuHead{width:100%;display:flex;align-items:center;justify-content:space-between;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:800;text-align:left;padding:8px 8px;border-radius:7px;cursor:pointer}.playerMenuHead:hover{background:#eee9e1}.playerMenuHead.active{background:var(--active);color:var(--accent)}.playerSub{display:none;padding:2px 0 4px}.playerSub.open{display:block}.playerClass{width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:700;text-align:left;padding:6px 8px;border-radius:6px;cursor:pointer}.playerClass:hover{background:#eee9e1}.playerClass.active{background:var(--active);color:var(--accent)}.playerSection{max-width:1400px;margin:auto}.playerClassBlock{margin:0 0 28px}.playerClassHead{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--line);margin-bottom:10px}.playerClassHead h3{margin:0 0 7px;font-size:19px}.playerClassHead span{font-size:12px;color:var(--muted)}.playerGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.playerCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px;min-width:0}.playerCard img{display:block;width:100%;height:auto;aspect-ratio:.72;object-fit:contain;border-radius:6px;background:#eee}.playerCard .meta{display:flex;justify-content:space-between;gap:6px;margin-top:5px;font-size:10px;color:var(--muted)}.playerCard .meta b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.playerCard button{width:100%;border:0;background:transparent;padding:0;cursor:pointer}.playerType{font-size:10px;color:var(--muted);margin:4px 0 0}.playerLoading{padding:30px;text-align:center;color:var(--muted)}@media(max-width:1100px){.playerGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:850px){.playerGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.playerGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
 .scenarios{padding-left:24px}.scenario{width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--ink)}.scenario:hover{background:#eee9e1}.scenario.active{background:var(--active);font-weight:700;color:var(--accent)}
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
@@ -22,37 +24,30 @@ section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background
 .paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
-
-.meeplesMenu{width:100%;border:0;background:transparent;text-align:left;padding:8px 8px;border-radius:7px;cursor:pointer;color:var(--ink);font-weight:700;margin-bottom:10px}
-.meeplesMenu:hover{background:#eee9e1}
-.meeplesMenu.active{background:var(--active);color:var(--accent)}
-#meeplesView{display:none;position:absolute;z-index:5;top:0;right:0;bottom:0;left:300px;padding:0;min-width:0;background:#eee9df}
-#meeplesFrame{width:100%;height:100%;border:0;display:block;background:#eee9df}
-body.meeples-active #search,body.meeples-active .tools{display:none}
-@media(max-width:850px){#meeplesView{left:0;top:0;right:0;bottom:0}}
+.meeples-active #search,.meeples-active .tools{display:none}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.2</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.4</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
 <main>
-<aside><button id="meeplesMenu" class="meeplesMenu" type="button">Programmation Meeples</button><button id="arkhamMenu" class="sideTitle" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><div class="playerMenu"><button id="playerMenuHead" class="playerMenuHead" type="button"><span>Cartes joueurs</span><span id="playerMenuArrow">▾</span></button><div id="playerSub" class="playerSub"><button class="playerClass" data-player-jump="all">Toutes les classes</button><button class="playerClass" data-player-jump="guardian">Gardien</button><button class="playerClass" data-player-jump="seeker">Chercheur</button><button class="playerClass" data-player-jump="rogue">Truand</button><button class="playerClass" data-player-jump="mystic">Mystique</button><button class="playerClass" data-player-jump="survivor">Survivant</button><button class="playerClass" data-player-jump="neutral">Neutre</button></div></div><button id="arkhamMenu" class="mainMenu" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.2</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.4</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
-<div id="cards"></div>
+<div id="playerCards"></div><div id="cards"></div>
 </section>
-<div id="meeplesView"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
+<div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.2 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.4 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -72,7 +67,7 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map();
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),playerCards=[],playerView=false,playerCardsBase=[];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
@@ -83,8 +78,11 @@ async function init(){
   all=await json(API+'/cards/?encounter=1',30000);
   if(!Array.isArray(all)||!all.length)throw Error('Aucune carte de scénario reçue');
   const ded=new Map();all.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});all=[...ded.values()];
+  playerCards=all.filter(c=>!c.encounter_code);
+  playerCards.sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0)||String(a.name||'').localeCompare(String(b.name||''));
+  playerCardsBase=[...playerCards];
   all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
-  buildTree();bind();
+  buildTree();bind();bindPlayerMenus();
   // Mapping is optional and has a hard timeout; it can NEVER block the application.
   loadMapping().catch(()=>{});
  }catch(e){
@@ -122,8 +120,26 @@ function buildTree(){
   box.append(h,list);root.append(box);
  });
 }
-function bind(){$('search').oninput=render;$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';render()}}
-function select(s,b,c){showArkham();document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
+function playerClassLabel(k){return ({guardian:'Gardien',seeker:'Chercheur',rogue:'Truand',mystic:'Mystique',survivor:'Survivant',neutral:'Neutre',mythos:'Faiblesses'})[k]||k}
+function playerClassKey(c){const k=c.class_code||'';if(['guardian','seeker','rogue','mystic','survivor','neutral'].includes(k))return k;return 'mythos'}
+function playerTypeLabel(c){const t=c.type_code||'';return ({investigator:'Investigateur',asset:'Soutien',event:'Événement',skill:'Compétence',treachery:'Faiblesse',enemy:'Faiblesse',location:'Autre',act:'Autre',agenda:'Autre',scenario:'Autre'})[t]||t}
+function playerImage(c){let u=c.imagesrc||c.imagesrc_front||c.image_url||'';return u?(u.startsWith('//')?'https:'+u:u.startsWith('/')?'https://arkhamdb.com'+u:u):''}
+function renderPlayerCard(c){const u=playerImage(c);return '<article class="playerCard"><button type="button" data-player-card="'+esc(c.code)+'"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(u)+'" alt="'+esc(c.name)+'"><div class="meta"><b>'+esc(c.name)+'</b><span>'+esc(c.code)+'</span></div><div class="playerType">'+esc(playerTypeLabel(c))+'</div></button></article>'}
+function showPlayers(which='all'){
+ playerView=true;selected=null;
+ const q=norm($('search').value);
+ const source=playerCardsBase.filter(c=>!q||norm([c.name,c.text,c.code,c.type_code,c.class_code].join(' ')).includes(q));
+$('welcome').style.display='none';$('cards').innerHTML='';$('playerCards').style.display='block';
+ document.querySelectorAll('.playerClass').forEach(x=>x.classList.toggle('active',x.dataset.playerJump===which));
+ const keys=which==='all'?['guardian','seeker','rogue','mystic','survivor','neutral','mythos']:[which];
+ $('playerCards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">Arkham Horror: The Card Game</div><h2>Cartes joueurs</h2><div class="sub">Toutes les cartes joueurs, regroupées par classe, avec investigateurs, soutiens, événements, compétences, faiblesses et autres cartes joueurs.</div></div><div class="count">'+source.length+' cartes</div></div>'+keys.map(k=>{let cs=source.filter(c=>playerClassKey(c)===k);return '<div class="playerClassBlock" id="player-class-'+k+'"><div class="playerClassHead"><h3>'+playerClassLabel(k)+'</h3><span>'+cs.length+' cartes</span></div><div class="playerGrid">'+(cs.length?cs.map(renderPlayerCard).join(''):'<div class="empty">Aucune carte</div>')+'</div></div>'}).join('');
+}
+function bindPlayerMenus(){
+ $('playerMenuHead').onclick=e=>{e.preventDefault();const open=$('playerSub').classList.toggle('open');$('playerMenuArrow').textContent=open?'▴':'▾'};
+ document.querySelectorAll('[data-player-jump]').forEach(b=>b.onclick=()=>{showPlayers(b.dataset.playerJump)});
+}
+function bind(){$('search').oninput=()=>{if(playerView)showPlayers(document.querySelector('.playerClass.active')?.dataset.playerJump||'all');else render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';render()}}
+function select(s,b,c){playerView=false;$('playerCards').style.display='none';document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
 function codesForScenario(){
  if(!selected)return[];
  const vals=mapping.get(norm(selected.name))||[];
@@ -168,7 +184,7 @@ async function render(){
  '<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes encounter chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.4.0';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.3.6';
 }
 function pair(c){
   const f=fr.get(c.code);
@@ -188,520 +204,31 @@ function face(src,name,label,code){
     '</div>';
 }
 
+init();
 
-const MEEPLE_SRC=`<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#f3efe7">
-<link rel="manifest" href="./manifest.webmanifest">
-<title>Table Meeples V6</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{position:sticky;top:0;z-index:10;background:#f8f5ef;border-bottom:1px solid #d8d1c5;padding:calc(10px + env(safe-area-inset-top)) 12px 10px}
-.title{font-size:22px;font-weight:800}.v{font-size:11px;font-weight:800;background:#2f2d29;color:#fff;padding:4px 7px;border-radius:7px}
-.sub{font-size:12px;color:#746f66;margin-top:2px}.bar{display:flex;gap:7px;margin-top:9px;overflow:auto}
-button,select,input{font:inherit}.btn,select{background:#fff;border:1px solid #d1c9bc;border-radius:10px;padding:9px 11px}
-.btn{font-weight:700;white-space:nowrap}.primary{background:#2f2d29!important;color:#fff!important;border-color:#2f2d29!important}
-main{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px solid #d8d1c5;border-radius:14px;overflow:hidden}
-.panel h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid #ded8ce}
-.reserve{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}
-.card{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;min-height:68px}
-.iconTap{width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex:0 0 48px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.piece{display:flex;align-items:center;justify-content:center;width:42px;height:42px}
-.meeple{width:28px;height:35px;clip-path:polygon(30% 0,70% 0,78% 15%,100% 28%,84% 43%,75% 38%,78% 100%,55% 100%,50% 64%,45% 100%,22% 100%,25% 38%,16% 43%,0 28%,22% 15%)}
-.circle{width:34px;height:34px;border-radius:50%;border:3px solid #aaa;box-shadow:inset 0 0 0 2px #fff8}
-.bread{width:38px;height:25px;border-radius:48% 48% 44% 44%;transform:rotate(-8deg);border:2px solid #a77940}
-.cube{width:31px;height:31px;border-radius:6px;transform:rotate(45deg)}
-.star{font-size:36px;line-height:1;color:inherit}.heart{font-size:34px;line-height:1;color:inherit}.crown{font-size:34px;line-height:1;color:inherit}
-.gem{width:29px;height:35px;clip-path:polygon(25% 0,75% 0,100% 38%,50% 100%,0 38%)}
-.shield{width:31px;height:36px;clip-path:polygon(8% 0,92% 0,92% 62%,50% 100%,8% 62%)}
-.coin{width:35px;height:35px;border-radius:50%;border:3px solid #9b741e;box-shadow:inset 0 0 0 2px #fff8}
-.info{min-width:0}.name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.qty{font-size:12px;color:#777;margin-top:2px}
-.zones{display:grid;gap:9px;padding:9px}.zone{background:#fffdf9;border:1px solid #d6cfc3;border-radius:12px;min-height:130px;overflow:hidden}
-.zoneHead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed #d8d1c5;background:#f5f1e8}
-.zoneTitle{font-weight:800;font-size:13px}.zoneBtns{display:flex;gap:5px}.small{padding:5px 8px;border-radius:8px;background:#fff;border:1px solid #d2cabf;font-size:12px}
-.groups{padding:10px;display:flex;flex-wrap:wrap;gap:14px 18px}.group{display:flex;flex-direction:column;align-items:center;gap:4px}
-.pieces{display:flex;flex-wrap:wrap;max-width:190px;gap:4px}.pieces .iconTap{width:38px;height:42px;flex-basis:38px}.pieces .piece{width:36px;height:40px}
-.groupCount{font-size:11px;color:#6f6a61;font-weight:700;text-align:center}.empty{padding:25px 12px;text-align:center;color:#999;font-size:12px}
-.emptyBig{padding:40px 18px;text-align:center;color:#777}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:flex-end;z-index:50}.modal.show{display:flex}
-.sheet{background:#f8f5ef;width:100%;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
-.sheet h3{margin:0 0 12px}.field{width:100%;padding:10px;border:1px solid #d2cabf;border-radius:10px;background:#fff;margin-bottom:9px}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.choice{background:#fff;border:1px solid #d2cabf;border-radius:10px;padding:9px 5px;text-align:center}.choice.selected{outline:3px solid #2f2d29}
-.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:8px 0 12px}.sw{height:36px;border-radius:9px;border:2px solid transparent}.sw.selected{border-color:#222;box-shadow:0 0 0 2px #fff inset}
-.row{display:flex;gap:8px;margin-top:10px}.row>*{flex:1}.hint{font-size:12px;color:#716b62;margin:5px 0 10px}
-.menuList{display:grid;gap:8px}.menuList .btn{text-align:left}.managerRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #ddd}
-.danger{color:#a52b2b;border-color:#d9b1b1}.footer{text-align:center;color:#777;font-size:11px;padding:2px 4px 15px}
-@media(min-width:700px){main{grid-template-columns:1fr 1.4fr}.panel:first-child{grid-column:1}.panel:nth-child(2){grid-column:2;grid-row:1/3}}
-
-.counter{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:10px;margin:9px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.counterInfo{min-width:0}.counterName{font-weight:800;font-size:14px}.counterValue{font-size:25px;font-weight:900;min-width:55px;text-align:center}
-.counterBtns{display:flex;gap:6px}.counterBtns button{width:42px;height:38px;border-radius:10px;border:1px solid #d1c9bc;background:#f8f5ef;font-size:21px;font-weight:800}
-.counterBtns .reset{width:auto;font-size:12px;padding:0 8px}
-.managerSection{margin-top:10px}.managerTitle{font-weight:800;font-size:13px;margin:12px 0 6px}
-.cardDraw{display:grid;gap:12px}
-.cardDrawGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
-.cardDrawPane{background:#fff;border:1px solid #d1c9bc;border-radius:12px;padding:8px;min-width:0}
-.cardDrawPane img{width:100%;max-height:62vh;object-fit:contain;display:block;margin:auto;border-radius:7px}
-.cardDrawTranslation{font-size:14px;line-height:1.42;text-align:left;white-space:pre-line;max-height:62vh;overflow:auto}
-.cardDrawTranslation h4{margin:2px 0 10px;font-size:16px}
-.cardDrawTranslation .cardTitleFr{font-weight:800;font-size:18px;margin-bottom:4px}
-.cardDrawTranslation .cardTypeFr{font-size:12px;color:#716b62;font-weight:700;margin-bottom:12px}
-.cardDrawMeta{font-size:12px;color:#716b62;text-align:center}
-@media(max-width:700px){.cardDrawGrid{grid-template-columns:1fr}.cardDrawTranslation{max-height:none}}
-
-
-.chaosGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:9px}.chaosTile{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:7px 5px;text-align:center;position:relative;min-height:76px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.chaosTile:active{transform:scale(.98)}.chaosIcon{width:50px;height:50px;margin:0 auto 3px;display:block}.chaosQty{font-size:12px;font-weight:800;color:#5d584f}.chaosBadge{position:absolute;right:5px;top:5px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:#2f2d29;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}.bagSummary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#f5f1e8;border-bottom:1px solid #ded8ce}.bagName{font-weight:850}.bagCount{font-size:12px;color:#716b62}.chaosBagActions{display:flex;gap:7px;flex-wrap:wrap;padding:9px}.chaosDraw{display:grid;gap:14px;text-align:center}.drawToken{width:min(210px,58vw);height:min(210px,58vw);margin:0 auto;display:block}.drawResult{font-size:13px;color:#716b62}.drawResult strong{display:block;font-size:18px;color:#292722;margin-bottom:3px}.history{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding-top:4px}.history img{width:44px;height:44px}@media(max-width:430px){.chaosGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.chaosTile{min-height:72px}.chaosIcon{width:46px;height:46px}}
-</style>
-</head>
-<body>
-<div class="app">
-<header>
- <div style="display:flex;align-items:center;gap:8px"><div class="title">Table Meeples</div><span class="v">V6</span></div>
- <div class="sub">Jeux personnalisés · tables multiples · composants · Chaos Bag - codage JGi</div>
- <div class="bar"><select id="gameSelect"></select><button class="btn" id="menuBtn">Menu</button><button class="btn primary" id="tableBtn">+ Table</button></div>
-</header>
-<main>
- <section class="panel"><h2>Réserve · toucher l’image pour ajouter</h2><div class="reserve" id="reserve"></div></section>
- <section class="panel"><h2>Tables</h2><div class="zones" id="zones"></div></section>
- <section class="panel"><h2>Compteurs</h2><div id="counters"></div></section><div class="footer">Les composants sont regroupés automatiquement. Touchez une image sur la table pour retirer une seule pièce.</div>
-</main>
-</div>
-
-<div class="modal" id="modal">
- <div class="sheet">
-  <h3 id="modalTitle"></h3>
-  <div id="modalBody"></div>
-  <div class="row"><button type="button" class="btn" id="cancelBtn">Annuler</button><button type="button" class="btn primary" id="confirmBtn">Valider</button></div>
- </div>
-</div>
-<input id="importFile" type="file" accept="application/json" hidden>
-
-<script>
-const KEY='tableMeeplesV5Data';
-const CUR='tableMeeplesV5Current';
-
-const colors=[
- ['Jaune','#e6c229'],['Noir','#282828'],['Rouge','#c9473b'],['Bleu clair','#79b8d1'],['Marron','#8b5e3c'],
- ['Violet','#8e65b5'],['Vert','#5b9b63'],['Blanc','#f4f1e8'],['Orange','#df8a3a'],['Rose','#d889a8'],
- ['Gris','#8d9297'],['Bleu foncé','#3f5f9a'],['Turquoise','#49a9a0'],['Bordeaux','#7f3040'],['Beige','#cdbb99']
-];
-
-const icons=[
- ['meeple','Meeple'],['bread','Pain'],['coin','Pièce'],['cube','Cube'],['token','Jeton'],
- ['star','Étoile'],['heart','Cœur'],['gem','Gemme'],['shield','Bouclier'],['crown','Couronne']
-];
-
-let games={};
-try{games=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){games={}};
-let currentId=localStorage.getItem(CUR)||'';
-Object.values(games).forEach(normalizeGame);
-if(Object.keys(games).length) localStorage.setItem(KEY,JSON.stringify(games));
-let modalAction=null, selectedColor=colors[0][1], selectedIcon='meeple';
-let chaosBags={};
-let currentChaosBagId=localStorage.getItem('tableMeeplesCurrentChaosBag')||'';
-try{chaosBags=JSON.parse(localStorage.getItem('tableMeeplesChaosBags')||'{}')||{}}catch(e){chaosBags={}}
-const chaosTypes=[
- {id:'p1',label:'+1',file:'p1.svg'},{id:'0',label:'0',file:'0.svg'},{id:'m1',label:'−1',file:'m1.svg'},{id:'m2',label:'−2',file:'m2.svg'},
- {id:'m3',label:'−3',file:'m3.svg'},{id:'m4',label:'−4',file:'m4.svg'},{id:'m5',label:'−5',file:'m5.svg'},{id:'m6',label:'−6',file:'m6.svg'},
- {id:'m7',label:'−7',file:'m7.svg'},{id:'m8',label:'−8',file:'m8.svg'},{id:'skull',label:'Crâne',file:'skull.svg'},
- {id:'cultist',label:'Cultiste',file:'cultist.svg'},{id:'tablet',label:'Tablette',file:'tablet.svg'},{id:'elder',label:'Être ancien',file:'elder.svg'},
- {id:'autofail',label:'Échec automatique',file:'autofail.svg'},{id:'elder_sign',label:'Signe des Anciens',file:'elder_sign.svg'},
- {id:'bless',label:'Bénédiction',file:'bless.svg'},{id:'curse',label:'Malédiction',file:'curse.svg'},{id:'frost',label:'Givre',file:'frost.svg'}
-];
-const chaosPresets={
- 'vide':[],
- 'facile':['p1','p1','0','0','0','m1','m1','m1','m2','m2','skull','skull','cultist','tablet','elder','elder_sign'],
- 'standard':['p1','0','0','m1','m1','m1','m2','m2','m3','m4','skull','skull','cultist','tablet','elder','elder_sign'],
- 'difficile':['0','0','0','m1','m1','m2','m2','m3','m3','m4','m5','skull','skull','cultist','tablet','elder_sign'],
- 'expert':['0','m1','m1','m2','m2','m3','m3','m4','m4','m5','m6','m8','skull','skull','cultist','tablet','elder_sign']
-};
-function persistChaos(){localStorage.setItem('tableMeeplesChaosBags',JSON.stringify(chaosBags));localStorage.setItem('tableMeeplesCurrentChaosBag',currentChaosBagId)}
-function currentChaos(){return chaosBags[currentChaosBagId]||null}
-function ensureChaosBag(b){if(!b.tokens)b.tokens={};if(!b.history)b.history=[];return b}
-function chaosTotal(b){return Object.values(b?.tokens||{}).reduce((n,v)=>n+(Number(v)||0),0)}
-function chaosIcon(id,extra=''){let t=chaosTypes.find(x=>x.id===id);return t?\`<img class="chaosIcon \${extra}" src="./chaos/\${t.file}" alt="\${esc(t.label)}">\`:''}
-function presetTokens(name){let out={};(chaosPresets[name]||[]).forEach(id=>out[id]=(out[id]||0)+1);return out}
-Object.values(chaosBags).forEach(ensureChaosBag);if(!currentChaosBagId||!chaosBags[currentChaosBagId]){let ids=Object.keys(chaosBags);currentChaosBagId=ids[0]||'';persistChaos()}
-
-
-const $=id=>document.getElementById(id);
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
-function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function game(){return games[currentId]||null}
-function persist(){localStorage.setItem(KEY,JSON.stringify(games));localStorage.setItem(CUR,currentId)}
-function normalizeGame(g){
- if(!g.tables && g.placed) g.tables=g.placed;
- if(!g.tables) g.tables=[{id:uid(),name:'Table principale',counts:{}}];
- if(!g.components) g.components=[];
- if(!g.counters) g.counters=[];
- g.tables.forEach(t=>{if(!t.counts)t.counts={}});
- delete g.placed;
- return g;
-}
-
-function visual(c, action, extra=''){
- let cls=c.type==='meeple'?'meeple':c.type==='bread'?'bread':c.type==='coin'?'coin':c.type==='cube'?'cube':c.type==='token'?'circle':c.type==='gem'?'gem':c.type==='shield'?'shield':'';
- let content=c.type==='star'?'★':c.type==='heart'?'♥':c.type==='crown'?'♛':'';
- let style=['star','heart','crown'].includes(c.type)?\`color:\${c.color||'#777'}\`:\`background:\${c.color||'#999'}\`;
- return \`<span class="iconTap \${extra}" data-action="\${action}" data-cid="\${esc(c.id)}"><span class="piece"><span class="\${cls}" style="\${style}">\${content}</span></span></span>\`;
-}
-
-function render(){
- let g=game(), sel=$('gameSelect');
- sel.innerHTML=Object.values(games).map(x=>\`<option value="\${esc(x.id)}">\${esc(x.name)}</option>\`).join('');
- sel.value=currentId;
- if(!g){
-  $('reserve').innerHTML='<div class="emptyBig" style="grid-column:1/-1">Aucun jeu<br><br>Ouvrez le Menu pour créer votre premier jeu.</div>';
-  $('zones').innerHTML='';
-  return;
- }
- let r=$('reserve');
- if(!g.components.length) r.innerHTML='<div class="emptyBig" style="grid-column:1/-1">Aucun composant.<br><br>Ouvrez le Menu pour en créer.</div>';
- else r.innerHTML=g.components.map(c=>{
-   let used=g.tables.reduce((n,t)=>n+(Number(t.counts[c.id])||0),0);
-   let available=Math.max(0,(Number(c.qty)||0)-used);
-   return \`<div class="card">\${visual(c,'add')}<div class="info"><div class="name">\${esc(c.name)}</div><div class="qty">Réserve : \${available} / \${Number(c.qty)||0}</div></div></div>\`;
- }).join('');
-
- $('counters').innerHTML=g.counters.length?g.counters.map(c=>\`<div class="counter">
-   <div class="counterInfo"><div class="counterName">\${esc(c.name)}</div></div>
-   <div class="counterValue">\${Number(c.value)||0}</div>
-   <div class="counterBtns"><button data-counter-minus="\${esc(c.id)}">−</button><button data-counter-plus="\${esc(c.id)}">+</button><button class="reset" data-counter-reset="\${esc(c.id)}">Réinitialiser</button></div>
-  </div>\`).join(''):'<div class="empty">Aucun compteur. Ouvrez le Menu pour en créer.</div>';
-
- $('zones').innerHTML=g.tables.map((t,i)=>{
-   let groups=g.components.map(c=>({c,n:Number(t.counts[c.id])||0})).filter(x=>x.n>0);
-   return \`<div class="zone" data-zone-id="\${esc(t.id)}">
-    <div class="zoneHead"><div class="zoneTitle">\${esc(t.name)}\${i===0?' · principale':''}</div>
-    <div class="zoneBtns">\${i>0?\`<button class="small danger" data-zone-delete="\${esc(t.id)}">Supprimer</button>\`:''}
-    \${groups.length?\`<button class="small" data-zone-clear="\${esc(t.id)}">Vider</button>\`:''}</div></div>
-    <div class="groups">\${groups.map(x=>\`<div class="group"><div class="pieces">\${Array.from({length:x.n},()=>visual(x.c,'remove')).join('')}</div><div class="groupCount">\${esc(x.c.name)} · \${x.n}</div></div>\`).join('')||'<div class="empty">Table vide</div>'}</div>
-   </div>\`;
- }).join('');
-}
-
-function openModal(title,body,fn=null){
- $('modalTitle').textContent=title;$('modalBody').innerHTML=body;modalAction=fn;$('modal').classList.add('show');
-}
-function closeModal(){$('modal').classList.remove('show');modalAction=null}
-
-function createCounter(){
- openModal('Créer un compteur',
-  \`<div class="hint">Exemples : Points de victoire, Points de vie, Or, Énergie…</div>
-   <input class="field" id="counterName" placeholder="Nom du compteur" autocomplete="off">
-   <input class="field" id="counterValue" type="number" value="0" placeholder="Valeur initiale">\`,()=>{
-    let g=game(); if(!g)return;
-    let name=$('counterName').value.trim(); if(!name)return;
-    let value=parseInt($('counterValue').value||'0',10); if(!Number.isFinite(value))value=0;
-    g.counters.push({id:uid(),name,value}); persist(); closeModal(); render();
-  });
-}
-
-function manageCounters(){
- let g=game(); if(!g){menu();return}
- let body=g.counters.length?g.counters.map(c=>\`<div class="managerRow">
-  <div><b>\${esc(c.name)}</b><div class="qty">Valeur : \${Number(c.value)||0}</div></div>
-  <button class="small danger" data-delete-counter="\${esc(c.id)}">Supprimer</button>
- </div>\`).join(''):'<p>Aucun compteur.</p>';
- openModal('Gérer les compteurs',body,null);
-}
-
-function deleteCounter(cid){
- let g=game(); if(!g)return;
- let c=g.counters.find(x=>x.id===cid); if(!c)return;
- if(!confirm(\`Supprimer le compteur « \${c.name} » ?\`))return;
- g.counters=g.counters.filter(x=>x.id!==cid); persist(); render(); manageCounters();
-}
-
-function changeCounter(cid,delta){
- let g=game(); if(!g)return;
- let c=g.counters.find(x=>x.id===cid); if(!c)return;
- c.value=(Number(c.value)||0)+delta; persist(); render();
-}
-function resetCounter(cid){
- let g=game(); if(!g)return;
- let c=g.counters.find(x=>x.id===cid); if(!c)return;
- c.value=0; persist(); render();
-}
-
-function menu(){
- let items=[
-  ['new','Créer un jeu'],
-  ['component','Créer un composant'],
-  ['drawCard','Tirer une carte'],
-  ['chaosBag','Chaos Bag'],
-  ['counter','Créer un compteur'],
-  ['manageCounters','Gérer les compteurs'],
-  ['manage','Gérer les composants'],
-  ['save','Sauvegarder le jeu actuel'],
-  ['import','Importer un jeu']
- ];
- if(game()) items.push(['delete','Supprimer le jeu actuel']);
- openModal('Menu',\`<div class="menuList">\${items.map(x=>\`<button class="btn \${x[0]==='delete'?'danger':''}" data-menu="\${x[0]}">\${x[1]}</button>\`).join('')}</div>\`,null);
-}
-
-function newGame(){
- openModal('Créer un jeu','<input class="field" id="gameName" placeholder="Nom du jeu" autocomplete="off">',()=>{
-  let n=$('gameName').value.trim();if(!n)return;
-  currentId=uid();games[currentId]={id:currentId,name:n,components:[],counters:[],tables:[{id:uid(),name:'Table principale',counts:{}}]};
-  persist();closeModal();render();
- });
-}
-
-function component(){
- selectedIcon='meeple';selectedColor=colors[0][1];
- let choices=icons.map(x=>\`<button type="button" class="choice \${x[0]==='meeple'?'selected':''}" data-icon="\${x[0]}">\${x[1]}</button>\`).join('');
- let pal=colors.map(x=>\`<button type="button" class="sw \${x[1]===selectedColor?'selected':''}" title="\${x[0]}" style="background:\${x[1]}" data-color="\${x[1]}"></button>\`).join('');
- openModal('Créer un composant',
-  \`<div class="hint">Type de composant</div><div class="grid">\${choices}</div>
-   <div class="hint">Couleur · 15 couleurs disponibles</div><div class="palette">\${pal}</div>
-   <input class="field" id="compName" placeholder="Nom du composant">
-   <input class="field" id="compQty" type="number" min="1" value="10" placeholder="Quantité totale">\`,()=>{
-    let g=game();if(!g)return;
-    let name=$('compName').value.trim();
-    let qty=Math.max(1,parseInt($('compQty').value||'1',10));
-    if(!name){
-      let label=icons.find(x=>x[0]===selectedIcon)[1];
-      if(selectedIcon==='meeple') label='Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase();
-      name=label;
-    }
-    g.components.push({id:uid(),name,type:selectedIcon,color:selectedColor,qty});
-    persist();closeModal();render();
-  });
- document.querySelectorAll('[data-icon]').forEach(b=>b.onclick=()=>{
-   selectedIcon=b.dataset.icon;
-   document.querySelectorAll('[data-icon]').forEach(x=>x.classList.toggle('selected',x===b));
-   if(selectedIcon==='coin' && !$('compName').value) $('compName').value='Pièce';
-   if(selectedIcon!=='meeple' && $('compName').value.startsWith('Meeple ')) $('compName').value='';
- });
- document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{
-   selectedColor=b.dataset.color;
-   document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b));
-   if(selectedIcon==='meeple') $('compName').value='Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase();
- });
-}
-
-function manageComponents(){
- let g=game();if(!g){menu();return}
- let body=g.components.length?g.components.map(c=>\`
-  <div class="managerRow"><div><b>\${esc(c.name)}</b><div class="qty">\${esc(icons.find(x=>x[0]===c.type)?.[1]||c.type)} · \${c.qty}</div></div>
-  <div style="display:flex;gap:5px"><button class="small" data-edit-comp="\${esc(c.id)}">Modifier</button><button class="small danger" data-delete-comp="\${esc(c.id)}">Supprimer</button></div></div>\`).join(''):'<p>Aucun composant.</p>';
- openModal('Gérer les composants',body,null);
-}
-
-function editComponent(cid){
- let g=game(),c=g?.components.find(x=>x.id===cid);if(!c)return;
- selectedIcon=c.type;selectedColor=c.color||colors[0][1];
- let choices=icons.map(x=>\`<button type="button" class="choice \${x[0]===selectedIcon?'selected':''}" data-icon="\${x[0]}">\${x[1]}</button>\`).join('');
- let pal=colors.map(x=>\`<button type="button" class="sw \${x[1]===selectedColor?'selected':''}" title="\${x[0]}" style="background:\${x[1]}" data-color="\${x[1]}"></button>\`).join('');
- openModal('Modifier le composant',
-  \`<div class="hint">Type</div><div class="grid">\${choices}</div><div class="hint">Couleur</div><div class="palette">\${pal}</div>
-   <input class="field" id="compName" value="\${esc(c.name)}"><input class="field" id="compQty" type="number" min="1" value="\${Number(c.qty)||1}">\`,()=>{
-    c.type=selectedIcon;c.color=selectedColor;c.name=$('compName').value.trim()||c.name;c.qty=Math.max(1,parseInt($('compQty').value||'1',10));
-    persist();closeModal();render();
-  });
- document.querySelectorAll('[data-icon]').forEach(b=>b.onclick=()=>{selectedIcon=b.dataset.icon;document.querySelectorAll('[data-icon]').forEach(x=>x.classList.toggle('selected',x===b))});
- document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{selectedColor=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b))});
-}
-
-function deleteComponent(cid){
- let g=game(),c=g?.components.find(x=>x.id===cid);if(!c)return;
- if(!confirm(\`Supprimer « \${c.name} » et toutes les pièces de ce composant ?\`))return;
- g.components=g.components.filter(x=>x.id!==cid);
- g.tables.forEach(t=>delete t.counts[cid]);
- persist();render();manageComponents();
-}
-
-function addTable(){
- let g=game();if(!g)return;
- openModal('Créer une table','<input class="field" id="tableName" placeholder="Nom de la table" autocomplete="off">',()=>{
-  let n=$('tableName').value.trim();if(!n)return;
-  g.tables.push({id:uid(),name:n,counts:{}});persist();closeModal();render();
- });
-}
-
-function deleteTable(tid){
- let g=game(),i=g.tables.findIndex(t=>t.id===tid);if(i<=0)return;
- if(!confirm('Supprimer cette table ? Les composants placés dessus retournent dans la réserve.'))return;
- g.tables.splice(i,1);persist();render();
-}
-
-function clearTable(tid){
- let g=game(),t=g.tables.find(x=>x.id===tid);if(!t)return;
- if(!confirm('Vider cette table et remettre tous ses composants dans la réserve ?'))return;
- t.counts={};persist();render();
-}
-
-function addToTable(cid,tid){
- let g=game(),c=g?.components.find(x=>x.id===cid),t=g?.tables.find(x=>x.id===tid);if(!c||!t)return;
- let used=g.tables.reduce((n,x)=>n+(Number(x.counts[cid])||0),0);
- if(used>=Number(c.qty))return;
- t.counts[cid]=(Number(t.counts[cid])||0)+1;persist();render();
-}
-
-function chooseTable(cid){
- let g=game();if(!g)return;
- if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}
- openModal('Sur quelle table ajouter ?',\`<div class="menuList">\${g.tables.map(t=>\`<button type="button" class="btn" data-pick-table="\${esc(t.id)}">\${esc(t.name)}</button>\`).join('')}</div>\`,null);
-}
-
-function removeOne(tid,cid){
- let g=game(),t=g?.tables.find(x=>x.id===tid);if(!t||!t.counts[cid])return;
- t.counts[cid]--;if(t.counts[cid]<=0)delete t.counts[cid];persist();render();
-}
-
-
-const drawCards=[{"page":2,"file":"card_02.jpg","title":"Premier empire","frTitle":"Premier empire","frType":"Culture","frText":"Placez 2 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Difficulté de terrain la plus élevée."},{"page":3,"file":"card_03.jpg","title":"Commerce extrieur","frTitle":"Commerce extérieur","frType":"Économie","frText":"Déplacez la caravane de ce joueur de 3 cases vers sa destination, en suivant le chemin le plus court.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte."},{"page":4,"file":"card_04.jpg","title":"Poterie","frTitle":"Poterie","frType":"Industrie","frText":"Construisez 1 merveille du monde. La production de ce joueur est de 5. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 2 cases ou moins d’une case amie.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Élevage et réinitialisez-la."},{"page":5,"file":"card_05.jpg","title":"Maonnerie","frTitle":"Maçonnerie","frType":"Militaire","frText":"Effectuez jusqu’à 2 attaques à 2 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 5.\\n\\nOrdre de priorité des cibles :\\n1. Barbare.\\n2. Ville rivale avec une défense de 4 ou moins.\\n3. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 3 pour chaque attaque effectuée (minimum 0). Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\\n\\nSi aucune attaque n’a été effectuée et qu’aucun jeton n’a été fortifié, remplacez cette carte par Travail du fer et réinitialisez-la."},{"page":6,"file":"card_06.jpg","title":"Astrologie","frTitle":"Astrologie","frType":"Science","frText":"Avancez le cadran technologique de ce joueur de 5 cases.\\n\\nLorsque ce joueur atteint ou franchit une case de niveau technologique sur son cadran, sélectionnez aléatoirement 1 de ses cartes de focus ayant le niveau technologique le plus faible. Remplacez la carte sélectionnée par la carte de focus du même type correspondant au niveau technologique indiqué par la case de niveau technologique. Si la carte sélectionnée est déjà au niveau indiqué, remplacez-la par la carte du même type qui est supérieure d’un niveau."},{"page":8,"file":"card_08.jpg","title":"Drame et posie","frTitle":"Drame et poésie","frType":"Culture","frText":"Placez 3 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Difficulté de terrain la plus élevée."},{"page":9,"file":"card_09.jpg","title":"Monnaie","frTitle":"Monnaie","frType":"Économie","frText":"Ce joueur vainc chaque barbare adjacent à une case amie sans gagner de jetons de commerce.\\n\\nEnsuite, déplacez chacune des caravanes de ce joueur de 4 cases vers des destinations différentes, en suivant le chemin le plus court.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte."},{"page":10,"file":"card_10.jpg","title":"levage","frTitle":"Élevage","frType":"Industrie","frText":"Construisez 1 merveille du monde. La production de ce joueur est de 6. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 3 cases ou moins d’une case amie ou d’une caravane amie.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Nationalisme et réinitialisez-la."},{"page":11,"file":"card_11.jpg","title":"Travail du fer","frTitle":"Travail du fer","frType":"Militaire","frText":"Effectuez jusqu’à 2 attaques à 3 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 6, ou de 8 s’il attaque un barbare.\\n\\nOrdre de priorité des cibles :\\n1. Barbare.\\n2. Ville rivale avec une défense de 6 ou moins.\\n3. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 2 pour chaque attaque effectuée (minimum 0). Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\\n\\nSi aucune attaque n’a été effectuée et qu’aucun jeton n’a été fortifié, remplacez cette carte par Production de masse et réinitialisez-la."},{"page":12,"file":"card_12.jpg","title":"Mathmatiques","frTitle":"Mathématiques","frType":"Science","frText":"Placez 1 jeton de commerce de la réserve sur la carte de focus qui possède le moins de jetons de commerce et qui est la plus haute dans la rangée de focus de ce joueur.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases."},{"page":14,"file":"card_14.jpg","title":"Administration","frTitle":"Administration","frType":"Culture","frText":"Placez 3 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nEnsuite, placez 1 jeton de contrôle sur une case adjacente à une case amie.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent à une merveille naturelle, un jeton de ressource ou un point d’apparition de barbares découvert.\\n5. Adjacent au plus grand nombre de villes.\\n6. Adjacent à la ville la plus proche de sa maturité.\\n7. Difficulté de terrain la plus élevée."},{"page":15,"file":"card_15.jpg","title":"Machine  vapeur","frTitle":"Machine à vapeur","frType":"Économie","frText":"Ce joueur gagne 1 ressource depuis la réserve.\\n\\nEnsuite, déplacez chacune des caravanes de ce joueur de 6 cases vers des destinations différentes, en suivant le chemin le plus court. Elles peuvent se déplacer sur l’eau.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte."},{"page":16,"file":"card_16.jpg","title":"Nationalisme","frTitle":"Nationalisme","frType":"Industrie","frText":"Construisez 1 merveille du monde. La production de ce joueur est de 7. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 4 cases ou moins d’une case amie. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Urbanisation et réinitialisez-la."},{"page":17,"file":"card_17.jpg","title":"Production de masse","frTitle":"Production de masse","frType":"Militaire","frText":"Effectuez jusqu’à 2 attaques à 3 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 7. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité des cibles :\\n1. Ville rivale avec une merveille et une défense de 8 ou moins.\\n2. Barbare adjacent à une case amie.\\n3. Ville rivale avec une défense de 8 ou moins.\\n4. Cité-État.\\n5. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 1 pour chaque attaque effectuée. Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée."},{"page":18,"file":"card_18.jpg","title":"Pices dtaches","frTitle":"Pièces détachées","frType":"Science","frText":"Ce joueur remplace sa carte de focus ayant la valeur technologique la plus faible parmi celles qui sont les plus hautes dans sa rangée de focus, par la carte du niveau technologique immédiatement supérieur du même type.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases."},{"page":20,"file":"card_20.jpg","title":"Mdias de masse","frTitle":"Médias de masse","frType":"Culture","frText":"Pour chaque jeton de contrôle rival adjacent à une case amie, retournez ce jeton sur son côté non fortifié. Si le jeton était déjà non fortifié, retirez-le de la carte.\\n\\nEnsuite, placez 4 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Adjacent à une case rivale.\\n7. Difficulté de terrain la plus élevée."},{"page":21,"file":"card_21.jpg","title":"Capitalisme","frTitle":"Capitalisme","frType":"Économie","frText":"Déplacez chacune des caravanes de ce joueur de 6 cases vers des destinations différentes, en suivant le chemin le plus court. Elles peuvent se déplacer sur l’eau.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte.\\n\\nEnsuite, après avoir réinitialisé cette carte, résolvez la carte située dans le cinquième emplacement de ce joueur, sans la réinitialiser."},{"page":22,"file":"card_22.jpg","title":"Urbanisation","frTitle":"Urbanisation","frType":"Industrie","frText":"Construisez 1 merveille du monde. La production de ce joueur est de 8. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 5 cases ou moins d’une case amie. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nEnsuite, après avoir réinitialisé cette carte, résolvez la carte de focus Culture de ce joueur comme si elle se trouvait dans le cinquième emplacement. Réinitialisez cette carte normalement."},{"page":23,"file":"card_23.jpg","title":"Aviation","frTitle":"Aviation","frType":"Militaire","frText":"Effectuez jusqu’à 3 attaques à 5 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 8. Ce joueur peut compter à travers l’eau, les cases rivales, les barbares et les cités-États.\\n\\nOrdre de priorité des cibles :\\n1. Ville rivale avec une merveille et une défense de 10 ou moins.\\n2. Barbare adjacent à une case amie.\\n3. Ville rivale avec une défense de 10 ou moins.\\n4. Cité-État.\\n5. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 1 pour chaque attaque effectuée. Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée."},{"page":24,"file":"card_24.jpg","title":"nergie nuclaire","frTitle":"Énergie nucléaire","frType":"Science","frText":"Chaque joueur humain doit choisir 1 de ses villes non-capitales, si possible. Détruisez chaque ville choisie ainsi que chaque jeton de contrôle adjacent à ces villes.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases."}];
-
-function drawCard(){
-  if(!drawCards.length)return;
-  const card=drawCards[Math.floor(Math.random()*drawCards.length)];
-  openModal('Tirage de carte',\`<div class="cardDraw">
-    <div class="cardDrawGrid">
-      <div class="cardDrawPane"><img src="./cards/\${card.file}" alt="Carte tirée au hasard"></div>
-      <div class="cardDrawPane cardDrawTranslation">
-        <h4>Traduction française</h4>
-        <div class="cardTitleFr">\${esc(card.frTitle)}</div>
-        <div class="cardTypeFr">\${esc(card.frType)}</div>
-        <div>\${esc(card.frText)}</div>
-      </div>
-    </div>
-    <div class="cardDrawMeta">Carte tirée au hasard · page \${card.page} du fichier source</div>
-    <button type="button" class="btn primary" id="drawAgainBtn">Tirer une autre carte</button>
-  </div>\`,null);
-  $('drawAgainBtn').onclick=e=>{e.preventDefault();drawCard()};
-}
-
-
-function createChaosBag(){openModal('Créer un Chaos Bag',\`<input class="field" id="chaosBagName" placeholder="Nom du sac" autocomplete="off"><div class="hint">Choisissez un modèle de départ. Le contenu restera entièrement modifiable.</div><select class="field" id="chaosPreset"><option value="vide">Sac vide</option><option value="facile">Facile</option><option value="standard" selected>Standard</option><option value="difficile">Difficile</option><option value="expert">Expert</option></select>\`,()=>{let name=$('chaosBagName').value.trim();if(!name)return;let id=uid(),preset=$('chaosPreset').value;chaosBags[id]={id,name,tokens:presetTokens(preset),history:[]};currentChaosBagId=id;persistChaos();closeModal();manageChaosBags()})}
-function manageChaosBags(){let bags=Object.values(chaosBags);let body=\`<div class="hint">Sac actif : choisissez un sac puis modifiez son contenu.</div>\`+bags.map(b=>\`<div class="managerRow"><div style="min-width:0"><b>\${esc(b.name)}</b><div class="qty">\${chaosTotal(b)} jeton\${chaosTotal(b)>1?'s':''}\${b.id===currentChaosBagId?' · actif':''}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="small \${b.id===currentChaosBagId?'primary':''}" data-chaos-open="\${esc(b.id)}">\${b.id===currentChaosBagId?'Modifier':'Choisir'}</button><button type="button" class="small danger" data-chaos-delete="\${esc(b.id)}">Supprimer</button></div></div>\`).join('');if(!bags.length)body+='<p>Aucun Chaos Bag. Créez-en un.</p>';body+=\`<div class="row"><button type="button" class="btn primary" id="newChaosBagBtn">+ Créer un sac</button></div>\`;openModal('Chaos Bags',body,null)}
-function editChaosBag(id=currentChaosBagId){let b=chaosBags[id];if(!b)return;currentChaosBagId=id;persistChaos();let total=chaosTotal(b);let body=\`<div class="bagSummary"><div><div class="bagName">\${esc(b.name)}</div><div class="bagCount">\${total} jeton\${total>1?'s':''}</div></div><button type="button" class="small" id="renameChaosBtn">Renommer</button></div><div class="hint">Touchez un jeton pour ajouter un exemplaire. Les jetons présents sont regroupés avec leur quantité.</div><div class="chaosGrid">\${chaosTypes.map(t=>{let n=Number(b.tokens[t.id])||0;return \`<button type="button" class="chaosTile" data-chaos-add="\${t.id}" aria-label="Ajouter \${esc(t.label)}">\${chaosIcon(t.id)}\${n?\`<span class="chaosBadge">\${n}</span>\`:''}<div class="chaosQty">\${n?'× '+n:'+'}</div></button>\`}).join('')}</div><div class="panel" style="margin:0 9px 9px"><h2>Jetons dans le sac · toucher pour retirer 1</h2><div class="chaosGrid">\${chaosTypes.filter(t=>(Number(b.tokens[t.id])||0)>0).map(t=>\`<button type="button" class="chaosTile" data-chaos-remove="\${t.id}" aria-label="Retirer un \${esc(t.label)}">\${chaosIcon(t.id)}<span class="chaosBadge">\${Number(b.tokens[t.id])||0}</span></button>\`).join('')||'<div class="empty" style="grid-column:1/-1">Sac vide</div>'}</div></div><div class="chaosBagActions"><button type="button" class="btn primary" id="drawChaosBtn">Tirer un jeton</button><button type="button" class="btn" id="chaosBackBtn">Retour</button></div>\`;openModal('Construire le Chaos Bag',body,null)}
-function renameChaosBag(){let b=currentChaos();if(!b)return;openModal('Renommer le Chaos Bag',\`<input class="field" id="chaosRename" value="\${esc(b.name)}" autocomplete="off">\`,()=>{let n=$('chaosRename').value.trim();if(!n)return;b.name=n;persistChaos();editChaosBag()})}
-function drawChaosToken(){let b=currentChaos();if(!b||chaosTotal(b)<=0){alert('Le Chaos Bag est vide.');return}let pool=[];Object.entries(b.tokens).forEach(([id,n])=>{for(let i=0;i<(Number(n)||0);i++)pool.push(id)});let id=pool[Math.floor(Math.random()*pool.length)];let t=chaosTypes.find(x=>x.id===id);b.history=[id,...(b.history||[])].slice(0,5);persistChaos();let hist=(b.history||[]).map(x=>chaosIcon(x)).join('');openModal('Tirage du Chaos Bag',\`<div class="chaosDraw">\${chaosIcon(id,'drawToken')}<div class="drawResult"><strong>\${esc(t?.label||'Jeton')}</strong>\${chaosTotal(b)} jetons dans le sac</div><div class="hint">Le jeton revient immédiatement dans le sac.</div><div class="history" aria-label="Derniers tirages">\${hist}</div><button type="button" class="btn primary" id="drawChaosAgainBtn">Tirer à nouveau</button><button type="button" class="btn" id="editChaosAfterDrawBtn">Modifier le sac</button></div>\`,null)}
-function changeChaos(id,delta){let b=currentChaos();if(!b)return;let n=(Number(b.tokens[id])||0)+delta;if(n<=0)delete b.tokens[id];else b.tokens[id]=n;persistChaos();editChaosBag()}
-
-function exportGame(){
- let g=game();if(!g)return;
- let blob=new Blob([JSON.stringify(g,null,2)],{type:'application/json'});
- let a=document.createElement('a');a.href=URL.createObjectURL(blob);
- a.download=g.name.replace(/[^a-z0-9àâçéèêëîïôûùüÿæœ_-]+/gi,'_')+'.json';a.click();
- setTimeout(()=>URL.revokeObjectURL(a.href),500);
-}
-
-function importGame(){$('importFile').click()}
-$('importFile').onchange=e=>{
- let f=e.target.files[0];if(!f)return;
- let rd=new FileReader();rd.onload=()=>{
-  try{let g=normalizeGame(JSON.parse(rd.result));if(!g.name||!g.components)throw 0;
-   g.id=uid();games[g.id]=g;currentId=g.id;persist();render();
-  }catch(_){alert('Fichier de jeu invalide.')}
-  e.target.value='';
- };rd.readAsText(f);
-};
-
-$('gameSelect').onchange=e=>{currentId=e.target.value;persist();render()};
-$('menuBtn').addEventListener('click',e=>{e.preventDefault();menu()});
-$('tableBtn').addEventListener('click',e=>{e.preventDefault();addTable()});
-$('cancelBtn').addEventListener('click',e=>{e.preventDefault();closeModal()});
-$('confirmBtn').addEventListener('click',e=>{
-  e.preventDefault();
-  const action=modalAction;
-  if(typeof action==='function') action();
-});
-$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-
-$('reserve').onclick=e=>{
- let x=e.target.closest('[data-action="add"]');if(x)chooseTable(x.dataset.cid);
-};
-
-$('counters').onclick=e=>{
- let x=e.target.closest('[data-counter-plus]'); if(x){changeCounter(x.dataset.counterPlus,1);return}
- x=e.target.closest('[data-counter-minus]'); if(x){changeCounter(x.dataset.counterMinus,-1);return}
- x=e.target.closest('[data-counter-reset]'); if(x){resetCounter(x.dataset.counterReset);return}
-};
-
-$('zones').onclick=e=>{
- let rem=e.target.closest('[data-action="remove"]');
- if(rem){
-   let zone=e.target.closest('.zone');removeOne(zone.dataset.zoneId,rem.dataset.cid);return;
- }
- let del=e.target.closest('[data-zone-delete]');if(del){deleteTable(del.dataset.zoneDelete);return}
- let clr=e.target.closest('[data-zone-clear]');if(clr){clearTable(clr.dataset.zoneClear);return}
-};
-
-$('modalBody').onclick=e=>{
- let m=e.target.closest('[data-menu]');
- if(m){
-   let a=m.dataset.menu;
-   if(a==='new')newGame();
-   else if(a==='component')component();
-   else if(a==='drawCard')drawCard();
-   else if(a==='chaosBag')manageChaosBags();
-   else if(a==='counter')createCounter();
-   else if(a==='manage')manageComponents();
-   else if(a==='manageCounters')manageCounters();
-   else if(a==='save'){exportGame();closeModal()}
-   else if(a==='import'){importGame();closeModal()}
-   else if(a==='delete'){
-     let g=game();
-     if(g&&confirm(\`Supprimer définitivement le jeu « \${g.name} » ?\`)){delete games[currentId];currentId=Object.keys(games)[0]||'';persist();closeModal();render()}
-   }
-   return;
- }
- let p=e.target.closest('[data-pick-table]');
- if(p){addToTable($('modalTitle').dataset.cid||'',p.dataset.pickTable);return}
- let dcounter=e.target.closest('[data-delete-counter]');if(dcounter){deleteCounter(dcounter.dataset.deleteCounter);return}
- let ec=e.target.closest('[data-edit-comp]');if(ec){editComponent(ec.dataset.editComp);return}
- let dc=e.target.closest('[data-delete-comp]');if(dc){deleteComponent(dc.dataset.deleteComp);return}
- let ca=e.target.closest('[data-chaos-open]');if(ca){editChaosBag(ca.dataset.chaosOpen);return}
- let cd=e.target.closest('[data-chaos-delete]');if(cd){let bag=chaosBags[cd.dataset.chaosDelete];if(bag&&confirm(\`Supprimer le Chaos Bag « \${bag.name} » ?\`)){delete chaosBags[bag.id];if(currentChaosBagId===bag.id)currentChaosBagId=Object.keys(chaosBags)[0]||'';persistChaos();manageChaosBags()}return}
- let add=e.target.closest('[data-chaos-add]');if(add){changeChaos(add.dataset.chaosAdd,1);return}
- let rem=e.target.closest('[data-chaos-remove]');if(rem){changeChaos(rem.dataset.chaosRemove,-1);return}
- if(e.target.id==='newChaosBagBtn'){createChaosBag();return}
- if(e.target.id==='renameChaosBtn'){renameChaosBag();return}
- if(e.target.id==='drawChaosBtn'||e.target.id==='drawChaosAgainBtn'){drawChaosToken();return}
- if(e.target.id==='editChaosAfterDrawBtn'){editChaosBag();return}
- if(e.target.id==='chaosBackBtn'){manageChaosBags();return}
-};
-
-// Keep the component id for the table-selection modal without relying on global DOM hacks.
-const originalChooseTable=chooseTable;
-chooseTable=function(cid){
- let g=game();if(!g)return;
- if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}
- openModal('Sur quelle table ajouter ?',\`<div class="menuList">\${g.tables.map(t=>\`<button type="button" class="btn" data-pick-table="\${esc(t.id)}">\${esc(t.name)}</button>\`).join('')}</div>\`,null);
- $('modalTitle').dataset.cid=cid;
-};
-render();
-<\/script>
-</body>
-</html>`;
-let meeplesShown=false;
+const MEEPLE_SRC = "<!doctype html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no\">\n<meta name=\"theme-color\" content=\"#f3efe7\">\n<link rel=\"manifest\" href=\"./manifest.webmanifest\">\n<title>Table Meeples V6</title>\n<style>\n*{box-sizing:border-box}\nbody{margin:0;background:#eee9df;color:#292722;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}\nheader{position:sticky;top:0;z-index:10;background:#f8f5ef;border-bottom:1px solid #d8d1c5;padding:calc(10px + env(safe-area-inset-top)) 12px 10px}\n.title{font-size:22px;font-weight:800}.v{font-size:11px;font-weight:800;background:#2f2d29;color:#fff;padding:4px 7px;border-radius:7px}\n.sub{font-size:12px;color:#746f66;margin-top:2px}.bar{display:flex;gap:7px;margin-top:9px;overflow:auto}\nbutton,select,input{font:inherit}.btn,select{background:#fff;border:1px solid #d1c9bc;border-radius:10px;padding:9px 11px}\n.btn{font-weight:700;white-space:nowrap}.primary{background:#2f2d29!important;color:#fff!important;border-color:#2f2d29!important}\nmain{padding:10px;display:grid;gap:10px}.panel{background:#f8f5ef;border:1px solid #d8d1c5;border-radius:14px;overflow:hidden}\n.panel h2{font-size:14px;margin:0;padding:10px 12px;border-bottom:1px solid #ded8ce}\n.reserve{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}\n.card{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;min-height:68px}\n.iconTap{width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex:0 0 48px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}\n.piece{display:flex;align-items:center;justify-content:center;width:42px;height:42px}\n.meeple{width:28px;height:35px;clip-path:polygon(30% 0,70% 0,78% 15%,100% 28%,84% 43%,75% 38%,78% 100%,55% 100%,50% 64%,45% 100%,22% 100%,25% 38%,16% 43%,0 28%,22% 15%)}\n.circle{width:34px;height:34px;border-radius:50%;border:3px solid #aaa;box-shadow:inset 0 0 0 2px #fff8}\n.bread{width:38px;height:25px;border-radius:48% 48% 44% 44%;transform:rotate(-8deg);border:2px solid #a77940}\n.cube{width:31px;height:31px;border-radius:6px;transform:rotate(45deg)}\n.star{font-size:36px;line-height:1;color:inherit}.heart{font-size:34px;line-height:1;color:inherit}.crown{font-size:34px;line-height:1;color:inherit}\n.gem{width:29px;height:35px;clip-path:polygon(25% 0,75% 0,100% 38%,50% 100%,0 38%)}\n.shield{width:31px;height:36px;clip-path:polygon(8% 0,92% 0,92% 62%,50% 100%,8% 62%)}\n.coin{width:35px;height:35px;border-radius:50%;border:3px solid #9b741e;box-shadow:inset 0 0 0 2px #fff8}\n.info{min-width:0}.name{font-weight:750;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}\n.qty{font-size:12px;color:#777;margin-top:2px}\n.zones{display:grid;gap:9px;padding:9px}.zone{background:#fffdf9;border:1px solid #d6cfc3;border-radius:12px;min-height:130px;overflow:hidden}\n.zoneHead{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed #d8d1c5;background:#f5f1e8}\n.zoneTitle{font-weight:800;font-size:13px}.zoneBtns{display:flex;gap:5px}.small{padding:5px 8px;border-radius:8px;background:#fff;border:1px solid #d2cabf;font-size:12px}\n.groups{padding:10px;display:flex;flex-wrap:wrap;gap:14px 18px}.group{display:flex;flex-direction:column;align-items:center;gap:4px}\n.pieces{display:flex;flex-wrap:wrap;max-width:190px;gap:4px}.pieces .iconTap{width:38px;height:42px;flex-basis:38px}.pieces .piece{width:36px;height:40px}\n.groupCount{font-size:11px;color:#6f6a61;font-weight:700;text-align:center}.empty{padding:25px 12px;text-align:center;color:#999;font-size:12px}\n.emptyBig{padding:40px 18px;text-align:center;color:#777}\n.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);display:none;align-items:flex-end;z-index:50}.modal.show{display:flex}\n.sheet{background:#f8f5ef;width:100%;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}\n.sheet h3{margin:0 0 12px}.field{width:100%;padding:10px;border:1px solid #d2cabf;border-radius:10px;background:#fff;margin-bottom:9px}\n.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.choice{background:#fff;border:1px solid #d2cabf;border-radius:10px;padding:9px 5px;text-align:center}.choice.selected{outline:3px solid #2f2d29}\n.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:8px 0 12px}.sw{height:36px;border-radius:9px;border:2px solid transparent}.sw.selected{border-color:#222;box-shadow:0 0 0 2px #fff inset}\n.row{display:flex;gap:8px;margin-top:10px}.row>*{flex:1}.hint{font-size:12px;color:#716b62;margin:5px 0 10px}\n.menuList{display:grid;gap:8px}.menuList .btn{text-align:left}.managerRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #ddd}\n.danger{color:#a52b2b;border-color:#d9b1b1}.footer{text-align:center;color:#777;font-size:11px;padding:2px 4px 15px}\n@media(min-width:700px){main{grid-template-columns:1fr 1.4fr}.panel:first-child{grid-column:1}.panel:nth-child(2){grid-column:2;grid-row:1/3}}\n\n.counter{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:10px;margin:9px;display:flex;align-items:center;justify-content:space-between;gap:10px}\n.counterInfo{min-width:0}.counterName{font-weight:800;font-size:14px}.counterValue{font-size:25px;font-weight:900;min-width:55px;text-align:center}\n.counterBtns{display:flex;gap:6px}.counterBtns button{width:42px;height:38px;border-radius:10px;border:1px solid #d1c9bc;background:#f8f5ef;font-size:21px;font-weight:800}\n.counterBtns .reset{width:auto;font-size:12px;padding:0 8px}\n.managerSection{margin-top:10px}.managerTitle{font-weight:800;font-size:13px;margin:12px 0 6px}\n.cardDraw{display:grid;gap:12px}\n.cardDrawGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}\n.cardDrawPane{background:#fff;border:1px solid #d1c9bc;border-radius:12px;padding:8px;min-width:0}\n.cardDrawPane img{width:100%;max-height:62vh;object-fit:contain;display:block;margin:auto;border-radius:7px}\n.cardDrawTranslation{font-size:14px;line-height:1.42;text-align:left;white-space:pre-line;max-height:62vh;overflow:auto}\n.cardDrawTranslation h4{margin:2px 0 10px;font-size:16px}\n.cardDrawTranslation .cardTitleFr{font-weight:800;font-size:18px;margin-bottom:4px}\n.cardDrawTranslation .cardTypeFr{font-size:12px;color:#716b62;font-weight:700;margin-bottom:12px}\n.cardDrawMeta{font-size:12px;color:#716b62;text-align:center}\n@media(max-width:700px){.cardDrawGrid{grid-template-columns:1fr}.cardDrawTranslation{max-height:none}}\n\n\n.chaosGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:9px}.chaosTile{background:#fff;border:1px solid #d7d0c4;border-radius:12px;padding:7px 5px;text-align:center;position:relative;min-height:76px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.chaosTile:active{transform:scale(.98)}.chaosIcon{width:50px;height:50px;margin:0 auto 3px;display:block}.chaosQty{font-size:12px;font-weight:800;color:#5d584f}.chaosBadge{position:absolute;right:5px;top:5px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:#2f2d29;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}.bagSummary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#f5f1e8;border-bottom:1px solid #ded8ce}.bagName{font-weight:850}.bagCount{font-size:12px;color:#716b62}.chaosBagActions{display:flex;gap:7px;flex-wrap:wrap;padding:9px}.chaosDraw{display:grid;gap:14px;text-align:center}.drawToken{width:min(210px,58vw);height:min(210px,58vw);margin:0 auto;display:block}.drawResult{font-size:13px;color:#716b62}.drawResult strong{display:block;font-size:18px;color:#292722;margin-bottom:3px}.history{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding-top:4px}.history img{width:44px;height:44px}@media(max-width:430px){.chaosGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.chaosTile{min-height:72px}.chaosIcon{width:46px;height:46px}}\n</style>\n</head>\n<body>\n<div class=\"app\">\n<header>\n <div style=\"display:flex;align-items:center;gap:8px\"><div class=\"title\">Table Meeples</div><span class=\"v\">V6</span></div>\n <div class=\"sub\">Jeux personnalisés · tables multiples · composants · Chaos Bag - codage JGi</div>\n <div class=\"bar\"><select id=\"gameSelect\"></select><button class=\"btn\" id=\"menuBtn\">Menu</button><button class=\"btn primary\" id=\"tableBtn\">+ Table</button></div>\n</header>\n<main>\n <section class=\"panel\"><h2>Réserve · toucher l’image pour ajouter</h2><div class=\"reserve\" id=\"reserve\"></div></section>\n <section class=\"panel\"><h2>Tables</h2><div class=\"zones\" id=\"zones\"></div></section>\n <section class=\"panel\"><h2>Compteurs</h2><div id=\"counters\"></div></section><div class=\"footer\">Les composants sont regroupés automatiquement. Touchez une image sur la table pour retirer une seule pièce.</div>\n</main>\n</div>\n\n<div class=\"modal\" id=\"modal\">\n <div class=\"sheet\">\n  <h3 id=\"modalTitle\"></h3>\n  <div id=\"modalBody\"></div>\n  <div class=\"row\"><button type=\"button\" class=\"btn\" id=\"cancelBtn\">Annuler</button><button type=\"button\" class=\"btn primary\" id=\"confirmBtn\">Valider</button></div>\n </div>\n</div>\n<input id=\"importFile\" type=\"file\" accept=\"application/json\" hidden>\n\n<script>\nconst KEY='tableMeeplesV5Data';\nconst CUR='tableMeeplesV5Current';\n\nconst colors=[\n ['Jaune','#e6c229'],['Noir','#282828'],['Rouge','#c9473b'],['Bleu clair','#79b8d1'],['Marron','#8b5e3c'],\n ['Violet','#8e65b5'],['Vert','#5b9b63'],['Blanc','#f4f1e8'],['Orange','#df8a3a'],['Rose','#d889a8'],\n ['Gris','#8d9297'],['Bleu foncé','#3f5f9a'],['Turquoise','#49a9a0'],['Bordeaux','#7f3040'],['Beige','#cdbb99']\n];\n\nconst icons=[\n ['meeple','Meeple'],['bread','Pain'],['coin','Pièce'],['cube','Cube'],['token','Jeton'],\n ['star','Étoile'],['heart','Cœur'],['gem','Gemme'],['shield','Bouclier'],['crown','Couronne']\n];\n\nlet games={};\ntry{games=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){games={}};\nlet currentId=localStorage.getItem(CUR)||'';\nObject.values(games).forEach(normalizeGame);\nif(Object.keys(games).length) localStorage.setItem(KEY,JSON.stringify(games));\nlet modalAction=null, selectedColor=colors[0][1], selectedIcon='meeple';\nlet chaosBags={};\nlet currentChaosBagId=localStorage.getItem('tableMeeplesCurrentChaosBag')||'';\ntry{chaosBags=JSON.parse(localStorage.getItem('tableMeeplesChaosBags')||'{}')||{}}catch(e){chaosBags={}}\nconst chaosTypes=[\n {id:'p1',label:'+1',file:'p1.svg'},{id:'0',label:'0',file:'0.svg'},{id:'m1',label:'−1',file:'m1.svg'},{id:'m2',label:'−2',file:'m2.svg'},\n {id:'m3',label:'−3',file:'m3.svg'},{id:'m4',label:'−4',file:'m4.svg'},{id:'m5',label:'−5',file:'m5.svg'},{id:'m6',label:'−6',file:'m6.svg'},\n {id:'m7',label:'−7',file:'m7.svg'},{id:'m8',label:'−8',file:'m8.svg'},{id:'skull',label:'Crâne',file:'skull.svg'},\n {id:'cultist',label:'Cultiste',file:'cultist.svg'},{id:'tablet',label:'Tablette',file:'tablet.svg'},{id:'elder',label:'Être ancien',file:'elder.svg'},\n {id:'autofail',label:'Échec automatique',file:'autofail.svg'},{id:'elder_sign',label:'Signe des Anciens',file:'elder_sign.svg'},\n {id:'bless',label:'Bénédiction',file:'bless.svg'},{id:'curse',label:'Malédiction',file:'curse.svg'},{id:'frost',label:'Givre',file:'frost.svg'}\n];\nconst chaosPresets={\n 'vide':[],\n 'facile':['p1','p1','0','0','0','m1','m1','m1','m2','m2','skull','skull','cultist','tablet','elder','elder_sign'],\n 'standard':['p1','0','0','m1','m1','m1','m2','m2','m3','m4','skull','skull','cultist','tablet','elder','elder_sign'],\n 'difficile':['0','0','0','m1','m1','m2','m2','m3','m3','m4','m5','skull','skull','cultist','tablet','elder_sign'],\n 'expert':['0','m1','m1','m2','m2','m3','m3','m4','m4','m5','m6','m8','skull','skull','cultist','tablet','elder_sign']\n};\nfunction persistChaos(){localStorage.setItem('tableMeeplesChaosBags',JSON.stringify(chaosBags));localStorage.setItem('tableMeeplesCurrentChaosBag',currentChaosBagId)}\nfunction currentChaos(){return chaosBags[currentChaosBagId]||null}\nfunction ensureChaosBag(b){if(!b.tokens)b.tokens={};if(!b.history)b.history=[];return b}\nfunction chaosTotal(b){return Object.values(b?.tokens||{}).reduce((n,v)=>n+(Number(v)||0),0)}\nfunction chaosIcon(id,extra=''){let t=chaosTypes.find(x=>x.id===id);return t?`<img class=\"chaosIcon ${extra}\" src=\"./chaos/${t.file}\" alt=\"${esc(t.label)}\">`:''}\nfunction presetTokens(name){let out={};(chaosPresets[name]||[]).forEach(id=>out[id]=(out[id]||0)+1);return out}\nObject.values(chaosBags).forEach(ensureChaosBag);if(!currentChaosBagId||!chaosBags[currentChaosBagId]){let ids=Object.keys(chaosBags);currentChaosBagId=ids[0]||'';persistChaos()}\n\n\nconst $=id=>document.getElementById(id);\nfunction uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}\nfunction esc(s){return String(s??'').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',\"'\":'&#39;','\"':'&quot;'}[c]))}\nfunction game(){return games[currentId]||null}\nfunction persist(){localStorage.setItem(KEY,JSON.stringify(games));localStorage.setItem(CUR,currentId)}\nfunction normalizeGame(g){\n if(!g.tables && g.placed) g.tables=g.placed;\n if(!g.tables) g.tables=[{id:uid(),name:'Table principale',counts:{}}];\n if(!g.components) g.components=[];\n if(!g.counters) g.counters=[];\n g.tables.forEach(t=>{if(!t.counts)t.counts={}});\n delete g.placed;\n return g;\n}\n\nfunction visual(c, action, extra=''){\n let cls=c.type==='meeple'?'meeple':c.type==='bread'?'bread':c.type==='coin'?'coin':c.type==='cube'?'cube':c.type==='token'?'circle':c.type==='gem'?'gem':c.type==='shield'?'shield':'';\n let content=c.type==='star'?'★':c.type==='heart'?'♥':c.type==='crown'?'♛':'';\n let style=['star','heart','crown'].includes(c.type)?`color:${c.color||'#777'}`:`background:${c.color||'#999'}`;\n return `<span class=\"iconTap ${extra}\" data-action=\"${action}\" data-cid=\"${esc(c.id)}\"><span class=\"piece\"><span class=\"${cls}\" style=\"${style}\">${content}</span></span></span>`;\n}\n\nfunction render(){\n let g=game(), sel=$('gameSelect');\n sel.innerHTML=Object.values(games).map(x=>`<option value=\"${esc(x.id)}\">${esc(x.name)}</option>`).join('');\n sel.value=currentId;\n if(!g){\n  $('reserve').innerHTML='<div class=\"emptyBig\" style=\"grid-column:1/-1\">Aucun jeu<br><br>Ouvrez le Menu pour créer votre premier jeu.</div>';\n  $('zones').innerHTML='';\n  return;\n }\n let r=$('reserve');\n if(!g.components.length) r.innerHTML='<div class=\"emptyBig\" style=\"grid-column:1/-1\">Aucun composant.<br><br>Ouvrez le Menu pour en créer.</div>';\n else r.innerHTML=g.components.map(c=>{\n   let used=g.tables.reduce((n,t)=>n+(Number(t.counts[c.id])||0),0);\n   let available=Math.max(0,(Number(c.qty)||0)-used);\n   return `<div class=\"card\">${visual(c,'add')}<div class=\"info\"><div class=\"name\">${esc(c.name)}</div><div class=\"qty\">Réserve : ${available} / ${Number(c.qty)||0}</div></div></div>`;\n }).join('');\n\n $('counters').innerHTML=g.counters.length?g.counters.map(c=>`<div class=\"counter\">\n   <div class=\"counterInfo\"><div class=\"counterName\">${esc(c.name)}</div></div>\n   <div class=\"counterValue\">${Number(c.value)||0}</div>\n   <div class=\"counterBtns\"><button data-counter-minus=\"${esc(c.id)}\">−</button><button data-counter-plus=\"${esc(c.id)}\">+</button><button class=\"reset\" data-counter-reset=\"${esc(c.id)}\">Réinitialiser</button></div>\n  </div>`).join(''):'<div class=\"empty\">Aucun compteur. Ouvrez le Menu pour en créer.</div>';\n\n $('zones').innerHTML=g.tables.map((t,i)=>{\n   let groups=g.components.map(c=>({c,n:Number(t.counts[c.id])||0})).filter(x=>x.n>0);\n   return `<div class=\"zone\" data-zone-id=\"${esc(t.id)}\">\n    <div class=\"zoneHead\"><div class=\"zoneTitle\">${esc(t.name)}${i===0?' · principale':''}</div>\n    <div class=\"zoneBtns\">${i>0?`<button class=\"small danger\" data-zone-delete=\"${esc(t.id)}\">Supprimer</button>`:''}\n    ${groups.length?`<button class=\"small\" data-zone-clear=\"${esc(t.id)}\">Vider</button>`:''}</div></div>\n    <div class=\"groups\">${groups.map(x=>`<div class=\"group\"><div class=\"pieces\">${Array.from({length:x.n},()=>visual(x.c,'remove')).join('')}</div><div class=\"groupCount\">${esc(x.c.name)} · ${x.n}</div></div>`).join('')||'<div class=\"empty\">Table vide</div>'}</div>\n   </div>`;\n }).join('');\n}\n\nfunction openModal(title,body,fn=null){\n $('modalTitle').textContent=title;$('modalBody').innerHTML=body;modalAction=fn;$('modal').classList.add('show');\n}\nfunction closeModal(){$('modal').classList.remove('show');modalAction=null}\n\nfunction createCounter(){\n openModal('Créer un compteur',\n  `<div class=\"hint\">Exemples : Points de victoire, Points de vie, Or, Énergie…</div>\n   <input class=\"field\" id=\"counterName\" placeholder=\"Nom du compteur\" autocomplete=\"off\">\n   <input class=\"field\" id=\"counterValue\" type=\"number\" value=\"0\" placeholder=\"Valeur initiale\">`,()=>{\n    let g=game(); if(!g)return;\n    let name=$('counterName').value.trim(); if(!name)return;\n    let value=parseInt($('counterValue').value||'0',10); if(!Number.isFinite(value))value=0;\n    g.counters.push({id:uid(),name,value}); persist(); closeModal(); render();\n  });\n}\n\nfunction manageCounters(){\n let g=game(); if(!g){menu();return}\n let body=g.counters.length?g.counters.map(c=>`<div class=\"managerRow\">\n  <div><b>${esc(c.name)}</b><div class=\"qty\">Valeur : ${Number(c.value)||0}</div></div>\n  <button class=\"small danger\" data-delete-counter=\"${esc(c.id)}\">Supprimer</button>\n </div>`).join(''):'<p>Aucun compteur.</p>';\n openModal('Gérer les compteurs',body,null);\n}\n\nfunction deleteCounter(cid){\n let g=game(); if(!g)return;\n let c=g.counters.find(x=>x.id===cid); if(!c)return;\n if(!confirm(`Supprimer le compteur « ${c.name} » ?`))return;\n g.counters=g.counters.filter(x=>x.id!==cid); persist(); render(); manageCounters();\n}\n\nfunction changeCounter(cid,delta){\n let g=game(); if(!g)return;\n let c=g.counters.find(x=>x.id===cid); if(!c)return;\n c.value=(Number(c.value)||0)+delta; persist(); render();\n}\nfunction resetCounter(cid){\n let g=game(); if(!g)return;\n let c=g.counters.find(x=>x.id===cid); if(!c)return;\n c.value=0; persist(); render();\n}\n\nfunction menu(){\n let items=[\n  ['new','Créer un jeu'],\n  ['component','Créer un composant'],\n  ['drawCard','Tirer une carte'],\n  ['chaosBag','Chaos Bag'],\n  ['counter','Créer un compteur'],\n  ['manageCounters','Gérer les compteurs'],\n  ['manage','Gérer les composants'],\n  ['save','Sauvegarder le jeu actuel'],\n  ['import','Importer un jeu']\n ];\n if(game()) items.push(['delete','Supprimer le jeu actuel']);\n openModal('Menu',`<div class=\"menuList\">${items.map(x=>`<button class=\"btn ${x[0]==='delete'?'danger':''}\" data-menu=\"${x[0]}\">${x[1]}</button>`).join('')}</div>`,null);\n}\n\nfunction newGame(){\n openModal('Créer un jeu','<input class=\"field\" id=\"gameName\" placeholder=\"Nom du jeu\" autocomplete=\"off\">',()=>{\n  let n=$('gameName').value.trim();if(!n)return;\n  currentId=uid();games[currentId]={id:currentId,name:n,components:[],counters:[],tables:[{id:uid(),name:'Table principale',counts:{}}]};\n  persist();closeModal();render();\n });\n}\n\nfunction component(){\n selectedIcon='meeple';selectedColor=colors[0][1];\n let choices=icons.map(x=>`<button type=\"button\" class=\"choice ${x[0]==='meeple'?'selected':''}\" data-icon=\"${x[0]}\">${x[1]}</button>`).join('');\n let pal=colors.map(x=>`<button type=\"button\" class=\"sw ${x[1]===selectedColor?'selected':''}\" title=\"${x[0]}\" style=\"background:${x[1]}\" data-color=\"${x[1]}\"></button>`).join('');\n openModal('Créer un composant',\n  `<div class=\"hint\">Type de composant</div><div class=\"grid\">${choices}</div>\n   <div class=\"hint\">Couleur · 15 couleurs disponibles</div><div class=\"palette\">${pal}</div>\n   <input class=\"field\" id=\"compName\" placeholder=\"Nom du composant\">\n   <input class=\"field\" id=\"compQty\" type=\"number\" min=\"1\" value=\"10\" placeholder=\"Quantité totale\">`,()=>{\n    let g=game();if(!g)return;\n    let name=$('compName').value.trim();\n    let qty=Math.max(1,parseInt($('compQty').value||'1',10));\n    if(!name){\n      let label=icons.find(x=>x[0]===selectedIcon)[1];\n      if(selectedIcon==='meeple') label='Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase();\n      name=label;\n    }\n    g.components.push({id:uid(),name,type:selectedIcon,color:selectedColor,qty});\n    persist();closeModal();render();\n  });\n document.querySelectorAll('[data-icon]').forEach(b=>b.onclick=()=>{\n   selectedIcon=b.dataset.icon;\n   document.querySelectorAll('[data-icon]').forEach(x=>x.classList.toggle('selected',x===b));\n   if(selectedIcon==='coin' && !$('compName').value) $('compName').value='Pièce';\n   if(selectedIcon!=='meeple' && $('compName').value.startsWith('Meeple ')) $('compName').value='';\n });\n document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{\n   selectedColor=b.dataset.color;\n   document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b));\n   if(selectedIcon==='meeple') $('compName').value='Meeple '+colors.find(x=>x[1]===selectedColor)[0].toLowerCase();\n });\n}\n\nfunction manageComponents(){\n let g=game();if(!g){menu();return}\n let body=g.components.length?g.components.map(c=>`\n  <div class=\"managerRow\"><div><b>${esc(c.name)}</b><div class=\"qty\">${esc(icons.find(x=>x[0]===c.type)?.[1]||c.type)} · ${c.qty}</div></div>\n  <div style=\"display:flex;gap:5px\"><button class=\"small\" data-edit-comp=\"${esc(c.id)}\">Modifier</button><button class=\"small danger\" data-delete-comp=\"${esc(c.id)}\">Supprimer</button></div></div>`).join(''):'<p>Aucun composant.</p>';\n openModal('Gérer les composants',body,null);\n}\n\nfunction editComponent(cid){\n let g=game(),c=g?.components.find(x=>x.id===cid);if(!c)return;\n selectedIcon=c.type;selectedColor=c.color||colors[0][1];\n let choices=icons.map(x=>`<button type=\"button\" class=\"choice ${x[0]===selectedIcon?'selected':''}\" data-icon=\"${x[0]}\">${x[1]}</button>`).join('');\n let pal=colors.map(x=>`<button type=\"button\" class=\"sw ${x[1]===selectedColor?'selected':''}\" title=\"${x[0]}\" style=\"background:${x[1]}\" data-color=\"${x[1]}\"></button>`).join('');\n openModal('Modifier le composant',\n  `<div class=\"hint\">Type</div><div class=\"grid\">${choices}</div><div class=\"hint\">Couleur</div><div class=\"palette\">${pal}</div>\n   <input class=\"field\" id=\"compName\" value=\"${esc(c.name)}\"><input class=\"field\" id=\"compQty\" type=\"number\" min=\"1\" value=\"${Number(c.qty)||1}\">`,()=>{\n    c.type=selectedIcon;c.color=selectedColor;c.name=$('compName').value.trim()||c.name;c.qty=Math.max(1,parseInt($('compQty').value||'1',10));\n    persist();closeModal();render();\n  });\n document.querySelectorAll('[data-icon]').forEach(b=>b.onclick=()=>{selectedIcon=b.dataset.icon;document.querySelectorAll('[data-icon]').forEach(x=>x.classList.toggle('selected',x===b))});\n document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{selectedColor=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b))});\n}\n\nfunction deleteComponent(cid){\n let g=game(),c=g?.components.find(x=>x.id===cid);if(!c)return;\n if(!confirm(`Supprimer « ${c.name} » et toutes les pièces de ce composant ?`))return;\n g.components=g.components.filter(x=>x.id!==cid);\n g.tables.forEach(t=>delete t.counts[cid]);\n persist();render();manageComponents();\n}\n\nfunction addTable(){\n let g=game();if(!g)return;\n openModal('Créer une table','<input class=\"field\" id=\"tableName\" placeholder=\"Nom de la table\" autocomplete=\"off\">',()=>{\n  let n=$('tableName').value.trim();if(!n)return;\n  g.tables.push({id:uid(),name:n,counts:{}});persist();closeModal();render();\n });\n}\n\nfunction deleteTable(tid){\n let g=game(),i=g.tables.findIndex(t=>t.id===tid);if(i<=0)return;\n if(!confirm('Supprimer cette table ? Les composants placés dessus retournent dans la réserve.'))return;\n g.tables.splice(i,1);persist();render();\n}\n\nfunction clearTable(tid){\n let g=game(),t=g.tables.find(x=>x.id===tid);if(!t)return;\n if(!confirm('Vider cette table et remettre tous ses composants dans la réserve ?'))return;\n t.counts={};persist();render();\n}\n\nfunction addToTable(cid,tid){\n let g=game(),c=g?.components.find(x=>x.id===cid),t=g?.tables.find(x=>x.id===tid);if(!c||!t)return;\n let used=g.tables.reduce((n,x)=>n+(Number(x.counts[cid])||0),0);\n if(used>=Number(c.qty))return;\n t.counts[cid]=(Number(t.counts[cid])||0)+1;persist();render();\n}\n\nfunction chooseTable(cid){\n let g=game();if(!g)return;\n if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}\n openModal('Sur quelle table ajouter ?',`<div class=\"menuList\">${g.tables.map(t=>`<button type=\"button\" class=\"btn\" data-pick-table=\"${esc(t.id)}\">${esc(t.name)}</button>`).join('')}</div>`,null);\n}\n\nfunction removeOne(tid,cid){\n let g=game(),t=g?.tables.find(x=>x.id===tid);if(!t||!t.counts[cid])return;\n t.counts[cid]--;if(t.counts[cid]<=0)delete t.counts[cid];persist();render();\n}\n\n\nconst drawCards=[{\"page\":2,\"file\":\"card_02.jpg\",\"title\":\"Premier empire\",\"frTitle\":\"Premier empire\",\"frType\":\"Culture\",\"frText\":\"Placez 2 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Difficulté de terrain la plus élevée.\"},{\"page\":3,\"file\":\"card_03.jpg\",\"title\":\"Commerce extrieur\",\"frTitle\":\"Commerce extérieur\",\"frType\":\"Économie\",\"frText\":\"Déplacez la caravane de ce joueur de 3 cases vers sa destination, en suivant le chemin le plus court.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte.\"},{\"page\":4,\"file\":\"card_04.jpg\",\"title\":\"Poterie\",\"frTitle\":\"Poterie\",\"frType\":\"Industrie\",\"frText\":\"Construisez 1 merveille du monde. La production de ce joueur est de 5. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 2 cases ou moins d’une case amie.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Élevage et réinitialisez-la.\"},{\"page\":5,\"file\":\"card_05.jpg\",\"title\":\"Maonnerie\",\"frTitle\":\"Maçonnerie\",\"frType\":\"Militaire\",\"frText\":\"Effectuez jusqu’à 2 attaques à 2 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 5.\\n\\nOrdre de priorité des cibles :\\n1. Barbare.\\n2. Ville rivale avec une défense de 4 ou moins.\\n3. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 3 pour chaque attaque effectuée (minimum 0). Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\\n\\nSi aucune attaque n’a été effectuée et qu’aucun jeton n’a été fortifié, remplacez cette carte par Travail du fer et réinitialisez-la.\"},{\"page\":6,\"file\":\"card_06.jpg\",\"title\":\"Astrologie\",\"frTitle\":\"Astrologie\",\"frType\":\"Science\",\"frText\":\"Avancez le cadran technologique de ce joueur de 5 cases.\\n\\nLorsque ce joueur atteint ou franchit une case de niveau technologique sur son cadran, sélectionnez aléatoirement 1 de ses cartes de focus ayant le niveau technologique le plus faible. Remplacez la carte sélectionnée par la carte de focus du même type correspondant au niveau technologique indiqué par la case de niveau technologique. Si la carte sélectionnée est déjà au niveau indiqué, remplacez-la par la carte du même type qui est supérieure d’un niveau.\"},{\"page\":8,\"file\":\"card_08.jpg\",\"title\":\"Drame et posie\",\"frTitle\":\"Drame et poésie\",\"frType\":\"Culture\",\"frText\":\"Placez 3 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Difficulté de terrain la plus élevée.\"},{\"page\":9,\"file\":\"card_09.jpg\",\"title\":\"Monnaie\",\"frTitle\":\"Monnaie\",\"frType\":\"Économie\",\"frText\":\"Ce joueur vainc chaque barbare adjacent à une case amie sans gagner de jetons de commerce.\\n\\nEnsuite, déplacez chacune des caravanes de ce joueur de 4 cases vers des destinations différentes, en suivant le chemin le plus court.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte.\"},{\"page\":10,\"file\":\"card_10.jpg\",\"title\":\"levage\",\"frTitle\":\"Élevage\",\"frType\":\"Industrie\",\"frText\":\"Construisez 1 merveille du monde. La production de ce joueur est de 6. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 3 cases ou moins d’une case amie ou d’une caravane amie.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Nationalisme et réinitialisez-la.\"},{\"page\":11,\"file\":\"card_11.jpg\",\"title\":\"Travail du fer\",\"frTitle\":\"Travail du fer\",\"frType\":\"Militaire\",\"frText\":\"Effectuez jusqu’à 2 attaques à 3 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 6, ou de 8 s’il attaque un barbare.\\n\\nOrdre de priorité des cibles :\\n1. Barbare.\\n2. Ville rivale avec une défense de 6 ou moins.\\n3. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 2 pour chaque attaque effectuée (minimum 0). Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\\n\\nSi aucune attaque n’a été effectuée et qu’aucun jeton n’a été fortifié, remplacez cette carte par Production de masse et réinitialisez-la.\"},{\"page\":12,\"file\":\"card_12.jpg\",\"title\":\"Mathmatiques\",\"frTitle\":\"Mathématiques\",\"frType\":\"Science\",\"frText\":\"Placez 1 jeton de commerce de la réserve sur la carte de focus qui possède le moins de jetons de commerce et qui est la plus haute dans la rangée de focus de ce joueur.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases.\"},{\"page\":14,\"file\":\"card_14.jpg\",\"title\":\"Administration\",\"frTitle\":\"Administration\",\"frType\":\"Culture\",\"frText\":\"Placez 3 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nEnsuite, placez 1 jeton de contrôle sur une case adjacente à une case amie.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent à une merveille naturelle, un jeton de ressource ou un point d’apparition de barbares découvert.\\n5. Adjacent au plus grand nombre de villes.\\n6. Adjacent à la ville la plus proche de sa maturité.\\n7. Difficulté de terrain la plus élevée.\"},{\"page\":15,\"file\":\"card_15.jpg\",\"title\":\"Machine  vapeur\",\"frTitle\":\"Machine à vapeur\",\"frType\":\"Économie\",\"frText\":\"Ce joueur gagne 1 ressource depuis la réserve.\\n\\nEnsuite, déplacez chacune des caravanes de ce joueur de 6 cases vers des destinations différentes, en suivant le chemin le plus court. Elles peuvent se déplacer sur l’eau.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte.\"},{\"page\":16,\"file\":\"card_16.jpg\",\"title\":\"Nationalisme\",\"frTitle\":\"Nationalisme\",\"frType\":\"Industrie\",\"frText\":\"Construisez 1 merveille du monde. La production de ce joueur est de 7. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 4 cases ou moins d’une case amie. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nSi ni une merveille ni une ville n’a été construite de cette manière, remplacez cette carte par Urbanisation et réinitialisez-la.\"},{\"page\":17,\"file\":\"card_17.jpg\",\"title\":\"Production de masse\",\"frTitle\":\"Production de masse\",\"frType\":\"Militaire\",\"frText\":\"Effectuez jusqu’à 2 attaques à 3 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 7. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité des cibles :\\n1. Ville rivale avec une merveille et une défense de 8 ou moins.\\n2. Barbare adjacent à une case amie.\\n3. Ville rivale avec une défense de 8 ou moins.\\n4. Cité-État.\\n5. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 1 pour chaque attaque effectuée. Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\"},{\"page\":18,\"file\":\"card_18.jpg\",\"title\":\"Pices dtaches\",\"frTitle\":\"Pièces détachées\",\"frType\":\"Science\",\"frText\":\"Ce joueur remplace sa carte de focus ayant la valeur technologique la plus faible parmi celles qui sont les plus hautes dans sa rangée de focus, par la carte du niveau technologique immédiatement supérieur du même type.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases.\"},{\"page\":20,\"file\":\"card_20.jpg\",\"title\":\"Mdias de masse\",\"frTitle\":\"Médias de masse\",\"frType\":\"Culture\",\"frText\":\"Pour chaque jeton de contrôle rival adjacent à une case amie, retournez ce jeton sur son côté non fortifié. Si le jeton était déjà non fortifié, retirez-le de la carte.\\n\\nEnsuite, placez 4 jetons de contrôle sur des cases adjacentes à des villes amies. Pour chaque jeton qui ne peut pas être placé, placez 1 jeton de commerce sur cette carte.\\n\\nOrdre de priorité des jetons de contrôle :\\n1. Contient une merveille naturelle.\\n2. Contient un jeton de ressource.\\n3. Contient un point d’apparition de barbares.\\n4. Adjacent au plus grand nombre de villes.\\n5. Adjacent à la ville la plus proche de sa maturité.\\n6. Adjacent à une case rivale.\\n7. Difficulté de terrain la plus élevée.\"},{\"page\":21,\"file\":\"card_21.jpg\",\"title\":\"Capitalisme\",\"frTitle\":\"Capitalisme\",\"frType\":\"Économie\",\"frText\":\"Déplacez chacune des caravanes de ce joueur de 6 cases vers des destinations différentes, en suivant le chemin le plus court. Elles peuvent se déplacer sur l’eau.\\n\\nOrdre de priorité des destinations :\\n1. Cité-État avec laquelle ce joueur n’a pas de carte de diplomatie.\\n2. Ville rivale.\\n3. Autre cité-État.\\n\\nEn cas d’égalité : distance la plus courte.\\n\\nEnsuite, après avoir réinitialisé cette carte, résolvez la carte située dans le cinquième emplacement de ce joueur, sans la réinitialiser.\"},{\"page\":22,\"file\":\"card_22.jpg\",\"title\":\"Urbanisation\",\"frTitle\":\"Urbanisation\",\"frType\":\"Industrie\",\"frText\":\"Construisez 1 merveille du monde. La production de ce joueur est de 8. Construisez cette merveille dans la ville amie ayant la défense la plus élevée.\\n\\nOrdre de priorité des merveilles :\\n1. La merveille qui rapproche le plus ce joueur de l’accomplissement d’un objectif.\\n2. La merveille ayant le coût le plus faible.\\n\\nEnsuite, construisez 1 ville sur une case légale située à 5 cases ou moins d’une case amie. Ce joueur peut compter à travers l’eau.\\n\\nOrdre de priorité pour l’emplacement de la ville :\\n1. Adjacent au plus grand nombre de merveilles naturelles et/ou de jetons de ressources.\\n2. Une case avec un point d’apparition de barbares.\\n3. Défense la plus élevée.\\n\\nEnsuite, après avoir réinitialisé cette carte, résolvez la carte de focus Culture de ce joueur comme si elle se trouvait dans le cinquième emplacement. Réinitialisez cette carte normalement.\"},{\"page\":23,\"file\":\"card_23.jpg\",\"title\":\"Aviation\",\"frTitle\":\"Aviation\",\"frType\":\"Militaire\",\"frText\":\"Effectuez jusqu’à 3 attaques à 5 cases ou moins d’une case amie. La valeur de combat de ce joueur est de 8. Ce joueur peut compter à travers l’eau, les cases rivales, les barbares et les cités-États.\\n\\nOrdre de priorité des cibles :\\n1. Ville rivale avec une merveille et une défense de 10 ou moins.\\n2. Barbare adjacent à une case amie.\\n3. Ville rivale avec une défense de 10 ou moins.\\n4. Cité-État.\\n5. Jeton de contrôle rival.\\n\\nEn cas d’égalité : défense la plus faible.\\n\\nEnsuite, fortifiez 5 jetons de contrôle de ce joueur, moins 1 pour chaque attaque effectuée. Fortifiez d’abord les jetons les plus proches des barbares et/ou des cases rivales ; en cas d’égalité, privilégiez la difficulté de terrain la plus élevée.\"},{\"page\":24,\"file\":\"card_24.jpg\",\"title\":\"nergie nuclaire\",\"frTitle\":\"Énergie nucléaire\",\"frType\":\"Science\",\"frText\":\"Chaque joueur humain doit choisir 1 de ses villes non-capitales, si possible. Détruisez chaque ville choisie ainsi que chaque jeton de contrôle adjacent à ces villes.\\n\\nEnsuite, avancez le cadran technologique de ce joueur de 5 cases.\"}];\n\nfunction drawCard(){\n  if(!drawCards.length)return;\n  const card=drawCards[Math.floor(Math.random()*drawCards.length)];\n  openModal('Tirage de carte',`<div class=\"cardDraw\">\n    <div class=\"cardDrawGrid\">\n      <div class=\"cardDrawPane\"><img src=\"./cards/${card.file}\" alt=\"Carte tirée au hasard\"></div>\n      <div class=\"cardDrawPane cardDrawTranslation\">\n        <h4>Traduction française</h4>\n        <div class=\"cardTitleFr\">${esc(card.frTitle)}</div>\n        <div class=\"cardTypeFr\">${esc(card.frType)}</div>\n        <div>${esc(card.frText)}</div>\n      </div>\n    </div>\n    <div class=\"cardDrawMeta\">Carte tirée au hasard · page ${card.page} du fichier source</div>\n    <button type=\"button\" class=\"btn primary\" id=\"drawAgainBtn\">Tirer une autre carte</button>\n  </div>`,null);\n  $('drawAgainBtn').onclick=e=>{e.preventDefault();drawCard()};\n}\n\n\nfunction createChaosBag(){openModal('Créer un Chaos Bag',`<input class=\"field\" id=\"chaosBagName\" placeholder=\"Nom du sac\" autocomplete=\"off\"><div class=\"hint\">Choisissez un modèle de départ. Le contenu restera entièrement modifiable.</div><select class=\"field\" id=\"chaosPreset\"><option value=\"vide\">Sac vide</option><option value=\"facile\">Facile</option><option value=\"standard\" selected>Standard</option><option value=\"difficile\">Difficile</option><option value=\"expert\">Expert</option></select>`,()=>{let name=$('chaosBagName').value.trim();if(!name)return;let id=uid(),preset=$('chaosPreset').value;chaosBags[id]={id,name,tokens:presetTokens(preset),history:[]};currentChaosBagId=id;persistChaos();closeModal();manageChaosBags()})}\nfunction manageChaosBags(){let bags=Object.values(chaosBags);let body=`<div class=\"hint\">Sac actif : choisissez un sac puis modifiez son contenu.</div>`+bags.map(b=>`<div class=\"managerRow\"><div style=\"min-width:0\"><b>${esc(b.name)}</b><div class=\"qty\">${chaosTotal(b)} jeton${chaosTotal(b)>1?'s':''}${b.id===currentChaosBagId?' · actif':''}</div></div><div style=\"display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end\"><button type=\"button\" class=\"small ${b.id===currentChaosBagId?'primary':''}\" data-chaos-open=\"${esc(b.id)}\">${b.id===currentChaosBagId?'Modifier':'Choisir'}</button><button type=\"button\" class=\"small danger\" data-chaos-delete=\"${esc(b.id)}\">Supprimer</button></div></div>`).join('');if(!bags.length)body+='<p>Aucun Chaos Bag. Créez-en un.</p>';body+=`<div class=\"row\"><button type=\"button\" class=\"btn primary\" id=\"newChaosBagBtn\">+ Créer un sac</button></div>`;openModal('Chaos Bags',body,null)}\nfunction editChaosBag(id=currentChaosBagId){let b=chaosBags[id];if(!b)return;currentChaosBagId=id;persistChaos();let total=chaosTotal(b);let body=`<div class=\"bagSummary\"><div><div class=\"bagName\">${esc(b.name)}</div><div class=\"bagCount\">${total} jeton${total>1?'s':''}</div></div><button type=\"button\" class=\"small\" id=\"renameChaosBtn\">Renommer</button></div><div class=\"hint\">Touchez un jeton pour ajouter un exemplaire. Les jetons présents sont regroupés avec leur quantité.</div><div class=\"chaosGrid\">${chaosTypes.map(t=>{let n=Number(b.tokens[t.id])||0;return `<button type=\"button\" class=\"chaosTile\" data-chaos-add=\"${t.id}\" aria-label=\"Ajouter ${esc(t.label)}\">${chaosIcon(t.id)}${n?`<span class=\"chaosBadge\">${n}</span>`:''}<div class=\"chaosQty\">${n?'× '+n:'+'}</div></button>`}).join('')}</div><div class=\"panel\" style=\"margin:0 9px 9px\"><h2>Jetons dans le sac · toucher pour retirer 1</h2><div class=\"chaosGrid\">${chaosTypes.filter(t=>(Number(b.tokens[t.id])||0)>0).map(t=>`<button type=\"button\" class=\"chaosTile\" data-chaos-remove=\"${t.id}\" aria-label=\"Retirer un ${esc(t.label)}\">${chaosIcon(t.id)}<span class=\"chaosBadge\">${Number(b.tokens[t.id])||0}</span></button>`).join('')||'<div class=\"empty\" style=\"grid-column:1/-1\">Sac vide</div>'}</div></div><div class=\"chaosBagActions\"><button type=\"button\" class=\"btn primary\" id=\"drawChaosBtn\">Tirer un jeton</button><button type=\"button\" class=\"btn\" id=\"chaosBackBtn\">Retour</button></div>`;openModal('Construire le Chaos Bag',body,null)}\nfunction renameChaosBag(){let b=currentChaos();if(!b)return;openModal('Renommer le Chaos Bag',`<input class=\"field\" id=\"chaosRename\" value=\"${esc(b.name)}\" autocomplete=\"off\">`,()=>{let n=$('chaosRename').value.trim();if(!n)return;b.name=n;persistChaos();editChaosBag()})}\nfunction drawChaosToken(){let b=currentChaos();if(!b||chaosTotal(b)<=0){alert('Le Chaos Bag est vide.');return}let pool=[];Object.entries(b.tokens).forEach(([id,n])=>{for(let i=0;i<(Number(n)||0);i++)pool.push(id)});let id=pool[Math.floor(Math.random()*pool.length)];let t=chaosTypes.find(x=>x.id===id);b.history=[id,...(b.history||[])].slice(0,5);persistChaos();let hist=(b.history||[]).map(x=>chaosIcon(x)).join('');openModal('Tirage du Chaos Bag',`<div class=\"chaosDraw\">${chaosIcon(id,'drawToken')}<div class=\"drawResult\"><strong>${esc(t?.label||'Jeton')}</strong>${chaosTotal(b)} jetons dans le sac</div><div class=\"hint\">Le jeton revient immédiatement dans le sac.</div><div class=\"history\" aria-label=\"Derniers tirages\">${hist}</div><button type=\"button\" class=\"btn primary\" id=\"drawChaosAgainBtn\">Tirer à nouveau</button><button type=\"button\" class=\"btn\" id=\"editChaosAfterDrawBtn\">Modifier le sac</button></div>`,null)}\nfunction changeChaos(id,delta){let b=currentChaos();if(!b)return;let n=(Number(b.tokens[id])||0)+delta;if(n<=0)delete b.tokens[id];else b.tokens[id]=n;persistChaos();editChaosBag()}\n\nfunction exportGame(){\n let g=game();if(!g)return;\n let blob=new Blob([JSON.stringify(g,null,2)],{type:'application/json'});\n let a=document.createElement('a');a.href=URL.createObjectURL(blob);\n a.download=g.name.replace(/[^a-z0-9àâçéèêëîïôûùüÿæœ_-]+/gi,'_')+'.json';a.click();\n setTimeout(()=>URL.revokeObjectURL(a.href),500);\n}\n\nfunction importGame(){$('importFile').click()}\n$('importFile').onchange=e=>{\n let f=e.target.files[0];if(!f)return;\n let rd=new FileReader();rd.onload=()=>{\n  try{let g=normalizeGame(JSON.parse(rd.result));if(!g.name||!g.components)throw 0;\n   g.id=uid();games[g.id]=g;currentId=g.id;persist();render();\n  }catch(_){alert('Fichier de jeu invalide.')}\n  e.target.value='';\n };rd.readAsText(f);\n};\n\n$('gameSelect').onchange=e=>{currentId=e.target.value;persist();render()};\n$('menuBtn').addEventListener('click',e=>{e.preventDefault();menu()});\n$('tableBtn').addEventListener('click',e=>{e.preventDefault();addTable()});\n$('cancelBtn').addEventListener('click',e=>{e.preventDefault();closeModal()});\n$('confirmBtn').addEventListener('click',e=>{\n  e.preventDefault();\n  const action=modalAction;\n  if(typeof action==='function') action();\n});\n$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});\n\n$('reserve').onclick=e=>{\n let x=e.target.closest('[data-action=\"add\"]');if(x)chooseTable(x.dataset.cid);\n};\n\n$('counters').onclick=e=>{\n let x=e.target.closest('[data-counter-plus]'); if(x){changeCounter(x.dataset.counterPlus,1);return}\n x=e.target.closest('[data-counter-minus]'); if(x){changeCounter(x.dataset.counterMinus,-1);return}\n x=e.target.closest('[data-counter-reset]'); if(x){resetCounter(x.dataset.counterReset);return}\n};\n\n$('zones').onclick=e=>{\n let rem=e.target.closest('[data-action=\"remove\"]');\n if(rem){\n   let zone=e.target.closest('.zone');removeOne(zone.dataset.zoneId,rem.dataset.cid);return;\n }\n let del=e.target.closest('[data-zone-delete]');if(del){deleteTable(del.dataset.zoneDelete);return}\n let clr=e.target.closest('[data-zone-clear]');if(clr){clearTable(clr.dataset.zoneClear);return}\n};\n\n$('modalBody').onclick=e=>{\n let m=e.target.closest('[data-menu]');\n if(m){\n   let a=m.dataset.menu;\n   if(a==='new')newGame();\n   else if(a==='component')component();\n   else if(a==='drawCard')drawCard();\n   else if(a==='chaosBag')manageChaosBags();\n   else if(a==='counter')createCounter();\n   else if(a==='manage')manageComponents();\n   else if(a==='manageCounters')manageCounters();\n   else if(a==='save'){exportGame();closeModal()}\n   else if(a==='import'){importGame();closeModal()}\n   else if(a==='delete'){\n     let g=game();\n     if(g&&confirm(`Supprimer définitivement le jeu « ${g.name} » ?`)){delete games[currentId];currentId=Object.keys(games)[0]||'';persist();closeModal();render()}\n   }\n   return;\n }\n let p=e.target.closest('[data-pick-table]');\n if(p){addToTable($('modalTitle').dataset.cid||'',p.dataset.pickTable);return}\n let dcounter=e.target.closest('[data-delete-counter]');if(dcounter){deleteCounter(dcounter.dataset.deleteCounter);return}\n let ec=e.target.closest('[data-edit-comp]');if(ec){editComponent(ec.dataset.editComp);return}\n let dc=e.target.closest('[data-delete-comp]');if(dc){deleteComponent(dc.dataset.deleteComp);return}\n let ca=e.target.closest('[data-chaos-open]');if(ca){editChaosBag(ca.dataset.chaosOpen);return}\n let cd=e.target.closest('[data-chaos-delete]');if(cd){let bag=chaosBags[cd.dataset.chaosDelete];if(bag&&confirm(`Supprimer le Chaos Bag « ${bag.name} » ?`)){delete chaosBags[bag.id];if(currentChaosBagId===bag.id)currentChaosBagId=Object.keys(chaosBags)[0]||'';persistChaos();manageChaosBags()}return}\n let add=e.target.closest('[data-chaos-add]');if(add){changeChaos(add.dataset.chaosAdd,1);return}\n let rem=e.target.closest('[data-chaos-remove]');if(rem){changeChaos(rem.dataset.chaosRemove,-1);return}\n if(e.target.id==='newChaosBagBtn'){createChaosBag();return}\n if(e.target.id==='renameChaosBtn'){renameChaosBag();return}\n if(e.target.id==='drawChaosBtn'||e.target.id==='drawChaosAgainBtn'){drawChaosToken();return}\n if(e.target.id==='editChaosAfterDrawBtn'){editChaosBag();return}\n if(e.target.id==='chaosBackBtn'){manageChaosBags();return}\n};\n\n// Keep the component id for the table-selection modal without relying on global DOM hacks.\nconst originalChooseTable=chooseTable;\nchooseTable=function(cid){\n let g=game();if(!g)return;\n if(g.tables.length===1){addToTable(cid,g.tables[0].id);return}\n openModal('Sur quelle table ajouter ?',`<div class=\"menuList\">${g.tables.map(t=>`<button type=\"button\" class=\"btn\" data-pick-table=\"${esc(t.id)}\">${esc(t.name)}</button>`).join('')}</div>`,null);\n $('modalTitle').dataset.cid=cid;\n};\nrender();\n<\/script>\n</body>\n</html>";
+let selectedMeeples=false;
 function showMeeples(){
-  meeplesShown=true;
-  document.body.classList.add('meeples-active');
-  $('meeplesView').style.display='block';
-  $('meeplesMenu').classList.add('active');
-  document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));
-  const frame=$('meeplesFrame');
-  if(!frame.getAttribute('srcdoc')) frame.setAttribute('srcdoc',MEEPLE_SRC);
+ selectedMeeples=true;
+ document.body.classList.add('meeples-active');
+ $('meeplesView').style.display='block';
+ $('meeplesView').setAttribute('aria-hidden','false');
+ $('meeplesMenu').classList.add('active');
+ $('arkhamMenu').classList.remove('active');
+ const frame=$('meeplesFrame');
+ if(!frame.srcdoc) frame.srcdoc=MEEPLE_SRC;
 }
 function showArkham(){
-  meeplesShown=false;
-  document.body.classList.remove('meeples-active');
-  $('meeplesView').style.display='none';
-  $('meeplesMenu').classList.remove('active');
-  if(selected){ $('welcome').style.display='none'; render(); } else { $('cards').innerHTML=''; $('welcome').style.display=''; }
+ selectedMeeples=false;playerView=false;$('playerCards').style.display='none';
+ document.body.classList.remove('meeples-active');
+ $('meeplesView').style.display='none';
+ $('meeplesView').setAttribute('aria-hidden','true');
+ $('meeplesMenu').classList.remove('active');
+ $('arkhamMenu').classList.add('active');
 }
-
 $('meeplesMenu').onclick=showMeeples;
 $('arkhamMenu').onclick=showArkham;
-init();
+$('arkhamMenu').classList.add('active');
 </script>
 </body>
 </html>
