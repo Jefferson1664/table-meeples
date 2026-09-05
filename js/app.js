@@ -32,16 +32,15 @@ async function init(){
 }
 
 async function loadCardsFromRepository(){
- const packs=await get(`${GH}/packs.json`);
- const wanted=packs.filter(p=>CYCLES.includes(p.cycle_code)&&p.code);
- const chunks=await Promise.all(wanted.map(async p=>{
-   const url=`${GH}/pack/${encodeURIComponent(p.code)}/${encodeURIComponent(p.code)}_encounter.json`;
-   try{const data=await get(url);return Array.isArray(data)?data:[]}catch(e){return []}
- }));
- all=chunks.flat();
- // Deduplicate by card code while keeping the first complete record.
- const byCode=new Map(); for(const c of all){if(c&&c.code&&!byCode.has(c.code))byCode.set(c.code,c)} all=[...byCode.values()];
+  // Use ArkhamDB's single public endpoint instead of making one GitHub request per pack.
+  // This avoids GitHub/raw rate limits that caused later campaigns (notably TCU) to disappear.
+  const data = await get('https://arkhamdb.com/api/public/cards/?encounter=1');
+  all = Array.isArray(data) ? data.filter(c => c && c.code && c.encounter_code) : [];
+  const byCode = new Map();
+  for (const c of all) if (!byCode.has(c.code)) byCode.set(c.code, c);
+  all = [...byCode.values()];
 }
+
 
 async function loadScenarioMapping(){
  try{
