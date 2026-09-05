@@ -30,7 +30,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.5.0</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.8</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -42,13 +42,13 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.5.0</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.8</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.5.0 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.8 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -68,7 +68,7 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all',packCache=new Map(),packFrench=new Map();
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
@@ -129,79 +129,69 @@ function codesForScenario(){
  const lookup=new Map();
  all.forEach(c=>{if(c.encounter_code){lookup.set(norm(c.encounter_code),c.encounter_code);if(c.encounter_name)lookup.set(norm(c.encounter_name),c.encounter_code)}});
  const out=[];
- // Scenario's own set is always included.
  if(selected.code)out.push(selected.code);
  vals.forEach(v=>{const x=lookup.get(norm(v));if(x&&!out.includes(x))out.push(x)});
  return out;
 }
-function scenarioPackCode(){
- if(!selected)return '';
- const wanted=selected.code;
- const c=all.find(x=>x && ((x.encounter_code===wanted)||norm(x.encounter_name)===norm(wanted)) && x.pack_code);
- return c?.pack_code||'';
+function encounterMatches(c,codes){
+ const ec=c.encounter_code||'';
+ const en=c.encounter_name||'';
+ return codes.includes(ec)||codes.some(x=>norm(x)===norm(en));
 }
-async function loadPack(pack){
- if(!pack)return [];
- if(packCache.has(pack))return packCache.get(pack);
- try{const d=await json(API+'/cards/'+encodeURIComponent(pack),30000);const a=Array.isArray(d)?d:[];packCache.set(pack,a);return a}catch(e){packCache.set(pack,[]);return []}
+function packCodesForScenario(codes){
+ const out=new Set();
+ all.forEach(c=>{if(encounterMatches(c,codes)&&c.pack_code)out.add(c.pack_code)});
+ return [...out];
 }
-async function loadPackFrench(pack){
- if(!pack||packFrench.has(pack))return;
- const urls=[
-  GH+'/translations/fr/pack/'+encodeURIComponent(pack)+'/'+encodeURIComponent(pack)+'p.json',
-  GH+'/translations/fr/pack/'+encodeURIComponent(pack)+'/'+encodeURIComponent(pack)+'.json'
- ];
- for(const u of urls){try{const d=await json(u,15000);if(Array.isArray(d)){d.forEach(x=>fr.set(x.code,x));packFrench.set(pack,true);return}}catch(e){}}
- packFrench.set(pack,false);
+function cardMatchesType(c){
+ if(typeFilter==='all')return true;
+ if(typeFilter==='story'){
+   const sub=String(c.subtype_code||c.subtype||'').toLowerCase();
+   const tags=String(c.tags||'').toLowerCase();
+   return (c.type_code==='asset'&&(sub.includes('story')||tags.includes('story'))) || c.type_code==='story';
+ }
+ return c.type_code===typeFilter;
 }
-const playerTypeFilters=new Set(['asset','event','skill','investigator','weakness']);
 async function loadFrench(cards){
  const packs=[...new Set(cards.map(c=>c.pack_code).filter(Boolean))];
- // Only packs used by the selected scenario are requested.
  await Promise.all(packs.map(async p=>{
   if([...fr.values()].some(x=>x.pack_code===p))return;
-  try{const d=await json(GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p)+'_encounter.json',15000);if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))}catch(e){}
+  const base=GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p);
+  try{
+   const [a,b]=await Promise.all([
+    json(base+'.json',15000).catch(()=>null),
+    json(base+'_encounter.json',15000).catch(()=>null)
+   ]);
+   ;[a,b].forEach(d=>{if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))});
+  }catch(e){}
  }));
 }
 async function render(){
  if(!selected)return;
- const q=norm($('search').value),codes=codesForScenario(); if($('typeSelect')) $('typeSelect').value=typeFilter;
+ const q=norm($('search').value),codes=codesForScenario();
+ if($('typeSelect')) $('typeSelect').value=typeFilter;
  $('welcome').style.display='none';
- let cards=all.filter(c=>{
-    const code=c.encounter_code||'';
-    const name=c.encounter_name||'';
-    return codes.includes(code) || codes.some(x=>norm(x)===norm(name));
-  });
- const pack=scenarioPackCode();
- let packCards=[];
- if(playerTypeFilters.has(typeFilter) && pack){
-   packCards=await loadPack(pack);
-   await loadPackFrench(pack);
-   const extra=packCards.filter(c=>c && c.type_code===typeFilter);
-   const seen=new Set(cards.map(c=>c.code));
-   cards=cards.concat(extra.filter(c=>!seen.has(c.code)));
- }
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+codes.length+' encounter sets · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' cartes</div></div><div class="empty">Chargement…</div>';
+ const packs=packCodesForScenario(codes);
+ let cards=all.filter(c=>encounterMatches(c,codes)||packs.includes(c.pack_code));
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+packs.length+' pack'+(packs.length>1?'s':'')+' · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' cartes</div></div><div class="empty">Chargement…</div>';
  await loadFrench(cards);
- cards=cards.filter(c=>(typeFilter==='all'||c.type_code===typeFilter)&&(!q||norm([c.name,c.text,c.encounter_name,c.code,fr.get(c.code)?.name,fr.get(c.code)?.text].join(' ')).includes(q)));
- const groups=codes.map(code=>{
-    const cs=cards.filter(c=>c.encounter_code===code || norm(c.encounter_name)===norm(code))
-      .sort((a,b)=>(a.position||0)-(b.position||0));
-    return cs.length?{code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs}:null
-  }).filter(Boolean);
- if(playerTypeFilters.has(typeFilter) && pack){
-   const pcs=cards.filter(c=>c.pack_code===pack && c.type_code===typeFilter && !codes.includes(c.encounter_code||''));
-   if(pcs.length) groups.push({code:'__pack__'+pack,name:'Cartes du pack '+pack,cards:pcs.sort((a,b)=>(a.position||0)-(b.position||0))});
+ cards=cards.filter(c=>cardMatchesType(c)&&(!q||norm([c.name,c.text,c.encounter_name,c.code,c.pack_code,fr.get(c.code)?.name,fr.get(c.code)?.text].join(' ')).includes(q)));
+ const groups=[];
+ const used=new Set();
+ codes.forEach(code=>{
+   const cs=cards.filter(c=>encounterMatches(c,[code])).sort((a,b)=>(a.position||0)-(b.position||0));
+   if(cs.length){groups.push({code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs});cs.forEach(c=>used.add(c.code));}
+ });
+ const player=cards.filter(c=>!used.has(c.code)&&packs.includes(c.pack_code));
+ if(player.length){
+   const byPack=new Map();
+   player.forEach(c=>{const k=c.pack_code||'pack';if(!byPack.has(k))byPack.set(k,[]);byPack.get(k).push(c)});
+   byPack.forEach((cs,p)=>groups.push({code:'pack:'+p,name:(cs[0].pack_name||p)+' · cartes du pack',cards:cs.sort((a,b)=>(a.position||0)-(b.position||0))}));
  }
- const miss=codes.filter(code=>!groups.some(g=>g.code===code));
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' encounter sets · toutes les cartes des sets connus pour ce scénario</div></div><div class="count">'+cards.length+' cartes</div></div>'+
- (miss.length?'<div class="warning">Sets sans cartes dans les données : '+miss.map(x=>esc(setNames.get(x)||x)).join(', ')+'</div>':'')+
- groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+
- (groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+
- '<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes encounter chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.3.6';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.4.9';
 }
 function pair(c){
   const f=fr.get(c.code);
