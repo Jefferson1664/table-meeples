@@ -24,31 +24,31 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 
 .mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:8px 8px;cursor:pointer;color:var(--ink);border-radius:7px}.mainMenu:hover{background:#eee9e1}.mainMenu.active{background:var(--active);color:var(--accent)}
-.typeMenu{display:grid;gap:5px;margin:8px 0 12px;padding:8px;background:#f3f0ea;border:1px solid var(--line);border-radius:9px}.typeTitle{font-size:11px;font-weight:800;color:var(--muted);margin:0 2px 2px}.typeBtn{width:100%;border:0;background:transparent;text-align:left;padding:6px 7px;border-radius:6px;cursor:pointer;color:var(--ink);font:inherit;font-size:13px}.typeBtn:hover{background:#e9e5de}.typeBtn.active{background:var(--active);color:var(--accent);font-weight:700}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}
+.typeMenu{display:grid;gap:5px;margin:8px 0 12px;padding:8px;background:#f3f0ea;border:1px solid var(--line);border-radius:9px}.typeMenu label{font-size:11px;font-weight:800;color:var(--muted)}.typeMenu select{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:13px}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}
 #meeplesView{display:none;position:fixed;z-index:6;top:var(--arkham-header-height,0px);right:0;bottom:0;left:300px;background:#eee9df;pointer-events:none}#meeplesView.open{display:block;pointer-events:auto}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.7</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.8</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
 <main>
-<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><button id="arkhamMenu" class="mainMenu active" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><button id="arkhamMenu" class="mainMenu active" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"><label for="typeSelect">Type de carte</label><select id="typeSelect"><option value="all">Toutes les cartes</option><option value="asset">Soutiens</option><option value="event">Événements</option><option value="skill">Compétences</option><option value="enemy">Ennemis</option><option value="treachery">Traîtrises</option><option value="location">Lieux</option><option value="act">Actes</option><option value="agenda">Intrigues</option><option value="scenario">Scénarios</option><option value="story">Histoires</option><option value="investigator">Investigateurs</option><option value="weakness">Faiblesses</option></select></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.7</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.8</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.7 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.8 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -121,8 +121,7 @@ function buildTree(){
   box.append(h,list);root.append(box);
  });
 }
-function bind(){$('search').oninput=render;$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';render();buildTypeMenu()};buildTypeMenu()}
-function buildTypeMenu(){const types=[['all','Toutes les cartes'],['asset','Soutiens'],['event','Événements'],['skill','Compétences'],['enemy','Ennemis'],['treachery','Traîtrises'],['location','Lieux'],['act','Actes'],['agenda','Intrigues'],['scenario','Scénarios'],['story','Histoires'],['investigator','Investigateurs'],['weakness','Faiblesses']];$('typeMenu').innerHTML='<div class="typeTitle">TYPE DE CARTE</div>'+types.map(t=>'<button type="button" class="typeBtn '+(typeFilter===t[0]?'active':'')+'" data-type-filter="'+t[0]+'">'+t[1]+'</button>').join('');$('typeMenu').onclick=e=>{const b=e.target.closest('[data-type-filter]');if(!b)return;typeFilter=b.dataset.typeFilter;buildTypeMenu();render()}}
+function bind(){$('search').oninput=render;$('typeSelect').onchange=e=>{typeFilter=e.target.value;render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';$('typeSelect').value='all';render()}}
 function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
 function codesForScenario(){
  if(!selected)return[];
@@ -145,7 +144,7 @@ async function loadFrench(cards){
 }
 async function render(){
  if(!selected)return;
- const q=norm($('search').value),codes=codesForScenario();
+ const q=norm($('search').value),codes=codesForScenario(); if($('typeSelect')) $('typeSelect').value=typeFilter;
  $('welcome').style.display='none';
  let cards=all.filter(c=>{
     const code=c.encounter_code||'';
