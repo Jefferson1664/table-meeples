@@ -1,16 +1,11 @@
-# Arkham Bilingual — Version 0.8
+# Table Meeples + Arkham Horror — V1.4.0
 
-Site statique pour consulter les cartes de scénario d'Arkham Horror: The Card Game en anglais et en français.
+Cette version fusionne dans un même `index.html` :
+- le catalogue bilingue des cartes de scénario d'Arkham Horror: The Card Game ;
+- la Programmation Meeples, accessible depuis le premier bouton du menu de gauche.
 
-- Campagne → scénario → encounter sets
-- Toutes les cartes des encounter sets utilisés par le scénario
-- Anglais à gauche, français à droite
-- Recherche et affichage EN / FR / bilingue
-- Données de cartes chargées depuis le dépôt public `Kamalisk/arkhamdb-json-data`
-- Compatible GitHub Pages
+Le bouton **Programmation Meeples** ouvre directement l'application Meeples dans la même page. Les menus Arkham restent disponibles pour revenir aux campagnes et scénarios.
 
-La version 0.8 ne dépend plus de l'endpoint global `/cards/?encounter=1` d'ArkhamDB pour le chargement initial. Elle lit directement les fichiers `*_encounter.json` du dépôt de données, avec un fallback naturel au seul set du scénario si la cartographie externe est indisponible.
+Les données de la Programmation Meeples sont conservées localement dans le navigateur. Les images du Chaos Bag et les cartes du projet sont conservées dans les dossiers `chaos/` et `cards/`.
 
-
-## Version 1.3
-Les images anglaises utilisent directement ArkhamDB. Les images françaises utilisent le CDN français d’ArkhamHorror et disposent de plusieurs formats de secours.
+Version : **1.4.0**
