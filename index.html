@@ -11,7 +11,7 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
 .brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
-main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
+main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px);position:relative}
 aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
 .sideTitle{font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:4px 0;cursor:pointer;color:var(--ink);font-size:inherit}.sideTitle:hover{text-decoration:underline}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
@@ -26,15 +26,15 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 .meeplesMenu{width:100%;border:0;background:transparent;text-align:left;padding:8px 8px;border-radius:7px;cursor:pointer;color:var(--ink);font-weight:700;margin-bottom:10px}
 .meeplesMenu:hover{background:#eee9e1}
 .meeplesMenu.active{background:var(--active);color:var(--accent)}
-#meeplesView{display:none;padding:0;height:calc(100vh - 75px);min-width:0;grid-column:2;grid-row:1}
+#meeplesView{display:none;position:absolute;z-index:5;top:0;right:0;bottom:0;left:300px;padding:0;min-width:0;background:#eee9df}
 #meeplesFrame{width:100%;height:100%;border:0;display:block;background:#eee9df}
 body.meeples-active #search,body.meeples-active .tools{display:none}
-@media(max-width:850px){#meeplesView{grid-column:1;grid-row:auto;height:calc(100vh - 75px)}}
+@media(max-width:850px){#meeplesView{left:0;top:0;right:0;bottom:0}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.1</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.2</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -46,13 +46,13 @@ body.meeples-active #search,body.meeples-active .tools{display:none}
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.1</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.2</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.1 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.2 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -685,9 +685,6 @@ let meeplesShown=false;
 function showMeeples(){
   meeplesShown=true;
   document.body.classList.add('meeples-active');
-  $('cards').style.display='none';
-  $('welcome').style.display='none';
-  document.querySelector('main > section').style.display='none';
   $('meeplesView').style.display='block';
   $('meeplesMenu').classList.add('active');
   document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));
@@ -698,9 +695,8 @@ function showArkham(){
   meeplesShown=false;
   document.body.classList.remove('meeples-active');
   $('meeplesView').style.display='none';
-  document.querySelector('main > section').style.display='';
   $('meeplesMenu').classList.remove('active');
-  if(selected) render(); else $('welcome').style.display='';
+  if(selected){ $('welcome').style.display='none'; render(); } else { $('cards').innerHTML=''; $('welcome').style.display=''; }
 }
 
 $('meeplesMenu').onclick=showMeeples;
