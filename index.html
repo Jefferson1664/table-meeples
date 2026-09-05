@@ -19,14 +19,14 @@ aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflo
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
 .scenarioHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}.eyebrow{font-size:12px;color:var(--muted)}h2{margin:3px 0;font-size:25px}.sub{font-size:12px;color:var(--muted)}.count{font-size:14px;font-weight:700;white-space:nowrap}
 .set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
-.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;border-radius:6px;background:#eee}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
+.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.3.3</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.3.4</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -38,12 +38,12 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.3.3</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.3.4</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.3.3 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.3.4 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -151,32 +151,24 @@ async function render(){
  '<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes encounter chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  // French scans use the SAME ArkhamDB card code as the English card.
-  // The official asset manifest lists these files under img/arkham/fr/cards/.
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.3.3';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.3.4';
 }
 function pair(c){
   const f=fr.get(c.code);
   const enImg=c.imagesrc||c.imagesrc_front||c.image_url||'';
   const ei=enImg?(enImg.startsWith('//')?'https:'+enImg:enImg.startsWith('/')?'https://arkhamdb.com'+enImg:enImg):'';
   const fi=frenchImageUrl(c.code);
-  return '<article class="pair '+mode+'"><div class="side en">'+
-    (mode!=='fr'?face(ei,c.name,'English',c.code,false):'')+
-    '</div><div class="side fr">'+
-    (mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,true):'')+
-    '</div></article>';
+  return '<article class="pair '+mode+'">'+
+    '<div class="side en">'+(mode!=='fr'?face(ei,c.name,'English',c.code):'')+'</div>'+
+    '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code):'')+'</div>'+
+    '</article>';
 }
-function face(src,name,label,code,isFrench){
-  const fallback=isFrench
-    ? '<div class="noimg">Image française indisponible<br><small>'+esc(code)+'</small></div>'
-    : '<div class="noimg">Image indisponible</div>';
-  if(!src) return '<div class="lang">'+label+'</div><div class="card">'+fallback+
-    '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div></div>';
-  return '<div class="lang">'+label+'</div><div class="card">'+
-    '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'" '+
-    'onerror="this.onerror=null;this.style.display=\'none\';this.insertAdjacentHTML(\'afterend\',\''+
-    (isFrench?'Image française indisponible':'Image indisponible')+'\');">'+
-    '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div></div>';
+function face(src,name,label,code){
+  return '<div class="lang">'+esc(label)+'</div>'+
+    '<div class="card">'+
+    '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'">'+
+    '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div>'+
+    '</div>';
 }
 
 init();
