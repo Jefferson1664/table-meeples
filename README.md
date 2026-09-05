@@ -1,4 +1,4 @@
-# Arkham Bilingual — Version 1.2
+# Arkham Bilingual — Version 0.8
 
 Site statique pour consulter les cartes de scénario d'Arkham Horror: The Card Game en anglais et en français.
 
@@ -12,5 +12,5 @@ Site statique pour consulter les cartes de scénario d'Arkham Horror: The Card G
 La version 0.8 ne dépend plus de l'endpoint global `/cards/?encounter=1` d'ArkhamDB pour le chargement initial. Elle lit directement les fichiers `*_encounter.json` du dépôt de données, avec un fallback naturel au seul set du scénario si la cartographie externe est indisponible.
 
 
-## Version 1.2
+## Version 1.3
 Les images anglaises utilisent directement ArkhamDB. Les images françaises utilisent le CDN français d’ArkhamHorror et disposent de plusieurs formats de secours.
