@@ -15,7 +15,6 @@ main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
 aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
 .mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:4px 0;cursor:pointer;color:var(--ink)}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}.meeplesWrap{display:none}
 #meeplesView{display:none;position:absolute;z-index:5;top:0;right:0;bottom:0;left:300px;background:#eee9df}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}.sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
-.playerMenu{margin:0 0 12px;padding:0 0 10px;border-bottom:1px solid var(--line)}.playerMenuHead{width:100%;display:flex;align-items:center;justify-content:space-between;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:800;text-align:left;padding:8px 8px;border-radius:7px;cursor:pointer}.playerMenuHead:hover{background:#eee9e1}.playerMenuHead.active{background:var(--active);color:var(--accent)}.playerSub{display:none;padding:2px 0 4px}.playerSub.open{display:block}.playerClass{width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:700;text-align:left;padding:6px 8px;border-radius:6px;cursor:pointer}.playerClass:hover{background:#eee9e1}.playerClass.active{background:var(--active);color:var(--accent)}.playerSection{max-width:1400px;margin:auto}.playerClassBlock{margin:0 0 28px}.playerClassHead{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid var(--line);margin-bottom:10px}.playerClassHead h3{margin:0 0 7px;font-size:19px}.playerClassHead span{font-size:12px;color:var(--muted)}.playerGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.playerCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px;min-width:0}.playerCard img{display:block;width:100%;height:auto;aspect-ratio:.72;object-fit:contain;border-radius:6px;background:#eee}.playerCard .meta{display:flex;justify-content:space-between;gap:6px;margin-top:5px;font-size:10px;color:var(--muted)}.playerCard .meta b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.playerCard button{width:100%;border:0;background:transparent;padding:0;cursor:pointer}.playerType{font-size:10px;color:var(--muted);margin:4px 0 0}.playerLoading{padding:30px;text-align:center;color:var(--muted)}@media(max-width:1100px){.playerGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:850px){.playerGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.playerGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
 .scenarios{padding-left:24px}.scenario{width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--ink)}.scenario:hover{background:#eee9e1}.scenario.active{background:var(--active);font-weight:700;color:var(--accent)}
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
@@ -29,25 +28,25 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.4</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.3</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
 <main>
-<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><div class="playerMenu"><button id="playerMenuHead" class="playerMenuHead" type="button"><span>Cartes joueurs</span><span id="playerMenuArrow">▾</span></button><div id="playerSub" class="playerSub"><button class="playerClass" data-player-jump="all">Toutes les classes</button><button class="playerClass" data-player-jump="guardian">Gardien</button><button class="playerClass" data-player-jump="seeker">Chercheur</button><button class="playerClass" data-player-jump="rogue">Truand</button><button class="playerClass" data-player-jump="mystic">Mystique</button><button class="playerClass" data-player-jump="survivor">Survivant</button><button class="playerClass" data-player-jump="neutral">Neutre</button></div></div><button id="arkhamMenu" class="mainMenu" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><button id="arkhamMenu" class="mainMenu" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.4</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.3</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
-<div id="playerCards"></div><div id="cards"></div>
+<div id="cards"></div>
 </section>
 <div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.4 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.3 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -67,7 +66,7 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),playerCards=[],playerView=false,playerCardsBase=[];
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
@@ -78,11 +77,8 @@ async function init(){
   all=await json(API+'/cards/?encounter=1',30000);
   if(!Array.isArray(all)||!all.length)throw Error('Aucune carte de scénario reçue');
   const ded=new Map();all.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});all=[...ded.values()];
-  playerCards=all.filter(c=>!c.encounter_code);
-  playerCards.sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0)||String(a.name||'').localeCompare(String(b.name||''));
-  playerCardsBase=[...playerCards];
   all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
-  buildTree();bind();bindPlayerMenus();
+  buildTree();bind();
   // Mapping is optional and has a hard timeout; it can NEVER block the application.
   loadMapping().catch(()=>{});
  }catch(e){
@@ -120,26 +116,8 @@ function buildTree(){
   box.append(h,list);root.append(box);
  });
 }
-function playerClassLabel(k){return ({guardian:'Gardien',seeker:'Chercheur',rogue:'Truand',mystic:'Mystique',survivor:'Survivant',neutral:'Neutre',mythos:'Faiblesses'})[k]||k}
-function playerClassKey(c){const k=c.class_code||'';if(['guardian','seeker','rogue','mystic','survivor','neutral'].includes(k))return k;return 'mythos'}
-function playerTypeLabel(c){const t=c.type_code||'';return ({investigator:'Investigateur',asset:'Soutien',event:'Événement',skill:'Compétence',treachery:'Faiblesse',enemy:'Faiblesse',location:'Autre',act:'Autre',agenda:'Autre',scenario:'Autre'})[t]||t}
-function playerImage(c){let u=c.imagesrc||c.imagesrc_front||c.image_url||'';return u?(u.startsWith('//')?'https:'+u:u.startsWith('/')?'https://arkhamdb.com'+u:u):''}
-function renderPlayerCard(c){const u=playerImage(c);return '<article class="playerCard"><button type="button" data-player-card="'+esc(c.code)+'"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(u)+'" alt="'+esc(c.name)+'"><div class="meta"><b>'+esc(c.name)+'</b><span>'+esc(c.code)+'</span></div><div class="playerType">'+esc(playerTypeLabel(c))+'</div></button></article>'}
-function showPlayers(which='all'){
- playerView=true;selected=null;
- const q=norm($('search').value);
- const source=playerCardsBase.filter(c=>!q||norm([c.name,c.text,c.code,c.type_code,c.class_code].join(' ')).includes(q));
-$('welcome').style.display='none';$('cards').innerHTML='';$('playerCards').style.display='block';
- document.querySelectorAll('.playerClass').forEach(x=>x.classList.toggle('active',x.dataset.playerJump===which));
- const keys=which==='all'?['guardian','seeker','rogue','mystic','survivor','neutral','mythos']:[which];
- $('playerCards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">Arkham Horror: The Card Game</div><h2>Cartes joueurs</h2><div class="sub">Toutes les cartes joueurs, regroupées par classe, avec investigateurs, soutiens, événements, compétences, faiblesses et autres cartes joueurs.</div></div><div class="count">'+source.length+' cartes</div></div>'+keys.map(k=>{let cs=source.filter(c=>playerClassKey(c)===k);return '<div class="playerClassBlock" id="player-class-'+k+'"><div class="playerClassHead"><h3>'+playerClassLabel(k)+'</h3><span>'+cs.length+' cartes</span></div><div class="playerGrid">'+(cs.length?cs.map(renderPlayerCard).join(''):'<div class="empty">Aucune carte</div>')+'</div></div>'}).join('');
-}
-function bindPlayerMenus(){
- $('playerMenuHead').onclick=e=>{e.preventDefault();const open=$('playerSub').classList.toggle('open');$('playerMenuArrow').textContent=open?'▴':'▾'};
- document.querySelectorAll('[data-player-jump]').forEach(b=>b.onclick=()=>{showPlayers(b.dataset.playerJump)});
-}
-function bind(){$('search').oninput=()=>{if(playerView)showPlayers(document.querySelector('.playerClass.active')?.dataset.playerJump||'all');else render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';render()}}
-function select(s,b,c){playerView=false;$('playerCards').style.display='none';document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
+function bind(){$('search').oninput=render;$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';render()}}
+function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
 function codesForScenario(){
  if(!selected)return[];
  const vals=mapping.get(norm(selected.name))||[];
@@ -219,7 +197,7 @@ function showMeeples(){
  if(!frame.srcdoc) frame.srcdoc=MEEPLE_SRC;
 }
 function showArkham(){
- selectedMeeples=false;playerView=false;$('playerCards').style.display='none';
+ selectedMeeples=false;
  document.body.classList.remove('meeples-active');
  $('meeplesView').style.display='none';
  $('meeplesView').setAttribute('aria-hidden','true');
