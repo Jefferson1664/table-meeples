@@ -13,7 +13,7 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
 main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
 aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
-.sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+.sideTitle{font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:4px 0;cursor:pointer;color:var(--ink);font-size:inherit}.sideTitle:hover{text-decoration:underline}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
 .scenarios{padding-left:24px}.scenario{width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--ink)}.scenario:hover{background:#eee9e1}.scenario.active{background:var(--active);font-weight:700;color:var(--accent)}
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
@@ -34,25 +34,25 @@ body.meeples-active #search,body.meeples-active .tools{display:none}
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.0</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.4.1</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
 <main>
-<aside><button id="meeplesMenu" class="meeplesMenu" type="button">Programmation Meeples</button><div class="sideTitle">Campagnes & scénarios</div><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><button id="meeplesMenu" class="meeplesMenu" type="button">Programmation Meeples</button><button id="arkhamMenu" class="sideTitle" type="button">Campagnes &amp; scénarios</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.4.0</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.4.1</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.0 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.4.1 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -695,7 +695,6 @@ function showMeeples(){
   if(!frame.getAttribute('srcdoc')) frame.setAttribute('srcdoc',MEEPLE_SRC);
 }
 function showArkham(){
-  if(!meeplesShown)return;
   meeplesShown=false;
   document.body.classList.remove('meeples-active');
   $('meeplesView').style.display='none';
@@ -705,6 +704,7 @@ function showArkham(){
 }
 
 $('meeplesMenu').onclick=showMeeples;
+$('arkhamMenu').onclick=showArkham;
 init();
 </script>
 </body>
