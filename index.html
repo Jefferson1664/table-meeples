@@ -1,8 +1,167 @@
 <!doctype html>
 <html lang="fr">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Arkham — cartes bilingues</title><link rel="stylesheet" href="css/style.css"></head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Arkham Horror LCG — cartes bilingues</title>
+<style>
+:root{--bg:#f4f1eb;--panel:#fff;--ink:#252525;--muted:#706b63;--line:#d9d3c9;--accent:#6b1f2b;--active:#ead8dc}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
+#search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+.tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
+main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
+aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
+.sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+.campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
+.scenarios{padding-left:24px}.scenario{width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--ink)}.scenario:hover{background:#eee9e1}.scenario.active{background:var(--active);font-weight:700;color:var(--accent)}
+section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
+.scenarioHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}.eyebrow{font-size:12px;color:var(--muted)}h2{margin:3px 0;font-size:25px}.sub{font-size:12px;color:var(--muted)}.count{font-size:14px;font-weight:700;white-space:nowrap}
+.set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
+.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;border-radius:6px;background:#eee}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
+@media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
+</style>
+</head>
 <body>
-<header><div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 8</span></div><input id="search" placeholder="Rechercher une carte…" autocomplete="off"><div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div></header>
-<main><aside><div class="sideTitle">Campagnes & scénarios</div><div class="hint">Clique un scénario pour afficher toutes ses cartes.</div><div id="tree"><div class="empty">Chargement…</div></div></aside><section><div id="welcome"><h2>Sélectionne un scénario</h2><p>Ce site permet de consulter toutes les cartes de scénario d’Arkham Horror: The Card Game.</p><p>Choisis une campagne puis un scénario. Les cartes anglaises sont affichées à gauche et leurs correspondantes françaises à droite.</p><p class="note">Les cartes sont chargées depuis les données publiques ArkhamDB. Le scénario détermine les encounter sets à afficher ; toutes les cartes de ces sets sont ensuite regroupées et mises en regard.</p><p class="note">Version 0.8 — chargement plus robuste des données et menus repliables corrigés.</p></div><div id="cards"></div></section></main><footer>Arkham Horror LCG — cartes bilingues · Version 0.8 · Projet personnel non affilié à Fantasy Flight Games</footer>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="js/app.js"></script>
-</body></html>
+<header>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.3.1</span></div>
+ <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
+ <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
+</header>
+<main>
+<aside><div class="sideTitle">Campagnes & scénarios</div><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<section>
+<div id="welcome" class="welcome">
+<h2>Cartes de scénario bilingues</h2>
+<p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
+<p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
+<p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
+<p><strong>Version 1.3.1</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+</div>
+<div id="cards"></div>
+</section>
+</main>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.3.1 · Projet personnel non affilié à Fantasy Flight Games</footer>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>
+const API='https://arkhamdb.com/api/public';
+const GH='https://raw.githubusercontent.com/Kamalisk/arkhamdb-json-data/master';
+const MAP='https://github.com/erikoliver/arkham-lcg-tools/raw/refs/heads/master/Scenario%20Mapping.xlsx';
+const campaigns=[
+['The Night of the Zealot','La Nuit de la Zélatrice',[['The Gathering','torch'],['The Midnight Masks','arkham'],['The Devourer Below','tentacles']]],
+['The Dunwich Legacy','L’Héritage de Dunwich',[['Extracurricular Activity','extracurricular_activity'],['The House Always Wins','the_house_always_wins'],['The Miskatonic Museum','the_miskatonic_museum'],['The Essex County Express','essex_county_express'],['Blood on the Altar','blood_on_the_altar'],['Undimensioned and Unseen','undimensioned_and_unseen'],['Where Doom Awaits','where_doom_awaits'],['Lost in Time and Space','lost_in_time_and_space']]],
+['The Path to Carcosa','La Route de Carcosa',[['Curtain Call','curtain_call'],['The Last King','the_last_king'],['Echoes of the Past','echoes_of_the_past'],['The Unspeakable Oath','the_unspeakable_oath'],['A Phantom of Truth','a_phantom_of_truth'],['The Pallid Mask','the_pallid_mask'],['Black Stars Rise','black_stars_rise'],['Dim Carcosa','dim_carcosa']]],
+['The Forgotten Age','L’Âge oublié',[['The Untamed Wilds','wilds'],['The Doom of Eztli','eztli'],['Threads of Fate','threads_of_fate'],['The Boundary Beyond','the_boundary_beyond'],['Heart of the Elders','heart_of_the_elders'],['The City of Archives','the_city_of_archives'],['The Depths of Yoth','the_depths_of_yoth'],['Shattered Aeons','shattered_aeons']]],
+['The Circle Undone','Le Cercle brisé',[['The Witching Hour','the_witching_hour'],['At Death’s Doorstep','at_deaths_doorstep'],['The Secret Name','the_secret_name'],['The Wages of Sin','the_wages_of_sin'],['For the Greater Good','for_the_greater_good'],['Union and Disillusion','union_and_disillusion'],['In the Clutches of Chaos','in_the_clutches_of_chaos'],['Before the Black Throne','before_the_black_throne']]],
+['The Dream-Eaters','Les Dévoreurs de rêves',[['Beyond the Gates of Sleep','beyond_the_gates_of_sleep'],['The Search for Kadath','the_search_for_kadath'],['A Thousand Shapes of Horror','a_thousand_shapes_of_horror'],['Dark Side of the Moon','dark_side_of_the_moon'],['Point of No Return','point_of_no_return'],['Where the Gods Dwell','where_the_gods_dwell'],['Weaver of the Cosmos','weaver_of_the_cosmos']]],
+['The Innsmouth Conspiracy','La Conspiration d’Innsmouth',[['The Pit of Despair','the_pit_of_despair'],['The Vanishing of Elina Harper','the_vanishing_of_elina_harper'],['In Too Deep','in_too_deep'],['Devil Reef','devil_reef'],['Horror in High Gear','horror_in_high_gear'],['A Light in the Fog','a_light_in_the_fog'],['The Lair of Dagon','the_lair_of_dagon'],['Into the Maelstrom','into_the_maelstrom']]],
+['Edge of the Earth','Aux confins de la Terre',[['Ice and Death','ice_and_death'],['The Crash','the_crash'],['To the Forbidden Peaks','to_the_forbidden_peaks'],['City of the Elder Things','city_of_the_elder_things'],['The Heart of Madness','the_heart_of_madness']]],
+['The Scarlet Keys','Les Clés écarlates',[['Riddles in the Dark','riddles_in_the_dark'],['Dead Heat','dead_heat'],['Sanguine Shadows','sanguine_shadows'],['Dealings in the Dark','dealings_in_the_dark'],['Dogs of War','dogs_of_war'],['Shades of Suffering','shades_of_suffering'],['Without a Trace','without_a_trace'],['Congress of the Keys','congress_of_the_keys']]],
+['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Longest Night','the_longest_night'],['The Thing in the Woods','the_thing_in_the_woods'],['The Dying Light','the_dying_light']]],
+['The Drowned City','La Cité engloutie',[['Dead Heat','dead_heat_tdc'],['The Apiary','the_apiary'],['The Grand Voyage','the_grand_voyage'],['The Tides of Fate','the_tides_of_fate'],['The Devil in the Flesh','the_devil_in_the_flesh'],['The Ennui','the_ennui'],['The Obsidian Gates','the_obsidian_gates'],['The Depths of Yoth','the_depths_of_yoth_tdc']]]
+];
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+async function json(url,ms=20000){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{cache:'force-cache',signal:c.signal});if(!r.ok)throw Error(r.status);return await r.json()}finally{clearTimeout(t)}}
+async function init(){
+ try{
+  // One API call for ALL encounter cards: avoids the many-pack/rate-limit problem.
+  all=await json(API+'/cards/?encounter=1',30000);
+  if(!Array.isArray(all)||!all.length)throw Error('Aucune carte de scénario reçue');
+  const ded=new Map();all.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});all=[...ded.values()];
+  all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+  buildTree();bind();
+  // Mapping is optional and has a hard timeout; it can NEVER block the application.
+  loadMapping().catch(()=>{});
+ }catch(e){
+  $('tree').innerHTML='<div class="empty"><b>Impossible de charger les cartes.</b><br><br>Vérifie la connexion Internet puis recharge la page.<br><br>'+esc(e.message)+'</div>';
+ }
+}
+async function loadMapping(){
+ const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
+ try{
+  if(!window.XLSX)throw Error('SheetJS absent');
+  const r=await fetch(MAP,{cache:'no-store',signal:c.signal});if(!r.ok)throw Error(r.status);
+  const wb=XLSX.read(await r.arrayBuffer(),{type:'array'});
+  const known=new Map(campaigns.flatMap(c=>c[2].map(s=>[norm(s[0]),s[0]])));
+  for(const sn of wb.SheetNames){
+   const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});
+   for(let r=0;r<rows.length;r++)for(let col=0;col<rows[r].length;col++){
+    const k=norm(rows[r][col]);if(!known.has(k))continue;
+    const vals=[];
+    for(const v of rows[r])if(v&&norm(v)!==k)vals.push(v);
+    for(let rr=0;rr<rows.length;rr++){const v=String(rows[rr]?.[col]??'').trim();if(v&&rr!==r)vals.push(v)}
+    mapping.set(k,[...new Set(vals)]);
+   }
+  }
+ }finally{clearTimeout(t)}
+}
+function buildTree(){
+ const root=$('tree');root.innerHTML='';
+ campaigns.forEach(c=>{
+  const box=document.createElement('div');box.className='campaign';
+  const h=document.createElement('button');h.className='campHead';h.type='button';h.setAttribute('aria-expanded','true');
+  h.innerHTML='<span class="arrow">▾</span><span class="campName">'+esc(c[0])+'</span><small>'+esc(c[1])+'</small>';
+  const list=document.createElement('div');list.className='scenarios';
+  c[2].forEach(s=>{const b=document.createElement('button');b.className='scenario';b.type='button';b.textContent=s[0];b.onclick=()=>select(s,b,c);list.appendChild(b)});
+  h.onclick=()=>{const open=!list.hidden;list.hidden=open;h.setAttribute('aria-expanded',String(!open));h.querySelector('.arrow').textContent=open?'▸':'▾'};
+  box.append(h,list);root.append(box);
+ });
+}
+function bind(){$('search').oninput=render;$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';render()}}
+function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
+function codesForScenario(){
+ if(!selected)return[];
+ const vals=mapping.get(norm(selected.name))||[];
+ const lookup=new Map();
+ all.forEach(c=>{if(c.encounter_code){lookup.set(norm(c.encounter_code),c.encounter_code);if(c.encounter_name)lookup.set(norm(c.encounter_name),c.encounter_code)}});
+ const out=[];
+ // Scenario's own set is always included.
+ if(selected.code)out.push(selected.code);
+ vals.forEach(v=>{const x=lookup.get(norm(v));if(x&&!out.includes(x))out.push(x)});
+ return out;
+}
+async function loadFrench(cards){
+ const packs=[...new Set(cards.map(c=>c.pack_code).filter(Boolean))];
+ // Only packs used by the selected scenario are requested.
+ await Promise.all(packs.map(async p=>{
+  if([...fr.values()].some(x=>x.pack_code===p))return;
+  try{const d=await json(GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p)+'_encounter.json',15000);if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))}catch(e){}
+ }));
+}
+async function render(){
+ if(!selected)return;
+ const q=norm($('search').value),codes=codesForScenario();
+ $('welcome').style.display='none';
+ let cards=all.filter(c=>codes.includes(c.encounter_code));
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+codes.length+' encounter sets · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' cartes</div></div><div class="empty">Chargement…</div>';
+ await loadFrench(cards);
+ cards=cards.filter(c=>!q||norm([c.name,c.text,c.encounter_name,c.code,fr.get(c.code)?.name,fr.get(c.code)?.text].join(' ')).includes(q));
+ const groups=codes.map(code=>{const cs=cards.filter(c=>c.encounter_code===code).sort((a,b)=>(a.position||0)-(b.position||0));return cs.length?{code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs}:null}).filter(Boolean);
+ const miss=codes.filter(code=>!groups.some(g=>g.code===code));
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' encounter sets · toutes les cartes des sets connus pour ce scénario</div></div><div class="count">'+cards.length+' cartes</div></div>'+
+ (miss.length?'<div class="warning">Sets sans cartes dans les données : '+miss.map(x=>esc(setNames.get(x)||x)).join(', ')+'</div>':'')+
+ groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+
+ (groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+
+ '<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Cartes encounter chargées : '+all.length+'</p><p>Sets trouvés : '+groups.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
+}
+function pair(c){
+ const f=fr.get(c.code);
+ const enImg=c.imagesrc||c.imagesrc_front||c.image_url||'';
+ const frImg=f?.imagesrc||f?.imagesrc_front||f?.image_url||'';
+ const ei=enImg?(enImg.startsWith('//')?'https:'+enImg:enImg.startsWith('/')?'https://arkhamdb.com'+enImg:enImg):'';
+ const fi=frImg?(frImg.startsWith('//')?'https:'+frImg:frImg.startsWith('/')?'https://arkhamdb.com'+frImg:frImg):frImg;
+ return '<article class="pair '+mode+'"><div class="side en">'+(mode!=='fr'?face(ei,c.name,'English',c.code):'')+'</div><div class="side fr">'+(mode!=='en'?face(fi,f?.name||'Image française indisponible','Français',c.code):'')+'</div></article>';
+}
+function face(src,name,label,code){
+ return '<div class="lang">'+label+'</div><div class="card">'+(src?'<img loading="lazy" src="'+esc(src)+'" alt="'+esc(name)+'">':'<div class="noimg">Image française indisponible</div>')+'<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div></div>';
+}
+init();
+</script>
+</body>
+</html>
