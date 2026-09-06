@@ -12,6 +12,7 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
 main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 80px)}
+.mainMenuSelect{display:grid;gap:5px;margin-bottom:10px}.mainMenuSelect label{font-size:11px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.04em}.mainMenuDropdown{width:100%;text-align:left;cursor:pointer}.mainMenuDropdown:focus{outline:2px solid #2f2d29;outline-offset:1px}
 aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflow:auto;position:sticky;top:75px;height:calc(100vh - 75px)}
 .sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
@@ -36,7 +37,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
 <main>
-<aside><button id="meeplesMenu" class="mainMenu" type="button">Programmation Meeples</button><button id="civilizationMenu" class="mainMenu" type="button">Civilization Solo</button><button id="arkhamMenu" class="mainMenu active" type="button">Arkham JDC</button><button id="chaosMenu" class="mainMenu" type="button">Chaos Bag</button><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"><label for="typeSelect">Type de carte</label><select id="typeSelect"><option value="all">Toutes les cartes</option><option value="asset">Soutiens</option><option value="event">Événements</option><option value="skill">Compétences</option><option value="enemy">Ennemis</option><option value="treachery">Traîtrises</option><option value="location">Lieux</option><option value="act">Actes</option><option value="agenda">Intrigues</option><option value="scenario">Scénarios</option><option value="story">Histoires</option><option value="investigator">Investigateurs</option><option value="weakness">Faiblesses</option></select></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><div class="mainMenuSelect"><label for="mainSectionSelect">Jeu / module</label><select id="mainSectionSelect" class="mainMenu mainMenuDropdown"><option value="meeples">Programmation Meeples</option><option value="civilization">Civilization Solo</option><option value="arkham" selected>Arkham JDC</option><option value="chaos">Chaos Bag</option></select></div><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"><label for="typeSelect">Type de carte</label><select id="typeSelect"><option value="all">Toutes les cartes</option><option value="asset">Soutiens</option><option value="event">Événements</option><option value="skill">Compétences</option><option value="enemy">Ennemis</option><option value="treachery">Traîtrises</option><option value="location">Lieux</option><option value="act">Actes</option><option value="agenda">Intrigues</option><option value="scenario">Scénarios</option><option value="story">Histoires</option><option value="investigator">Investigateurs</option><option value="weakness">Faiblesses</option></select></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
@@ -192,7 +193,7 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.5.9';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.0';
 }
 function pair(c){
   const f=fr.get(c.code);
@@ -228,13 +229,13 @@ function ensureMeeplesFrame(){
  }
 }
 function positionMeeples(){const h=document.querySelector('body>header')?.offsetHeight||0;document.documentElement.style.setProperty('--arkham-header-height',h+'px');const v=document.getElementById('meeplesView');v.style.top=h+'px';}
-function setMainActive(id){['meeplesMenu','civilizationMenu','arkhamMenu','chaosMenu'].forEach(x=>document.getElementById(x)?.classList.toggle('active',x===id));}
-function setChaosActive(on){document.getElementById('chaosMenu')?.classList.toggle('active',!!on);}
+function setMainActive(id){const s=document.getElementById('mainSectionSelect');if(s)s.value=id.replace('Menu','');}
+function setChaosActive(on){}
 function showMeeples(){positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
 function showArkham(){document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');setMainActive('arkhamMenu');setChaosActive(false);}
 function showCivilization(){positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
 function showChaos(){positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
-document.getElementById('meeplesMenu').addEventListener('click',showMeeples);document.getElementById('arkhamMenu').addEventListener('click',showArkham);document.getElementById('civilizationMenu').addEventListener('click',showCivilization);document.getElementById('chaosMenu').addEventListener('click',showChaos);
+document.getElementById('mainSectionSelect').addEventListener('change',e=>{const v=e.target.value;if(v==='meeples')showMeeples();else if(v==='civilization')showCivilization();else if(v==='chaos')showChaos();else showArkham();});
 </script>
 </body>
 </html>
