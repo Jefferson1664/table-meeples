@@ -20,7 +20,7 @@ aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflo
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
 .scenarioHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}.eyebrow{font-size:12px;color:var(--muted)}h2{margin:3px 0;font-size:25px}.sub{font-size:12px;color:var(--muted)}.count{font-size:14px;font-weight:700;white-space:nowrap}
 .set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
-.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.card.flippable{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.card.flippable:active{transform:scale(.99)}.flipBadge{position:absolute;top:7px;right:7px;z-index:2;background:rgba(255,255,255,.92);border:1px solid #d7d0c4;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;color:#5f5a52;box-shadow:0 1px 3px rgba(0,0,0,.12)}.card.flippable{position:relative}.card.flippable.isBack .flipBadge{background:rgba(47,45,41,.92);color:#fff;border-color:#2f2d29}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
+.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.card.flippable{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.card.flippable:active{transform:scale(.99)}.rvBadge{display:inline-flex;align-items:center;gap:3px;margin-left:5px;padding:2px 5px;border-radius:999px;background:#eee9df;border:1px solid #d7d0c4;font-size:9px;font-weight:800;color:#5f5a52;vertical-align:middle}.card.flippable{cursor:pointer;position:relative}.card.flippable.isBack{outline:1px solid #b9b0a3}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 
@@ -228,47 +228,50 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.3';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.4';
 }
 function imageUrl(v){
   const u=v||'';
   return u?(u.startsWith('//')?'https:'+u:u.startsWith('/')?'https://arkhamdb.com'+u:u):'';
 }
 function backCardFor(c){
-  const byCode=new Map(all.map(x=>[x.code,x]));
-  const explicit=c.back_link?byCode.get(c.back_link):null;
-  if(explicit)return explicit;
-  const base=String(c.code||'').slice(0,5);
-  const derived=byCode.get(base+'b');
-  return derived||null;
+ const byCode=new Map(all.map(x=>[x.code,x]));
+ const explicit=c.back_link?byCode.get(c.back_link):null;
+ if(explicit)return explicit;
+ return null;
+}
+function englishBackImageUrl(code){
+ return code?'https://arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
+}
+function frenchBackImageUrl(code){
+ return code?'https://fr.arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
 }
 function pair(c){
-  const f=fr.get(c.code);
-  const back=backCardFor(c);
-  const enImg=imageUrl(c.imagesrc_front||c.imagesrc||c.image_url||'');
-  const backEn=imageUrl(c.backimagesrc||c.back_image||back?.imagesrc_front||back?.imagesrc||back?.image_url||'');
-  const fi=frenchImageUrl(c.code);
-  const backCode=back?.code||'';
-  const backFr=backCode?frenchImageUrl(backCode):'';
-  const backFrAlt=backCode?frenchImageUrl(c.code+'b'):'';
-  const frBackName=fr.get(backCode)?.name||fr.get(c.code+'b')?.name||c.back_name||f?.name||c.name;
-  return '<article class="pair '+mode+'">'+
-    '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,back?.name||c.back_name||c.name,enImg,''):'')+'</div>'+
-    '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr||backFrAlt,frBackName,fi,backEn):'')+'</div>'+
-    '</article>';
+ const f=fr.get(c.code);
+ const back=backCardFor(c);
+ const doubleSided=!!c.double_sided || !!back;
+ const enImg=imageUrl(c.imagesrc_front||c.imagesrc||c.image_url||'');
+ const backEn=doubleSided?(englishBackImageUrl(c.code)||(imageUrl(c.backimagesrc||c.back_image||back?.imagesrc_front||back?.imagesrc||back?.image_url||''))):'';
+ const fi=frenchImageUrl(c.code);
+ const backCode=back?.code||c.code;
+ const backFr=doubleSided?frenchBackImageUrl(backCode):'';
+ const frBackName=f?.back_name||f?.backName||back?.name||c.back_name||f?.name||c.name;
+ return '<article class="pair '+mode+'">'+
+   '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,frBackName,enImg,''):'')+'</div>'+
+   '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr,frBackName,fi,backEn):'')+'</div>'+
+   '</article>';
 }
 function cardTypeLabel(c){const m={asset:'Soutien',event:'Événement',skill:'Compétence',enemy:'Ennemi',treachery:'Traîtrise',location:'Lieu',act:'Acte',agenda:'Intrigue',scenario:'Scénario',story:'Histoire',investigator:'Investigateur',weakness:'Faiblesse'};return m[c?.type_code]||c?.type_code||''}
 function face(src,name,label,code,c,backSrc,backName,frontFallback,backFallback){
-  const flip=backSrc&&backSrc!==src;
-  const badge=flip?'<span class="flipBadge" aria-hidden="true">↻ Recto / verso</span>':'';
-  return '<div class="lang">'+esc(label)+'</div>'+
-    '<div class="card'+(flip?' flippable':'')+'"'+(flip?' data-back-src="'+esc(backSrc)+'" data-front-src="'+esc(src)+'" data-front-fallback="'+esc(frontFallback||src)+'" data-back-fallback="'+esc(backFallback||'')+'" data-side="front" data-front-name="'+esc(name)+'" data-back-name="'+esc(backName||name)+'" role="button" tabindex="0" aria-label="'+esc(name)+' — appuyer pour retourner la carte"':'')+'>'+
-    badge+
-    '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'">'+
-    '<div class="typeTag">'+esc(cardTypeLabel(c))+'</div>'+
-    '<div class="qtyTag">'+esc((Number(c?.quantity)||1)===1?'1 exemplaire':'× '+(Number(c?.quantity)||1)+' exemplaires')+' dans le paquet</div>'+
-    '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div>'+
-    '</div>';
+ const flip=!!backSrc&&backSrc!==src;
+ const rv=flip?'<span class="rvBadge" aria-hidden="true">↻ RV</span>':'';
+ return '<div class="lang">'+esc(label)+rv+'</div>'+
+   '<div class="card'+(flip?' flippable':'')+'"'+(flip?' data-back-src="'+esc(backSrc)+'" data-front-src="'+esc(src)+'" data-front-fallback="'+esc(frontFallback||src)+'" data-back-fallback="'+esc(backFallback||'')+'" data-side="front" data-front-name="'+esc(name)+'" data-back-name="'+esc(backName||name)+'" role="button" tabindex="0" aria-label="'+esc(name)+' — appuyer pour retourner la carte"':'')+'>'+
+   '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'">'+
+   '<div class="typeTag">'+esc(cardTypeLabel(c))+'</div>'+
+   '<div class="qtyTag">'+esc((Number(c?.quantity)||1)===1?'1 exemplaire':'× '+(Number(c?.quantity)||1)+' exemplaires')+' dans le paquet</div>'+
+   '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div>'+ 
+   '</div>';
 }
 
 init();
