@@ -32,7 +32,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.7</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.8</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -45,13 +45,13 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.7</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.8</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.7 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.8 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -229,7 +229,7 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.7';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.8';
 }
 function imageUrl(v){
   const u=v||'';
@@ -245,17 +245,20 @@ function englishBackImageUrl(code){
  return code?'https://arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
 }
 function frenchBackImageUrl(code){
- return code?'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+encodeURIComponent(String(code))+'b.avif?v=1.6.7':'';
+ return code?'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+encodeURIComponent(String(code))+'b.avif?v=1.6.8':'';
 }
 function pair(c){
  const f=fr.get(c.code);
  const back=backCardFor(c);
  const doubleSided=!!c.double_sided || !!back;
- const enImg=imageUrl(c.imagesrc_front||c.imagesrc||c.image_url||'');
+ /* For double-sided Location cards ArkhamDB's imagesrc_front can represent the opposite face in some datasets;
+    use the canonical card image as the front and the same base code + b for the back. */
+ const isLocation=c.type_code==='location';
+ const enImg=imageUrl(isLocation?(c.imagesrc||c.image_url||c.imagesrc_front||''):(c.imagesrc_front||c.imagesrc||c.image_url||''));
  const backEn=doubleSided?(englishBackImageUrl(c.code)||(imageUrl(c.backimagesrc||c.back_image||back?.imagesrc_front||back?.imagesrc||back?.image_url||''))):'';
  const fi=frenchImageUrl(c.code);
- const backCode=back?.code||c.code;
- const backFr=doubleSided?frenchBackImageUrl(backCode):'';
+ const baseCode=String(c.code||'').replace(/b$/i,'');
+ const backFr=doubleSided?frenchBackImageUrl(baseCode):'';
  const frBackName=f?.back_name||f?.backName||back?.name||c.back_name||f?.name||c.name;
  return '<article class="pair '+mode+'">'+
    '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,frBackName,enImg,''):'')+'</div>'+
