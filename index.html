@@ -27,12 +27,12 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 .mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:8px 8px;cursor:pointer;color:var(--ink);border-radius:7px}.mainMenu:hover{background:#eee9e1}.mainMenu.active{background:var(--active);color:var(--accent)}
 .subMenu{display:grid;gap:4px;margin:-3px 0 8px 8px}.subMenuBtn{font-family:inherit;font-size:13px;font-weight:700;text-align:left;border:0;background:transparent;padding:6px 8px;cursor:pointer;color:var(--muted);border-radius:7px}.subMenuBtn:hover{background:#eee9e1;color:var(--ink)}.subMenuBtn.active{background:var(--active);color:var(--accent)}
 .typeMenu{display:grid;gap:5px;margin:8px 0 12px;padding:8px;background:#f3f0ea;border:1px solid var(--line);border-radius:9px}.typeMenu label{font-size:11px;font-weight:800;color:var(--muted)}.typeMenu select{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:13px}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}
-#meeplesView{display:none;position:fixed;z-index:100;top:var(--arkham-header-height,0px);right:0;bottom:0;left:0;overflow:auto;background:#eee9df;pointer-events:none}#meeplesView.open{display:block;pointer-events:auto}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}
+#meeplesView{display:none;position:fixed;z-index:5;top:var(--arkham-header-height,0px);right:0;bottom:0;left:300px;overflow:auto;background:#eee9df;pointer-events:none}#meeplesView.open{display:block;pointer-events:auto}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0;top:var(--arkham-header-height,0px)}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.6</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.7</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -45,13 +45,13 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.6</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.7</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.6 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.7 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -229,7 +229,7 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.6';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.7';
 }
 function imageUrl(v){
   const u=v||'';
@@ -245,7 +245,7 @@ function englishBackImageUrl(code){
  return code?'https://arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
 }
 function frenchBackImageUrl(code){
- return code?'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+encodeURIComponent(String(code))+'b.avif?v=1.6.6':'';
+ return code?'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+encodeURIComponent(String(code))+'b.avif?v=1.6.7':'';
 }
 function pair(c){
  const f=fr.get(c.code);
