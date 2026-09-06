@@ -20,7 +20,7 @@ aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflo
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
 .scenarioHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}.eyebrow{font-size:12px;color:var(--muted)}h2{margin:3px 0;font-size:25px}.sub{font-size:12px;color:var(--muted)}.count{font-size:14px;font-weight:700;white-space:nowrap}
 .set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
-.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.card.flippable{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.card.flippable:active{transform:scale(.99)}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
+.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.card.flippable{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.card.flippable:active{transform:scale(.99)}.flipBadge{position:absolute;top:7px;right:7px;z-index:2;background:rgba(255,255,255,.92);border:1px solid #d7d0c4;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;color:#5f5a52;box-shadow:0 1px 3px rgba(0,0,0,.12)}.card.flippable{position:relative}.card.flippable.isBack .flipBadge{background:rgba(47,45,41,.92);color:#fff;border-color:#2f2d29}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 
@@ -32,7 +32,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.2</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.3</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -44,13 +44,13 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.2</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.3</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
 <div id="meeplesView" aria-hidden="true"><iframe id="meeplesFrame" title="Programmation Meeples"></iframe></div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.2 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.3 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -133,15 +133,31 @@ function bind(){
  $('cards').addEventListener('click',e=>{
    const card=e.target.closest('.card[data-back-src]');
    if(!card)return;
-   const img=card.querySelector('img');
-   if(!img)return;
-   const flipped=card.dataset.side==='back';
-   card.dataset.side=flipped?'front':'back';
-   img.src=flipped?card.dataset.frontSrc:card.dataset.backSrc;
-   img.alt=flipped?card.dataset.frontName:card.dataset.backName;
-   const name=card.querySelector('.meta b');
-   if(name)name.textContent=flipped?card.dataset.frontName:card.dataset.backName;
+   flipCard(card);
  });
+ $('cards').addEventListener('keydown',e=>{
+   if(e.key!=='Enter'&&e.key!==' ')return;
+   const card=e.target.closest('.card[data-back-src]');
+   if(!card)return;
+   e.preventDefault();
+   flipCard(card);
+ });
+}
+function flipCard(card){
+ const img=card.querySelector('img');
+ if(!img)return;
+ const flipped=card.dataset.side==='back';
+ card.dataset.side=flipped?'front':'back';
+ const src=flipped?card.dataset.frontSrc:card.dataset.backSrc;
+ img.onerror=()=>{
+   const fallback=flipped?card.dataset.frontFallback:card.dataset.backFallback;
+   if(fallback&&img.src!==fallback){img.onerror=null;img.src=fallback;}
+ };
+ img.src=src;
+ img.alt=flipped?card.dataset.frontName:card.dataset.backName;
+ const name=card.querySelector('.meta b');
+ if(name)name.textContent=flipped?card.dataset.frontName:card.dataset.backName;
+ card.classList.toggle('isBack',!flipped);
 }
 function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
 function codesForScenario(){
@@ -212,7 +228,7 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.2';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.3';
 }
 function imageUrl(v){
   const u=v||'';
@@ -234,16 +250,20 @@ function pair(c){
   const fi=frenchImageUrl(c.code);
   const backCode=back?.code||'';
   const backFr=backCode?frenchImageUrl(backCode):'';
+  const backFrAlt=backCode?frenchImageUrl(c.code+'b'):'';
+  const frBackName=fr.get(backCode)?.name||fr.get(c.code+'b')?.name||c.back_name||f?.name||c.name;
   return '<article class="pair '+mode+'">'+
-    '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,back?.name||c.back_name||c.name):'')+'</div>'+
-    '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr,fr.get(backCode)?.name||c.back_name||f?.name||c.name):'')+'</div>'+
+    '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,back?.name||c.back_name||c.name,enImg,''):'')+'</div>'+
+    '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr||backFrAlt,frBackName,fi,backEn):'')+'</div>'+
     '</article>';
 }
 function cardTypeLabel(c){const m={asset:'Soutien',event:'Événement',skill:'Compétence',enemy:'Ennemi',treachery:'Traîtrise',location:'Lieu',act:'Acte',agenda:'Intrigue',scenario:'Scénario',story:'Histoire',investigator:'Investigateur',weakness:'Faiblesse'};return m[c?.type_code]||c?.type_code||''}
-function face(src,name,label,code,c,backSrc,backName){
+function face(src,name,label,code,c,backSrc,backName,frontFallback,backFallback){
   const flip=backSrc&&backSrc!==src;
+  const badge=flip?'<span class="flipBadge" aria-hidden="true">↻ Recto / verso</span>':'';
   return '<div class="lang">'+esc(label)+'</div>'+
-    '<div class="card'+(flip?' flippable':'')+'"'+(flip?' data-back-src="'+esc(backSrc)+'" data-front-src="'+esc(src)+'" data-side="front" data-front-name="'+esc(name)+'" data-back-name="'+esc(backName||name)+'" role="button" tabindex="0" aria-label="'+esc(name)+' — appuyer pour retourner la carte"':'')+'>'+
+    '<div class="card'+(flip?' flippable':'')+'"'+(flip?' data-back-src="'+esc(backSrc)+'" data-front-src="'+esc(src)+'" data-front-fallback="'+esc(frontFallback||src)+'" data-back-fallback="'+esc(backFallback||'')+'" data-side="front" data-front-name="'+esc(name)+'" data-back-name="'+esc(backName||name)+'" role="button" tabindex="0" aria-label="'+esc(name)+' — appuyer pour retourner la carte"':'')+'>'+
+    badge+
     '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'">'+
     '<div class="typeTag">'+esc(cardTypeLabel(c))+'</div>'+
     '<div class="qtyTag">'+esc((Number(c?.quantity)||1)===1?'1 exemplaire':'× '+(Number(c?.quantity)||1)+' exemplaires')+' dans le paquet</div>'+
