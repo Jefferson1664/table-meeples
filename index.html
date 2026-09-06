@@ -27,7 +27,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 .mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:8px 8px;cursor:pointer;color:var(--ink);border-radius:7px}.mainMenu:hover{background:#eee9e1}.mainMenu.active{background:var(--active);color:var(--accent)}
 .subMenu{display:grid;gap:4px;margin:-3px 0 8px 8px}.subMenuBtn{font-family:inherit;font-size:13px;font-weight:700;text-align:left;border:0;background:transparent;padding:6px 8px;cursor:pointer;color:var(--muted);border-radius:7px}.subMenuBtn:hover{background:#eee9e1;color:var(--ink)}.subMenuBtn.active{background:var(--active);color:var(--accent)}
 .typeMenu{display:grid;gap:5px;margin:8px 0 12px;padding:8px;background:#f3f0ea;border:1px solid var(--line);border-radius:9px}.typeMenu label{font-size:11px;font-weight:800;color:var(--muted)}.typeMenu select{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:13px}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}
-#meeplesView{display:none;position:fixed;z-index:6;top:var(--arkham-header-height,0px);right:0;bottom:0;left:300px;background:#eee9df;pointer-events:none}#meeplesView.open{display:block;pointer-events:auto}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}
+#meeplesView{display:none;position:fixed;z-index:20;top:var(--arkham-header-height,0px);right:0;bottom:0;left:300px;overflow:auto;background:#eee9df;pointer-events:none}#meeplesView.open{display:block;pointer-events:auto}#meeplesFrame{width:100%;height:100%;border:0;display:block}@media(max-width:850px){#meeplesView{left:0}}
 </style>
 </head>
 <body>
@@ -228,7 +228,7 @@ async function render(){
  $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
 function frenchImageUrl(code){
-  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.4';
+  return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.6.5';
 }
 function imageUrl(v){
   const u=v||'';
@@ -244,7 +244,7 @@ function englishBackImageUrl(code){
  return code?'https://arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
 }
 function frenchBackImageUrl(code){
- return code?'https://fr.arkhamdb.com/bundles/cards/'+encodeURIComponent(String(code))+'b.png':'';
+ return code?'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+encodeURIComponent(String(code))+'b.avif?v=1.6.5':'';
 }
 function pair(c){
  const f=fr.get(c.code);
@@ -258,7 +258,7 @@ function pair(c){
  const frBackName=f?.back_name||f?.backName||back?.name||c.back_name||f?.name||c.name;
  return '<article class="pair '+mode+'">'+
    '<div class="side en">'+(mode!=='fr'?face(enImg,c.name,'English',c.code,c,backEn,frBackName,enImg,''):'')+'</div>'+
-   '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr,frBackName,fi,backEn):'')+'</div>'+
+   '<div class="side fr">'+(mode!=='en'?face(fi,f?.name||c.name,'Français',c.code,c,backFr,frBackName,fi,''):'')+'</div>'+
    '</article>';
 }
 function cardTypeLabel(c){const m={asset:'Soutien',event:'Événement',skill:'Compétence',enemy:'Ennemi',treachery:'Traîtrise',location:'Lieu',act:'Acte',agenda:'Intrigue',scenario:'Scénario',story:'Histoire',investigator:'Investigateur',weakness:'Faiblesse'};return m[c?.type_code]||c?.type_code||''}
