@@ -18,8 +18,8 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 .brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
-main{display:block;min-height:calc(100vh - 80px)}
-aside{border-bottom:1px solid var(--line);background:#faf8f4;padding:10px 12px;overflow:visible;position:relative;top:auto;height:auto;max-height:none}
+main{display:grid;grid-template-columns:minmax(260px,310px) minmax(0,1fr);min-height:calc(100vh - 80px)}
+aside{border-right:1px solid var(--line);border-bottom:0;background:#faf8f4;padding:10px 12px;overflow:visible;position:relative;top:auto;height:auto;max-height:none}
 .sideTitle{font-weight:800;margin:4px 0 8px}.hint{font-size:12px;color:var(--muted);margin-bottom:10px}
 .campaign{margin-bottom:7px}.campHead{width:100%;display:grid;grid-template-columns:20px 1fr auto;gap:5px;align-items:center;text-align:left;border:0;background:transparent;padding:8px 5px;border-radius:7px;cursor:pointer;color:var(--ink)}.campHead:hover{background:#eee9e1}.arrow{font-size:14px}.campName{font-weight:700}.campHead small{font-size:10px;color:var(--muted)}
 .scenarios{padding-left:24px}.scenario{width:100%;border:0;background:transparent;text-align:left;padding:7px 8px;border-radius:6px;cursor:pointer;color:var(--ink)}.scenario:hover{background:#eee9e1}.scenario.active{background:var(--active);font-weight:700;color:var(--accent)}
@@ -28,8 +28,17 @@ section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background
 .set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
 .paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.arkhamCardImage.flipAvailable{cursor:pointer}.flipCardBtn{display:block;width:100%;margin:6px 0 2px;padding:5px 7px;border:1px solid var(--line);background:#faf8f4;border-radius:6px;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer}.flipCardBtn:hover{background:#eee9e1;color:var(--ink)}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
-@media(max-width:850px){aside{position:relative;top:auto;height:auto;max-height:none;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
+#arkhamNavPanel>summary{display:none}
+.arkhamNavSummary{font-weight:800;cursor:pointer;padding:10px 4px;color:var(--ink)}
+@media(max-width:850px){
+ main{display:grid;grid-template-columns:minmax(260px,310px) minmax(0,1fr);min-height:calc(100vh - 80px)}
+ aside{position:relative;top:auto;height:auto;max-height:none;border-right:0;border-bottom:1px solid var(--line);padding:8px 10px}
+ #arkhamNavPanel>summary{display:block}
+ #arkhamNavPanel:not([open])>.arkhamNavContent{display:none}
+ .arkhamNavContent{padding:2px 0 4px}
+ .paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 
+#arkhamNavPanel>summary{display:none}.arkhamNavSummary{font-weight:800;cursor:pointer;padding:10px 4px;color:var(--ink)}
 .mainMenu{font-family:inherit;font-size:inherit;font-weight:800;margin:4px 0 8px;width:100%;display:block;text-align:left;border:0;background:transparent;padding:8px 8px;cursor:pointer;color:var(--ink);border-radius:7px}.mainMenu:hover{background:#eee9e1}.mainMenu.active{background:var(--active);color:var(--accent)}
 .subMenu{display:grid;gap:4px;margin:-3px 0 8px 8px}.subMenuBtn{font-family:inherit;font-size:13px;font-weight:700;text-align:left;border:0;background:transparent;padding:6px 8px;cursor:pointer;color:var(--muted);border-radius:7px}.subMenuBtn:hover{background:#eee9e1;color:var(--ink)}.subMenuBtn.active{background:var(--active);color:var(--accent)}
 .typeMenu{display:grid;gap:5px;margin:8px 0 12px;padding:8px;background:#f3f0ea;border:1px solid var(--line);border-radius:9px}.typeMenu label{font-size:11px;font-weight:800;color:var(--muted)}.typeMenu select{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:13px}.mainMenu:hover{text-decoration:underline}.mainMenu.active{background:var(--active);color:var(--accent);border-radius:7px;padding:8px 8px;margin:0 0 8px}
@@ -77,7 +86,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.9</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.10</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
  <nav class="mainNav" aria-label="Navigation principale">
@@ -94,14 +103,14 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
  </nav>
 </header>
 <main>
-<aside><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"><label for="typeSelect">Type de carte</label><select id="typeSelect"><option value="all">Toutes les cartes</option><option value="asset">Soutiens</option><option value="event">Événements</option><option value="skill">Compétences</option><option value="enemy">Ennemis</option><option value="treachery">Traîtrises</option><option value="location">Lieux</option><option value="act">Actes</option><option value="agenda">Intrigues</option><option value="scenario">Scénarios</option><option value="story">Histoires</option><option value="investigator">Investigateurs</option><option value="weakness">Faiblesses</option></select></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></aside>
+<aside><details id="arkhamNavPanel" open><summary class="arkhamNavSummary">Choisir une campagne / un scénario</summary><div class="arkhamNavContent"><div class="hint">Choisis une campagne puis un scénario pour afficher toutes les cartes de ses sets.</div><div id="typeMenu" class="typeMenu"><label for="typeSelect">Type de carte</label><select id="typeSelect"><option value="all">Toutes les cartes</option><option value="asset">Soutiens</option><option value="event">Événements</option><option value="skill">Compétences</option><option value="enemy">Ennemis</option><option value="treachery">Traîtrises</option><option value="location">Lieux</option><option value="act">Actes</option><option value="agenda">Intrigues</option><option value="scenario">Scénarios</option><option value="story">Histoires</option><option value="investigator">Investigateurs</option><option value="weakness">Faiblesses</option></select></div><div id="tree"><div class="empty">Chargement des campagnes…</div></div></div></details></aside>
 <section>
 <div id="welcome" class="welcome">
 <h2>Cartes de scénario bilingues</h2>
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.9</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.10</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
@@ -109,7 +118,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
   <div id="demeterApp"></div>
 </div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.9 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.10 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -183,7 +192,7 @@ function buildTree(){
  });
 }
 function bind(){$('search').oninput=render;$('typeSelect').onchange=e=>{typeFilter=e.target.value;render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';$('typeSelect').value='all';render()}}
-function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render()}
+function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render();if(window.innerWidth<=850){const n=document.getElementById('arkhamNavPanel');if(n)n.open=false;}}
 function codesForScenario(){
  if(!selected)return[];
  const vals=mapping.get(norm(selected.name))||[];
@@ -330,7 +339,7 @@ let varunaSaves=JSON.parse(localStorage.getItem("varunaSaves")||"{}");
 function varunaPersist(){localStorage.setItem("varunaSaves",JSON.stringify(varunaSaves));}
 function varunaShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function varunaUid(){return "v_"+Date.now()+"_"+Math.random().toString(36).slice(2,8)}
-function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.6.9</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
+function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.6.10</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
 function varunaStart(){const decks={};const removed={bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]};VARUNA_COLORS.forEach(([key])=>{decks[key]=varunaShuffle(VARUNA_ASSETS.cards[key].map((_,i)=>i));removed[key]=decks[key].splice(0,2)});varunaState={id:varunaUid(),version:"1.6.9",objectives:varunaShuffle(VARUNA_ASSETS.objectives.map((_,i)=>i)).slice(0,4),discoveries:varunaShuffle(VARUNA_ASSETS.discoveries.map((_,i)=>i)).slice(0,4),decks,displayed:{},played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},removed,turn:1,finished:false,startedAt:new Date().toISOString()};VARUNA_COLORS.forEach(([key])=>varunaState.displayed[key]=varunaState.decks[key].shift());varunaRenderGame()}
 function varunaRenderGame(){demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");const s=varunaState;const objectives=s.objectives.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.objectives[i]}" alt="Tuile objectif ${i+1}"></div>`).join("");const discoveries=s.discoveries.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.discoveries[i]}" alt="Carte découverte ${i+1}"></div>`).join("");const species=VARUNA_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join("");const cards=VARUNA_COLORS.map(([key,label,css])=>{const idx=s.displayed[key];return `<div class="demeterColorCard ${css}"><div class="demeterColorName">${label}</div><img src="${VARUNA_ASSETS.cards[key][idx]}" alt="Carte ${label}"></div>`}).join("");const remaining=Math.max(0,Object.values(s.decks).reduce((n,a)=>n+a.length,0));const played=Object.values(s.played).reduce((n,a)=>n+a.length,0);const discarded=Object.values(s.removed).reduce((n,a)=>n+a.length,0);document.getElementById("demeterApp").innerHTML=`<div class="demeterShell demeterGame demeterVarunaGame"><div class="demeterTitle"><div><div class="eyebrow">DEMETER · VARUNA</div><h2>Partie en cours</h2><div class="sub">Tour ${s.turn} sur 13 · ${remaining} cartes encore dans les paquets</div></div><div class="demeterActions"><button class="demeterBtn" id="varunaSaveGameBtn">Sauvegarder</button><button class="demeterBtn" id="varunaDiscardedBtn">Cartes écartées (${discarded})</button><button class="demeterBtn danger" id="varunaAbandonGameBtn">Abandonner</button></div></div><div class="demeterPanel"><h3>Objectifs tirés au hasard</h3><div class="demeterObjectives">${objectives}</div></div><div class="demeterPanel"><h3>Cartes découverte tirées au hasard</h3><div class="demeterObjectives">${discoveries}</div></div><div class="demeterPanel"><h3>Tuiles espèces</h3><div class="demeterSpecies">${species}</div></div><div class="demeterPanel"><h3>Cartes du tour ${s.turn}</h3><div class="demeterCards">${cards}</div><div class="demeterTurnBar"><div class="demeterTurn">Ordre : Bleu · Rouge · Jaune · Violet · Gris</div></div></div><div class="demeterTurnBar">${s.finished?'<strong>Fin de partie</strong>':'<button class="demeterBtn primary" id="varunaNextBtn">Tour suivant</button>'}<span class="demeterStatus">${played} cartes jouées · ${discarded} cartes écartées</span></div></div>`;document.getElementById("varunaSaveGameBtn").onclick=varunaShowSave;document.getElementById("varunaDiscardedBtn").onclick=varunaShowDiscarded;document.getElementById("varunaAbandonGameBtn").onclick=varunaAbandon;if(!s.finished)document.getElementById("varunaNextBtn").onclick=varunaNextTurn}
 function varunaNextTurn(){const s=varunaState;VARUNA_COLORS.forEach(([key])=>{s.played[key].push(s.displayed[key]);s.displayed[key]=null});if(s.turn>=13){s.finished=true;varunaRenderGame();return}s.turn++;VARUNA_COLORS.forEach(([key])=>s.displayed[key]=s.decks[key].shift());varunaRenderGame()}
@@ -412,7 +421,7 @@ function demeterHome(sub='summer'){
 function demeterRenderHome(){
  const has=!!demeterState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.9</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.10</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -524,7 +533,7 @@ function demeterAutumnUid(){return 'da_'+Date.now()+'_'+Math.random().toString(3
 function demeterRenderAutumnHome(){
  const has=!!demeterAutumnState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.9</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.10</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
