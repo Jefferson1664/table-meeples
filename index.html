@@ -70,7 +70,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.5</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.6</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -87,7 +87,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.5</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.6</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
@@ -95,7 +95,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
   <div id="demeterApp"></div>
 </div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.5 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.6 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -307,8 +307,8 @@ let varunaSaves=JSON.parse(localStorage.getItem("varunaSaves")||"{}");
 function varunaPersist(){localStorage.setItem("varunaSaves",JSON.stringify(varunaSaves));}
 function varunaShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function varunaUid(){return "v_"+Date.now()+"_"+Math.random().toString(36).slice(2,8)}
-function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.6.5</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
-function varunaStart(){const decks={};VARUNA_COLORS.forEach(([key])=>{decks[key]=varunaShuffle(VARUNA_ASSETS.cards[key].map((_,i)=>i));decks[key].splice(0,3)});varunaState={id:varunaUid(),version:"1.6.5",objectives:varunaShuffle(VARUNA_ASSETS.objectives.map((_,i)=>i)).slice(0,4),discoveries:varunaShuffle(VARUNA_ASSETS.discoveries.map((_,i)=>i)).slice(0,4),decks,displayed:{},played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},turn:1,finished:false,startedAt:new Date().toISOString()};VARUNA_COLORS.forEach(([key])=>varunaState.displayed[key]=varunaState.decks[key].shift());varunaRenderGame()}
+function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.6.6</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
+function varunaStart(){const decks={};VARUNA_COLORS.forEach(([key])=>{decks[key]=varunaShuffle(VARUNA_ASSETS.cards[key].map((_,i)=>i));decks[key].splice(0,3)});varunaState={id:varunaUid(),version:"1.6.6",objectives:varunaShuffle(VARUNA_ASSETS.objectives.map((_,i)=>i)).slice(0,4),discoveries:varunaShuffle(VARUNA_ASSETS.discoveries.map((_,i)=>i)).slice(0,4),decks,displayed:{},played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},turn:1,finished:false,startedAt:new Date().toISOString()};VARUNA_COLORS.forEach(([key])=>varunaState.displayed[key]=varunaState.decks[key].shift());varunaRenderGame()}
 function varunaRenderGame(){demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");const s=varunaState;const objectives=s.objectives.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.objectives[i]}" alt="Tuile objectif ${i+1}"></div>`).join("");const discoveries=s.discoveries.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.discoveries[i]}" alt="Carte découverte ${i+1}"></div>`).join("");const species=VARUNA_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join("");const cards=VARUNA_COLORS.map(([key,label,css])=>{const idx=s.displayed[key];return `<div class="demeterColorCard ${css}"><div class="demeterColorName">${label}</div><img src="${VARUNA_ASSETS.cards[key][idx]}" alt="Carte ${label}"></div>`}).join("");const remaining=Math.max(0,Object.values(s.decks).reduce((n,a)=>n+a.length,0));const played=Object.values(s.played).reduce((n,a)=>n+a.length,0);const discarded=Object.values(s.removed).reduce((n,a)=>n+a.length,0);document.getElementById("demeterApp").innerHTML=`<div class="demeterShell demeterGame demeterVarunaGame"><div class="demeterTitle"><div><div class="eyebrow">DEMETER · VARUNA</div><h2>Partie en cours</h2><div class="sub">Tour ${s.turn} sur 12 · ${remaining} cartes encore dans les paquets</div></div><div class="demeterActions"><button class="demeterBtn" id="varunaSaveGameBtn">Sauvegarder</button><button class="demeterBtn" id="varunaDiscardedBtn">Cartes écartées (${discarded})</button><button class="demeterBtn danger" id="varunaAbandonGameBtn">Abandonner</button></div></div><div class="demeterPanel"><h3>Objectifs tirés au hasard</h3><div class="demeterObjectives">${objectives}</div></div><div class="demeterPanel"><h3>Cartes découverte tirées au hasard</h3><div class="demeterObjectives">${discoveries}</div></div><div class="demeterPanel"><h3>Tuiles espèces</h3><div class="demeterSpecies">${species}</div></div><div class="demeterPanel"><h3>Cartes du tour ${s.turn}</h3><div class="demeterCards">${cards}</div><div class="demeterTurnBar"><div class="demeterTurn">Ordre : Bleu · Rouge · Jaune · Violet · Gris</div></div></div><div class="demeterTurnBar">${s.finished?'<strong>Fin de partie</strong>':'<button class="demeterBtn primary" id="varunaNextBtn">Tour suivant</button>'}<span class="demeterStatus">${played} cartes jouées · ${discarded} cartes écartées</span></div></div>`;document.getElementById("varunaSaveGameBtn").onclick=varunaShowSave;document.getElementById("varunaDiscardedBtn").onclick=varunaShowDiscarded;document.getElementById("varunaAbandonGameBtn").onclick=varunaAbandon;if(!s.finished)document.getElementById("varunaNextBtn").onclick=varunaNextTurn}
 function varunaNextTurn(){const s=varunaState;VARUNA_COLORS.forEach(([key])=>{s.played[key].push(s.displayed[key]);s.displayed[key]=null});if(s.turn>=12){s.finished=true;varunaRenderGame();return}s.turn++;VARUNA_COLORS.forEach(([key])=>s.displayed[key]=s.decks[key].shift());varunaRenderGame()}
 function varunaShowSave(){const currentName=varunaState?.name||"";demeterModal(`<h3>Sauvegarder une partie Varuna</h3><p class="hint">La sauvegarde mémorise les objectifs, les 4 cartes découverte, les 3 cartes retirées de chaque paquet, les cartes restantes, les cartes jouées et le tour.</p><input id="varunaSaveName" class="field" placeholder="Nom de la partie" value="${esc(currentName)}"><div class="row"><button class="demeterBtn primary" id="varunaSaveConfirm">Sauvegarder</button><button class="demeterBtn" id="varunaSaveCancel">Annuler</button></div>`);document.getElementById("varunaSaveConfirm").onclick=()=>{const n=document.getElementById("varunaSaveName").value.trim();if(!n){alert("Donnez un nom à la partie.");return}varunaState.name=n;varunaSaves[n]=JSON.parse(JSON.stringify(varunaState));varunaPersist();demeterModalClose();varunaRenderGame()};document.getElementById("varunaSaveCancel").onclick=demeterModalClose}
@@ -389,7 +389,7 @@ function demeterHome(sub='summer'){
 function demeterRenderHome(){
  const has=!!demeterState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.5</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.6</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -412,7 +412,7 @@ function demeterStart(){
    if(!window.__demeterRemoved)window.__demeterRemoved={};
    window.__demeterRemoved[key]=removed;});
  demeterState={
-   id:demeterUid(), version:'1.6.5', objectives:demeterShuffle(DEMETER_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
+   id:demeterUid(), version:'1.6.6', objectives:demeterShuffle(DEMETER_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
    decks, displayed:{}, played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},
    removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]}, turn:1, finished:false,
    startedAt:new Date().toISOString()
@@ -427,7 +427,7 @@ function demeterRenderGame(){
  demeterOpenView();document.querySelectorAll('#demeterSubmenu .subMenuBtn').forEach(x=>x.classList.remove('active'));document.getElementById('demeterSummerMenu').classList.add('active');
  const s=demeterState;
  const objectives=s.objectives.map(i=>`<div class="demeterObjective"><img src="${DEMETER_ASSETS.objectives[i]}" alt="Tuile objectif ${i+1}"></div>`).join('');
- const species=DEMETER_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join('');
+ const species=DEMETER_AUTUMN_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join('');
  const cards=DEMETER_COLORS.map(([key,label,css])=>{const idx=s.displayed[key];return `<div class="demeterColorCard ${css}"><div class="demeterColorName">${label}</div><img src="${DEMETER_ASSETS.cards[key][idx]}" alt="Carte ${label}"></div>`}).join('');
  const remaining=Math.max(0,Object.values(s.decks).reduce((n,a)=>n+a.length,0));
  const played=Object.values(s.played).reduce((n,a)=>n+a.length,0);
@@ -501,7 +501,7 @@ function demeterAutumnUid(){return 'da_'+Date.now()+'_'+Math.random().toString(3
 function demeterRenderAutumnHome(){
  const has=!!demeterAutumnState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.5</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.6</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -525,7 +525,7 @@ function demeterAutumnStart(){
    if(!window.__demeterAutumnRemoved)window.__demeterAutumnRemoved={};
    window.__demeterAutumnRemoved[key]=removed;});
  demeterAutumnState={
-   id:demeterAutumnUid(), version:'1.6.5', objectives:demeterAutumnShuffle(DEMETER_AUTUMN_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
+   id:demeterAutumnUid(), version:'1.6.6', objectives:demeterAutumnShuffle(DEMETER_AUTUMN_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
    decks, displayed:{}, played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},
    removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]}, turn:1, finished:false,
    startedAt:new Date().toISOString()
