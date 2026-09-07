@@ -43,17 +43,17 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 .demeterGame{display:grid;gap:18px}
 .demeterTop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start}
 .demeterObjectives{display:flex;gap:12px;flex-wrap:wrap}
-.demeterObjective{width:150px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px}
-.demeterObjective img{width:100%;height:210px;object-fit:contain;display:block;border-radius:6px}
+.demeterObjective{position:relative;width:210px;height:140px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px;overflow:visible}
+.demeterObjective img{position:absolute;left:50%;top:50%;width:140px;height:210px;object-fit:contain;display:block;border-radius:6px;transform:translate(-50%,-50%) rotate(90deg)}
 .demeterSpecies{display:grid;grid-template-columns:repeat(6,minmax(80px,1fr));gap:10px}
-.demeterSpecies .species{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px}
-.demeterSpecies img{width:100%;height:auto;aspect-ratio:1.48;object-fit:contain;display:block;clip-path:polygon(3% 2%,82% 2%,100% 50%,82% 98%,3% 98%)}
+.demeterSpecies .species{position:relative;height:240px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;overflow:visible}
+.demeterSpecies img{position:absolute;left:50%;top:50%;width:240px;height:150px;object-fit:contain;display:block;transform:translate(-50%,-50%) rotate(90deg);clip-path:polygon(3% 2%,82% 2%,100% 50%,82% 98%,3% 98%)}
 .demeterAutumnGame .demeterSpecies{grid-template-columns:repeat(7,minmax(70px,1fr))}
 .demeterCards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.demeterColorCard{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+.demeterColorCard{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px;text-align:center;overflow:visible}
 .demeterColorCard.blue{border-color:#2e9dcb}.demeterColorCard.red{border-color:#e5332f}.demeterColorCard.yellow{border-color:#f1b72d}.demeterColorCard.purple{border-color:#7a3a93}.demeterColorCard.gray{border-color:#aaa}
 .demeterColorName{font-weight:900;font-size:13px;margin-bottom:7px}
-.demeterColorCard img{width:100%;height:180px;object-fit:contain;display:block}
+.demeterColorCard img{display:block;width:145px;height:220px;object-fit:contain;margin:0 auto;transform:rotate(90deg)}
 .demeterTurnBar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
 .demeterTurn{font-weight:900}.demeterStatus{color:var(--muted);font-size:12px}
 .demeterActions{display:flex;gap:8px;flex-wrap:wrap}
@@ -61,14 +61,14 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 .demeterModal.open{display:flex}.demeterDialog{background:#fff;border-radius:14px;border:1px solid var(--line);max-width:900px;width:min(900px,100%);max-height:90vh;overflow:auto;padding:18px}
 .demeterDialog h3{margin-top:0}.saveRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .saveName{font-weight:800}.saveMeta{font-size:11px;color:var(--muted)}
-.discardGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.discardGroup{background:#faf8f4;border:1px solid var(--line);border-radius:10px;padding:8px}.discardGroup h4{margin:0 0 8px}.discardGroup img{width:100%;height:140px;object-fit:contain;background:#fff;border-radius:6px;margin-bottom:7px}
+.discardGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.discardGroup{background:#faf8f4;border:1px solid var(--line);border-radius:10px;padding:8px}.discardGroup h4{margin:0 0 8px}.discardGroup img{display:block;width:105px;height:165px;object-fit:contain;background:#fff;border-radius:6px;margin:8px auto 12px;transform:rotate(90deg)}
 #demeterSubmenu .subMenuBtn{font-family:inherit}
 @media(max-width:850px){#demeterView{left:0}.demeterCards{grid-template-columns:repeat(2,minmax(0,1fr))}.demeterSpecies,.demeterAutumnGame .demeterSpecies{grid-template-columns:repeat(3,minmax(80px,1fr))}.demeterMenuGrid{grid-template-columns:1fr}.demeterTop{grid-template-columns:1fr}.discardGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.2</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.4</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
 </header>
@@ -85,7 +85,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.2</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.6.4</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
@@ -93,7 +93,7 @@ footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-t
   <div id="demeterApp"></div>
 </div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.2 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.4 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -371,7 +371,7 @@ function demeterHome(sub='summer'){
 function demeterRenderHome(){
  const has=!!demeterState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.2</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.4</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -394,7 +394,7 @@ function demeterStart(){
    if(!window.__demeterRemoved)window.__demeterRemoved={};
    window.__demeterRemoved[key]=removed;});
  demeterState={
-   id:demeterUid(), version:'1.6.2', objectives:demeterShuffle(DEMETER_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
+   id:demeterUid(), version:'1.6.4', objectives:demeterShuffle(DEMETER_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
    decks, displayed:{}, played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},
    removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]}, turn:1, finished:false,
    startedAt:new Date().toISOString()
@@ -483,7 +483,7 @@ function demeterAutumnUid(){return 'da_'+Date.now()+'_'+Math.random().toString(3
 function demeterRenderAutumnHome(){
  const has=!!demeterAutumnState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.2</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.4</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -507,7 +507,7 @@ function demeterAutumnStart(){
    if(!window.__demeterAutumnRemoved)window.__demeterAutumnRemoved={};
    window.__demeterAutumnRemoved[key]=removed;});
  demeterAutumnState={
-   id:demeterAutumnUid(), version:'1.6.2', objectives:demeterAutumnShuffle(DEMETER_AUTUMN_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
+   id:demeterAutumnUid(), version:'1.6.4', objectives:demeterAutumnShuffle(DEMETER_AUTUMN_ASSETS.objectives.map((_,i)=>i)).slice(0,4),
    decks, displayed:{}, played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},
    removed:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]}, turn:1, finished:false,
    startedAt:new Date().toISOString()
