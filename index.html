@@ -19,7 +19,7 @@ aside{border-right:1px solid var(--line);background:#faf8f4;padding:12px;overflo
 section{padding:20px;min-width:0}.welcome{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;line-height:1.55}
 .scenarioHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}.eyebrow{font-size:12px;color:var(--muted)}h2{margin:3px 0;font-size:25px}.sub{font-size:12px;color:var(--muted)}.count{font-size:14px;font-weight:700;white-space:nowrap}
 .set{margin:18px auto;max-width:1250px}.setHead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);margin-bottom:10px}.setHead h3{margin:0 0 7px;font-size:17px}.setHead span{font-size:12px;color:var(--muted)}
-.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
+.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pair{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px;min-width:0}.side{min-width:0}.pair.both{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair.en .fr,.pair.fr .en{display:none}.lang{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px}.card img{display:block;width:100%;height:auto;aspect-ratio:0.72;object-fit:contain;border-radius:6px;background:#eee}.arkhamCardImage.flipAvailable{cursor:pointer}.flipCardBtn{display:block;width:100%;margin:6px 0 2px;padding:5px 7px;border:1px solid var(--line);background:#faf8f4;border-radius:6px;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer}.flipCardBtn:hover{background:#eee9e1;color:var(--ink)}.noimg{aspect-ratio:0.72;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}.typeTag{font-size:10px;color:var(--accent);font-weight:700;margin-top:3px}.qtyTag{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}.meta{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:var(--muted)}.warning,.empty{padding:14px;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--muted);margin:12px 0}.warning{color:#7a4c00;background:#fff8e8}.diag{max-width:1250px;margin:20px auto;font-size:12px;color:var(--muted)}
 footer{text-align:center;padding:18px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
 @media(max-width:850px){main{grid-template-columns:1fr}aside{position:relative;top:auto;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.paired{grid-template-columns:1fr}.pair.both{grid-template-columns:1fr 1fr}section{padding:12px}.scenarioHead{align-items:start}.tools{width:100%}}
 
@@ -250,13 +250,25 @@ function pair(c){
 }
 function cardTypeLabel(c){const m={asset:'Soutien',event:'Événement',skill:'Compétence',enemy:'Ennemi',treachery:'Traîtrise',location:'Lieu',act:'Acte',agenda:'Intrigue',scenario:'Scénario',story:'Histoire',investigator:'Investigateur',weakness:'Faiblesse'};return m[c?.type_code]||c?.type_code||''}
 function face(src,name,label,code,c){
+  const backRaw=c?.backimagesrc||c?.imagesrc_back||'';
+  const back=backRaw?(backRaw.startsWith('//')?'https:'+backRaw:backRaw.startsWith('/')?'https://arkhamdb.com'+backRaw:backRaw):'';
+  const canFlip=!!back;
   return '<div class="lang">'+esc(label)+'</div>'+
     '<div class="card">'+
-    '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'">'+
+    '<img class="arkhamCardImage'+(canFlip?' flipAvailable':'')+'" loading="lazy" referrerpolicy="no-referrer" src="'+esc(src)+'" alt="'+esc(name)+'"'+(canFlip?' data-front="'+esc(src)+'" data-back="'+esc(back)+'" data-name="'+esc(name)+'" onclick="toggleArkhamCardFace(this)" title="Cliquer pour retourner la carte"':'')+'>'+
+    (canFlip?'<button type="button" class="flipCardBtn" onclick="toggleArkhamCardFace(this.previousElementSibling)">↔ Retourner la carte</button>':'')+
     '<div class="typeTag">'+esc(cardTypeLabel(c))+'</div>'+
     '<div class="qtyTag">'+esc((Number(c?.quantity)||1)===1?'1 exemplaire':'× '+(Number(c?.quantity)||1)+' exemplaires')+' dans le paquet</div>'+
     '<div class="meta"><b>'+esc(name)+'</b><span>'+esc(code)+'</span></div>'+
     '</div>';
+}
+function toggleArkhamCardFace(img){
+  if(!img||!img.dataset.back)return;
+  const isBack=img.dataset.side==='back';
+  img.src=isBack?img.dataset.front:img.dataset.back;
+  img.dataset.side=isBack?'front':'back';
+  img.alt=img.dataset.name+(isBack?'':' — verso');
+  img.title=isBack?'Cliquer pour retourner au verso':'Cliquer pour retourner au recto';
 }
 
 init();
