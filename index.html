@@ -15,6 +15,8 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 .mainNav .subMenu{display:flex;gap:5px;margin:0;padding:0;flex:0 0 auto}
 .mainNav .subMenuBtn{flex:0 0 auto;white-space:nowrap;padding:7px 9px;border:1px solid var(--line);background:#fff}
 .mainNav .subMenuBtn.active{background:var(--active);color:var(--accent);border-color:#d7bdc3}
+.mainNavGroup{display:flex;flex-direction:column;align-items:stretch;flex:0 0 auto;min-width:0}.mainNavGroup>.mainMenu{width:auto}.tmSubmenu{display:grid;gap:3px;margin:-5px 0 0 0;padding:4px;background:#faf8f4;border:1px solid var(--line);border-radius:8px;min-width:150px}.tmSubBtn{font-family:inherit;font-size:12px;font-weight:700;text-align:left;border:0;background:transparent;padding:6px 8px;cursor:pointer;color:var(--muted);border-radius:6px;white-space:nowrap}.tmSubBtn:hover{background:#eee9e1;color:var(--ink)}.tmSubBtn.active{background:var(--active);color:var(--accent)}
+
 #tmSubmenu .tmSubBtn{font-size:12px}#tmSubmenu .tmSubBtn.active{font-weight:800}
 .brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
@@ -102,7 +104,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.7.6</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.7.7</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
  <nav class="mainNav" aria-label="Navigation principale">
@@ -111,17 +113,19 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <button id="arkhamMenu" class="mainMenu active" type="button">Arkham JDC</button>
   <button id="chaosMenu" class="mainMenu" type="button">Chaos Bag</button>
   <button id="demeterMenu" class="mainMenu" type="button">DEMETER</button>
-   <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
-  <div id="tmSubmenu" class="subMenu" style="display:none" aria-label="Extensions Terraforming Mars">
-   <button class="subMenuBtn tmSubBtn active" type="button" data-tm-exp="all">Toutes</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="base">Base</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="venus">Venus Next</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="prelude">Prelude</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="colonies">Colonies</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="turmoil">Turmoil</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="promo">Promo</button>
-   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="automa">Automa</button>
-  </div>
+   <div id="tmNavGroup" class="mainNavGroup">
+    <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
+    <div id="tmSubmenu" class="tmSubmenu" style="display:none" aria-label="Extensions Terraforming Mars">
+     <button class="tmSubBtn active" type="button" data-tm-exp="all">Toutes</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="base">Base</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="venus">Venus Next</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="prelude">Prelude</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="colonies">Colonies</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="turmoil">Turmoil</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="promo">Promo</button>
+     <button class="tmSubBtn" type="button" data-tm-exp="automa">Automa</button>
+    </div>
+   </div>
   <div id="demeterSubmenu" class="subMenu" style="display:none" aria-label="Jeux DEMETER">
    <button id="demeterSummerMenu" class="subMenuBtn" type="button">Été</button>
    <button id="demeterAutumnMenu" class="subMenuBtn" type="button">Autumn</button>
@@ -137,7 +141,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.7.6</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.7.7</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
@@ -149,7 +153,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <div class="tmShell">
     <aside class="tmAside">
       <div class="tmSideTitle">Terraforming Mars</div>
-      <div class="tmHint">Cartes françaises uniquement. Les plateaux et autres composants sont exclus.</div>
+      <div class="tmHint">Cartes anglaises uniquement. Les plateaux et autres composants sont exclus.</div>
       <div class="tmFilters">
         <select id="tmExpansion"><option value="all">Toutes les extensions</option></select>
         <select id="tmType"><option value="all">Tous les types</option><option value="project">Projets</option><option value="corporation">Corporations</option><option value="prelude">Préludes</option><option value="colony">Colonies</option><option value="event">Événements globaux</option><option value="automa">Automa</option></select>
@@ -171,7 +175,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
     </section>
   </div>
 </div>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.7.6 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.7.7 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -191,7 +195,7 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all',allFrenchPromise=null,allFrenchLoaded=false,encounterIndex=new Map(),qa={version:'1.7.5',checks:[]};
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all',allFrenchPromise=null,allFrenchLoaded=false,encounterIndex=new Map(),qa={version:'1.7.7',checks:[]};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
@@ -203,32 +207,41 @@ async function loadEncounterIndex(){
   }catch(e){}
 }
 async function init(){
-  // QA-01 : le menu doit être utilisable même si une source distante échoue.
+  // QA-01 : la navigation est construite immédiatement, indépendamment du réseau.
   buildTree();
   bind();
   await loadEncounterIndex();
   try{
-    // Source primaire : API ArkhamDB, avec les cartes de rencontre incluses.
-    const encounterCards=await json(API+'/cards/?encounter=1',30000);
-    if(!Array.isArray(encounterCards)||!encounterCards.length)throw Error('Aucune carte de scénario reçue');
+    // Source primaire historique et robuste : cartes de rencontre + cartes joueurs.
+    // Les cartes joueurs sont nécessaires pour compléter les cartes des packs associés au scénario.
+    const [encounterCards,playerCards]=await Promise.all([
+      json(API+'/cards/?encounter=1',30000),
+      json(API+'/cards/',30000)
+    ]);
+    if(!Array.isArray(encounterCards)||!encounterCards.length)throw Error('Aucune carte de rencontre reçue');
+    if(!Array.isArray(playerCards))throw Error('Aucune carte joueur reçue');
     const ded=new Map();
-    encounterCards.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
+    [...encounterCards,...playerCards].forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
     all=[...ded.values()];
+    if(!all.length)throw Error('Aucune carte reçue');
     all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
-    qa.checks.push(['API cards',all.length>0]);
+    qa.checks.push(['API cards',true]);
     loadMapping().catch(()=>{});
   }catch(e){
-    // QA-02 : secours GitHub. Il faut charger AUSSI les fichiers *_encounter.json.
+    // QA-02 : fallback GitHub. La structure réelle est pack/<cycle>/<pack>.json.
     try{
       const packs=await json(GH+'/packs.json',20000);
-      const candidates=(Array.isArray(packs)?packs:[]).filter(x=>x&&x.code);
+      const candidates=(Array.isArray(packs)?packs:[]).filter(x=>x&&x.code&&x.cycle_code);
       const loaded=[];
       const queue=candidates.slice();
-      const workers=Array.from({length:6},async()=>{
+      const workers=Array.from({length:8},async()=>{
         while(queue.length){
           const p=queue.shift(); if(!p)continue;
-          const base=GH+'/pack/'+encodeURIComponent(p.code)+'/'+encodeURIComponent(p.code);
-          const [a,b]=await Promise.all([json(base+'.json',10000).catch(()=>null),json(base+'_encounter.json',10000).catch(()=>null)]);
+          const base=GH+'/pack/'+encodeURIComponent(p.cycle_code)+'/'+encodeURIComponent(p.code);
+          const [a,b]=await Promise.all([
+            json(base+'.json',10000).catch(()=>null),
+            json(base+'_encounter.json',10000).catch(()=>null)
+          ]);
           ;[a,b].forEach(d=>{if(Array.isArray(d))loaded.push(...d)});
         }
       });
@@ -241,16 +254,10 @@ async function init(){
       if(!all.length)throw e;
     }catch(_){
       const tree=$('tree');
-      if(tree){
-        const warn=document.createElement('div');
-        warn.className='warning';
-        warn.innerHTML="<b>Les campagnes sont disponibles, mais les cartes n'ont pas pu être chargées.</b><br>Vérifie la connexion Internet puis recharge la page.";
-        tree.prepend(warn);
-      }
+      if(tree){const warn=document.createElement('div');warn.className='warning';warn.innerHTML='<b>Les menus sont disponibles, mais les cartes Arkham n’ont pas pu être chargées.</b><br>Recharge la page lorsque la connexion Internet est disponible.';tree.prepend(warn);}
     }
   }
-  qa.checks.push(['Version',document.querySelector('.version')?.textContent?.includes('1.7.5')===true]);
-  // QA-03 : contrôle de cohérence des scénarios avant d'afficher une page vide.
+  qa.checks.push(['Version',document.querySelector('.version')?.textContent?.includes('1.7.7')===true]);
   const unresolved=campaigns.flatMap(c=>c[2].map(s=>s[0])).filter(name=>!encounterIndex.has(norm(name)) && !all.some(x=>norm(x.encounter_name)===norm(name)));
   qa.checks.push(['Scenario index',unresolved.length===0]);
   if(selected)render();
@@ -492,7 +499,7 @@ function showTerraformingMars(){document.body.classList.remove('demeterMode');do
 function tmSyncHeader(){document.querySelectorAll('#tmSubmenu .tmSubBtn').forEach(b=>b.classList.toggle('active',b.dataset.tmExp===tmExpansion));}
 function tmRenderTree(){const tree=document.getElementById('tmTree');tmSyncHeader();if(!tree)return;const counts=new Map();tmData.forEach(c=>counts.set(c.expansion,(counts.get(c.expansion)||0)+1));tree.innerHTML='';}
 function tmMatches(c){const q=norm(tmSearch);if(q&&!norm([c.name,c.text,c.sourceName,c.expansionName].join(' ')).includes(q))return false;if(tmExpansion!=='all'&&c.expansion!==tmExpansion)return false;const t=document.getElementById('tmType')?.value||'all';if(t!=='all'&&c.type!==t)return false;const tag=norm(document.getElementById('tmTag')?.value||'');if(tag&&!norm(c.text).includes(tag)&&!norm(c.name).includes(tag))return false;return true}
-function tmRender(){const box=document.getElementById('tmCards');if(!box)return;const arr=tmData.filter(tmMatches);if(tmSelected){tmRenderDetail(tmSelected);return}document.getElementById('tmWelcome').style.display=arr.length?'none':'block';box.innerHTML='<div class="tmHead"><div><div class="eyebrow">TERRAFORMING MARS</div><h2>Cartes françaises</h2><div class="sub">'+arr.length+' résultat'+(arr.length>1?'s':'')+' · aucune carte anglaise affichée</div></div><div class="count">'+arr.length+'</div></div>'+(arr.length?'<div class="tmGrid">'+arr.map(tmCardHtml).join('')+'</div>':'<div class="empty">Aucune carte ne correspond aux filtres.</div>');box.querySelectorAll('[data-tm-id]').forEach(el=>el.onclick=()=>{tmSelected=tmData.find(x=>x.id===el.dataset.tmId);tmRender()})}
+function tmRender(){const box=document.getElementById('tmCards');if(!box)return;const arr=tmData.filter(tmMatches);if(tmSelected){tmRenderDetail(tmSelected);return}document.getElementById('tmWelcome').style.display=arr.length?'none':'block';box.innerHTML='<div class="tmHead"><div><div class="eyebrow">TERRAFORMING MARS</div><h2>Cartes anglaises</h2><div class="sub">'+arr.length+' résultat'+(arr.length>1?'s':'')+' · aucune carte anglaise affichée</div></div><div class="count">'+arr.length+'</div></div>'+(arr.length?'<div class="tmGrid">'+arr.map(tmCardHtml).join('')+'</div>':'<div class="empty">Aucune carte ne correspond aux filtres.</div>');box.querySelectorAll('[data-tm-id]').forEach(el=>el.onclick=()=>{tmSelected=tmData.find(x=>x.id===el.dataset.tmId);tmRender()})}
 function tmCardHtml(c){return '<article class="tmCard" data-tm-id="'+esc(c.id)+'"><div class="tmCardImage">'+(c.imageUrl?'<img src="'+esc(c.imageUrl)+'" alt="" loading="lazy">':'<span>Image indisponible</span>')+'</div><div class="tmCardMeta"><div class="tmCardName">'+esc(c.name)+'</div><div class="tmCardSub">'+esc(c.type==='corporation'?'Corporation':c.type==='prelude'?'Prelude':c.type==='colony'?'Colony':c.type==='event'?'Global Event':c.type==='automa'?'Automa':'Project')+'</div></div></article>'}
 function tmRenderDetail(c){document.getElementById('tmWelcome').style.display='none';document.getElementById('tmCards').innerHTML='<div class="tmDetail"><button class="tmDetailBack" id="tmBack">← Retour aux cartes</button><div class="tmDetailGrid"><div class="tmScanPlaceholder">'+(c.imageUrl?'<img src="'+esc(c.imageUrl)+'" alt="" style="max-width:100%;height:auto;display:block;margin:auto">':'English card image unavailable')+'</div><div class="tmData"><div><div class="eyebrow">'+esc(c.expansionName)+'</div><h2>'+esc(c.name)+'</h2></div><div class="tmDataRow"><div class="tmDataLabel">Type</div><div class="tmDataValue">'+esc(c.type)+'</div></div><div class="tmDataRow"><div class="tmDataLabel">Card text</div><div class="tmDataValue">'+esc(c.text)+'</div></div><div class="tmMissing">English card images are loaded from the public Terraforming Mars card-image repository.</div></div></div></div>';document.getElementById('tmBack').onclick=()=>{tmSelected=null;tmRender()}}
 function handleGlobalSearch(){const v=document.getElementById('search')?.value||'';if(document.getElementById('tmView')?.classList.contains('open')){tmSearch=v;tmRender();}else{tmSearch='';render();}}
@@ -512,7 +519,7 @@ let varunaSaves=JSON.parse(localStorage.getItem("varunaSaves")||"{}");
 function varunaPersist(){localStorage.setItem("varunaSaves",JSON.stringify(varunaSaves));}
 function varunaShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function varunaUid(){return "v_"+Date.now()+"_"+Math.random().toString(36).slice(2,8)}
-function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.7.6</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
+function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.7.7</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
 function varunaStart(){const decks={};const removed={bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]};VARUNA_COLORS.forEach(([key])=>{decks[key]=varunaShuffle(VARUNA_ASSETS.cards[key].map((_,i)=>i));removed[key]=decks[key].splice(0,2)});varunaState={id:varunaUid(),version:"1.6.9",objectives:varunaShuffle(VARUNA_ASSETS.objectives.map((_,i)=>i)).slice(0,4),discoveries:varunaShuffle(VARUNA_ASSETS.discoveries.map((_,i)=>i)).slice(0,4),decks,displayed:{},played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},removed,turn:1,finished:false,startedAt:new Date().toISOString()};VARUNA_COLORS.forEach(([key])=>varunaState.displayed[key]=varunaState.decks[key].shift());varunaRenderGame()}
 function varunaRenderGame(){demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");const s=varunaState;const objectives=s.objectives.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.objectives[i]}" alt="Tuile objectif ${i+1}"></div>`).join("");const discoveries=s.discoveries.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.discoveries[i]}" alt="Carte découverte ${i+1}"></div>`).join("");const species=VARUNA_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join("");const cards=VARUNA_COLORS.map(([key,label,css])=>{const idx=s.displayed[key];return `<div class="demeterColorCard ${css}"><div class="demeterColorName">${label}</div><img src="${VARUNA_ASSETS.cards[key][idx]}" alt="Carte ${label}"></div>`}).join("");const remaining=Math.max(0,Object.values(s.decks).reduce((n,a)=>n+a.length,0));const played=Object.values(s.played).reduce((n,a)=>n+a.length,0);const discarded=Object.values(s.removed).reduce((n,a)=>n+a.length,0);document.getElementById("demeterApp").innerHTML=`<div class="demeterShell demeterGame demeterVarunaGame"><div class="demeterTitle"><div><div class="eyebrow">DEMETER · VARUNA</div><h2>Partie en cours</h2><div class="sub">Tour ${s.turn} sur 13 · ${remaining} cartes encore dans les paquets</div></div><div class="demeterActions"><button class="demeterBtn" id="varunaSaveGameBtn">Sauvegarder</button><button class="demeterBtn" id="varunaDiscardedBtn">Cartes écartées (${discarded})</button><button class="demeterBtn danger" id="varunaAbandonGameBtn">Abandonner</button></div></div><div class="demeterPanel"><h3>Objectifs tirés au hasard</h3><div class="demeterObjectives">${objectives}</div></div><div class="demeterPanel"><h3>Cartes découverte tirées au hasard</h3><div class="demeterObjectives">${discoveries}</div></div><div class="demeterPanel"><h3>Tuiles espèces</h3><div class="demeterSpecies">${species}</div></div><div class="demeterPanel"><h3>Cartes du tour ${s.turn}</h3><div class="demeterCards">${cards}</div><div class="demeterTurnBar"><div class="demeterTurn">Ordre : Bleu · Rouge · Jaune · Violet · Gris</div></div></div><div class="demeterTurnBar">${s.finished?'<strong>Fin de partie</strong>':'<button class="demeterBtn primary" id="varunaNextBtn">Tour suivant</button>'}<span class="demeterStatus">${played} cartes jouées · ${discarded} cartes écartées</span></div></div>`;document.getElementById("varunaSaveGameBtn").onclick=varunaShowSave;document.getElementById("varunaDiscardedBtn").onclick=varunaShowDiscarded;document.getElementById("varunaAbandonGameBtn").onclick=varunaAbandon;if(!s.finished)document.getElementById("varunaNextBtn").onclick=varunaNextTurn}
 function varunaNextTurn(){const s=varunaState;VARUNA_COLORS.forEach(([key])=>{s.played[key].push(s.displayed[key]);s.displayed[key]=null});if(s.turn>=13){s.finished=true;varunaRenderGame();return}s.turn++;VARUNA_COLORS.forEach(([key])=>s.displayed[key]=s.decks[key].shift());varunaRenderGame()}
@@ -595,7 +602,7 @@ function demeterHome(sub='summer'){
 function demeterRenderHome(){
  const has=!!demeterState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.7.6</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.7.7</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -707,7 +714,7 @@ function demeterAutumnUid(){return 'da_'+Date.now()+'_'+Math.random().toString(3
 function demeterRenderAutumnHome(){
  const has=!!demeterAutumnState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.7.6</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.7.7</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
