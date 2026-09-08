@@ -101,7 +101,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.7.4</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.7.3</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
  <nav class="mainNav" aria-label="Navigation principale">
@@ -109,8 +109,8 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <button id="civilizationMenu" class="mainMenu" type="button">Civilization Solo</button>
   <button id="arkhamMenu" class="mainMenu active" type="button">Arkham JDC</button>
   <button id="chaosMenu" class="mainMenu" type="button">Chaos Bag</button>
-  <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
   <button id="demeterMenu" class="mainMenu" type="button">DEMETER</button>
+   <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
   <div id="demeterSubmenu" class="subMenu" style="display:none" aria-label="Jeux DEMETER">
    <button id="demeterSummerMenu" class="subMenuBtn" type="button">Été</button>
    <button id="demeterAutumnMenu" class="subMenuBtn" type="button">Autumn</button>
@@ -190,29 +190,49 @@ async function init(){
   buildTree();
   bind();
   try{
-    const [encounterCards,playerCards]=await Promise.all([
-      json(API+'/cards/?encounter=1',30000),
-      json(API+'/cards/',30000)
-    ]);
-    const byCode=new Map();
-    [...encounterCards,...playerCards].forEach(c=>{if(c&&c.code)byCode.set(c.code,c)});
-    all=[...byCode.values()];
-    if(!Array.isArray(all)||!all.length)throw Error('Aucune carte de scénario reçue');
+    // IMPORTANT : pour les scénarios, un seul appel suffit.
+    // L'ancien Promise.all() dépendait aussi de /cards/ (cartes joueurs) :
+    // si cet endpoint échouait, TOUT Arkham restait vide alors que les cartes
+    // de scénario étaient parfaitement récupérables avec encounter=1.
+    const encounterCards=await json(API+'/cards/?encounter=1',30000);
+    if(!Array.isArray(encounterCards)||!encounterCards.length)throw Error('Aucune carte de scénario reçue');
     const ded=new Map();
-    all.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
+    encounterCards.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
     all=[...ded.values()];
     all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+    // Le mapping Excel reste optionnel : les codes de scénarios intégrés
+    // dans campaigns permettent déjà l'affichage des sets principaux.
     loadMapping().catch(()=>{});
-    if(selected)render();
   }catch(e){
-    const tree=$('tree');
-    if(tree){
-      const warn=document.createElement('div');
-      warn.className='warning';
-      warn.innerHTML='<b>Les campagnes sont disponibles.</b><br>Le chargement des cartes Arkham a échoué. Recharge la page pour réessayer.';
-      tree.prepend(warn);
+    // Deuxième filet de sécurité : essayer le dépôt JSON public d'ArkhamDB.
+    try{
+      const packs=await json(GH+'/packs.json',20000);
+      const candidates=(Array.isArray(packs)?packs:[]).filter(x=>x&&x.code);
+      const loaded=[];
+      for(const p of candidates){
+        try{
+          const d=await json(GH+'/pack/'+encodeURIComponent(p.code)+'/'+encodeURIComponent(p.code)+'.json',10000);
+          if(Array.isArray(d))loaded.push(...d);
+        }catch(_){}
+      }
+      const ded=new Map();
+      loaded.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
+      all=[...ded.values()];
+      all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+      if(!all.length)throw e;
+    }catch(_){
+      const tree=$('tree');
+      if(tree){
+        const warn=document.createElement('div');
+        warn.className='warning';
+        warn.innerHTML="<b>Les campagnes sont disponibles, mais les cartes n'ont pas pu être chargées.</b><br>Vérifie la connexion Internet puis recharge la page.";
+        tree.prepend(warn);
+      }
     }
   }
+  // Si un scénario a été sélectionné très rapidement pendant le chargement,
+  // on le rend maintenant que les cartes sont disponibles.
+  if(selected)render();
 }
 async function loadMapping(){
  const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
