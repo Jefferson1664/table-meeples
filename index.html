@@ -15,6 +15,7 @@ header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid 
 .mainNav .subMenu{display:flex;gap:5px;margin:0;padding:0;flex:0 0 auto}
 .mainNav .subMenuBtn{flex:0 0 auto;white-space:nowrap;padding:7px 9px;border:1px solid var(--line);background:#fff}
 .mainNav .subMenuBtn.active{background:var(--active);color:var(--accent);border-color:#d7bdc3}
+#tmSubmenu .tmSubBtn{font-size:12px}#tmSubmenu .tmSubBtn.active{font-weight:800}
 .brand{min-width:250px;display:flex;flex-direction:column}.brand h1{font-size:20px;margin:0}.brand span{font-size:12px;color:var(--muted)}.brand .version{font-weight:700;color:var(--accent);margin-top:3px}
 #search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
 .tools{display:flex;gap:6px}.tools button{padding:9px 10px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
@@ -111,6 +112,16 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <button id="chaosMenu" class="mainMenu" type="button">Chaos Bag</button>
   <button id="demeterMenu" class="mainMenu" type="button">DEMETER</button>
    <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
+  <div id="tmSubmenu" class="subMenu" style="display:none" aria-label="Extensions Terraforming Mars">
+   <button class="subMenuBtn tmSubBtn active" type="button" data-tm-exp="all">Toutes</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="base">Base</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="venus">Venus Next</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="prelude">Prelude</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="colonies">Colonies</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="turmoil">Turmoil</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="promo">Promo</button>
+   <button class="subMenuBtn tmSubBtn" type="button" data-tm-exp="automa">Automa</button>
+  </div>
   <div id="demeterSubmenu" class="subMenu" style="display:none" aria-label="Jeux DEMETER">
    <button id="demeterSummerMenu" class="subMenuBtn" type="button">Été</button>
    <button id="demeterAutumnMenu" class="subMenuBtn" type="button">Autumn</button>
@@ -148,7 +159,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
         <input id="tmCost" type="number" min="0" placeholder="Coût max">
       </div>
       <button id="tmReset" class="tmReset">Réinitialiser les filtres</button>
-      <div id="tmTree" class="tmTree"></div>
+      <div id="tmTree" class="tmTree" style="display:none"></div>
     </aside>
     <section class="tmContent">
       <div id="tmWelcome" class="tmWelcome">
@@ -180,96 +191,69 @@ const campaigns=[
 ['The Feast of Hemlock Vale','La Fête de Hemlock Vale',[['Written in Rock','written_in_rock'],['The Silent Heath','the_silent_heath'],['Hemlock House','hemlock_house'],['The Lost Sister','the_lost_sister'],['The Thing in the Depths','the_thing_in_the_depths'],['The Twisted Hollow','the_twisted_hollow'],['The Longest Night','the_longest_night'],['Fate of the Vale','fate_of_the_vale']]],
 ['The Drowned City','La Cité engloutie',[['One Last Job','one_last_job'],['The Western Wall','the_western_wall'],['The Drowned Quarter','the_drowned_quarter'],['The Apiary','the_apiary'],['The Grand Vault','the_grand_vault'],['Court of the Ancients','court_of_the_ancients'],['Obsidian Canyons','obsidian_canyons'],['Sepulchre of the Sleeper','sepulchre_of_the_sleeper'],['The Doom of Arkham Part I','the_doom_of_arkham_part_i'],['The Doom of Arkham Part II','the_doom_of_arkham_part_ii']]]
 ];
-let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all',allFrenchPromise=null,allFrenchLoaded=false,encounterIndex=new Map(),qa={version:'1.7.6',checks:[]};
+let all=[],selected=null,mode='both',fr=new Map(),mapping=new Map(),setNames=new Map(),typeFilter='all',allFrenchPromise=null,allFrenchLoaded=false,encounterIndex=new Map(),qa={version:'1.7.5',checks:[]};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 async function json(url,ms=20000){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{cache:'force-cache',signal:c.signal});if(!r.ok)throw Error(r.status);return await r.json()}finally{clearTimeout(t)}}
-let packIndex=new Map(),scenarioCache=new Map(),packIndexLoaded=false;
 async function loadEncounterIndex(){
   try{
     const data=await json(GH+'/encounters.json',15000);
     if(Array.isArray(data)) data.forEach(x=>{if(x&&x.code&&x.name){encounterIndex.set(norm(x.name),x.code);setNames.set(x.code,x.name)}});
-  }catch(e){qa.checks.push(['Encounter index',false])}
+  }catch(e){}
 }
-async function loadPackIndex(){
-  if(packIndexLoaded)return packIndex;
+async function init(){
+  // QA-01 : le menu doit être utilisable même si une source distante échoue.
+  buildTree();
+  bind();
+  await loadEncounterIndex();
   try{
-    const data=await json(GH+'/packs.json',15000);
-    if(Array.isArray(data))data.forEach(p=>{if(p&&p.code){packIndex.set(p.code,p)}});
-    packIndexLoaded=true;qa.checks.push(['Pack index',packIndex.size>0]);
-  }catch(e){qa.checks.push(['Pack index',false])}
-  return packIndex;
-}
-function campaignPackCodes(){
-  if(!selected)return[];
-  const out=[];
-  // The Night of the Zealot stores its four encounter sets in the Core pack.
-  if(selected.campaign==='The Night of the Zealot')out.push('core');
-  // For the other campaigns, prefer the campaign expansion pack (eoec, tskc,
-  // fhvc, tdcc) or the cycle's main campaign pack (dwl, ptc, tfa, ...).
-  const cycleByCampaign={
-    'The Dunwich Legacy':'dwl','The Path to Carcosa':'ptc','The Forgotten Age':'tfa',
-    'The Circle Undone':'tcu','The Dream-Eaters':'tde','The Innsmouth Conspiracy':'tic',
-    'Edge of the Earth':'eoe','The Scarlet Keys':'tsk','The Feast of Hemlock Vale':'fhv',
-    'The Drowned City':'tdc'
-  };
-  const cyc=cycleByCampaign[selected.campaign];
-  if(cyc){
-    const ps=[...packIndex.values()].filter(p=>p.cycle_code===cyc&&p.code);
-    const campaign=ps.find(p=>/campaign/i.test(p.name||''));
-    if(campaign)out.push(campaign.code);
-    else { const main=ps.find(p=>p.code===cyc); if(main)out.push(main.code); }
-  }
-  if(selected.code&&!out.includes(selected.code)){
-    const p=packIndex.get(selected.code);
-    // If the selected code is itself a pack code, it is a useful direct source.
-    if(p)out.push(selected.code);
-  }
-  return [...new Set(out)];
-}
-async function loadScenarioCards(){
-  if(!selected)return[];
-  const key=selected.campaign+'|'+selected.name+'|'+selected.code;
-  if(scenarioCache.has(key))return scenarioCache.get(key);
-  const wanted=codesForScenario();
-  const candidates=campaignPackCodes();
-  let loaded=[];
-  // Fast path: ask ArkhamDB for each relevant pack. This endpoint is explicitly
-  // documented by ArkhamDB and is much safer than guessing GitHub paths.
-  for(const pc of candidates){
-    try{const d=await json(API+'/cards/'+encodeURIComponent(pc),25000);if(Array.isArray(d))loaded.push(...d)}catch(e){}
-  }
-  // Direct GitHub fallback: pack files are stored under pack/<cycle>/<code>.
-  if(!loaded.length){
-    await loadPackIndex();
-    for(const pc of candidates){
-      const p=packIndex.get(pc);if(!p)continue;
-      const cycle=p.cycle_code||'core';
-      const base=GH+'/pack/'+encodeURIComponent(cycle)+'/'+encodeURIComponent(pc);
-      for(const suffix of ['_encounter','']){
-        try{const d=await json(base+suffix+'.json',15000);if(Array.isArray(d))loaded.push(...d)}catch(e){}
+    // Source primaire : API ArkhamDB, avec les cartes de rencontre incluses.
+    const encounterCards=await json(API+'/cards/?encounter=1',30000);
+    if(!Array.isArray(encounterCards)||!encounterCards.length)throw Error('Aucune carte de scénario reçue');
+    const ded=new Map();
+    encounterCards.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
+    all=[...ded.values()];
+    all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+    qa.checks.push(['API cards',all.length>0]);
+    loadMapping().catch(()=>{});
+  }catch(e){
+    // QA-02 : secours GitHub. Il faut charger AUSSI les fichiers *_encounter.json.
+    try{
+      const packs=await json(GH+'/packs.json',20000);
+      const candidates=(Array.isArray(packs)?packs:[]).filter(x=>x&&x.code);
+      const loaded=[];
+      const queue=candidates.slice();
+      const workers=Array.from({length:6},async()=>{
+        while(queue.length){
+          const p=queue.shift(); if(!p)continue;
+          const base=GH+'/pack/'+encodeURIComponent(p.code)+'/'+encodeURIComponent(p.code);
+          const [a,b]=await Promise.all([json(base+'.json',10000).catch(()=>null),json(base+'_encounter.json',10000).catch(()=>null)]);
+          ;[a,b].forEach(d=>{if(Array.isArray(d))loaded.push(...d)});
+        }
+      });
+      await Promise.all(workers);
+      const ded=new Map();
+      loaded.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
+      all=[...ded.values()];
+      all.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
+      qa.checks.push(['GitHub fallback cards',all.length>0]);
+      if(!all.length)throw e;
+    }catch(_){
+      const tree=$('tree');
+      if(tree){
+        const warn=document.createElement('div');
+        warn.className='warning';
+        warn.innerHTML="<b>Les campagnes sont disponibles, mais les cartes n'ont pas pu être chargées.</b><br>Vérifie la connexion Internet puis recharge la page.";
+        tree.prepend(warn);
       }
     }
   }
-  const ded=new Map();loaded.forEach(c=>{if(c&&c.code&&!ded.has(c.code))ded.set(c.code,c)});
-  let cards=[...ded.values()];
-  // Strict scenario filter. Never display an unrelated pack merely because it
-  // belongs to the same expansion.
-  cards=cards.filter(c=>encounterMatches(c,wanted));
-  scenarioCache.set(key,cards);
-  cards.forEach(c=>{if(c.encounter_code&&c.encounter_name)setNames.set(c.encounter_code,c.encounter_name)});
-  qa.checks.push(['Scenario '+selected.name,cards.length>0]);
-  return cards;
-}
-async function init(){
-  buildTree();bind();
-  await Promise.all([loadEncounterIndex(),loadPackIndex()]);
-  // The global API is intentionally only a secondary search source now. A
-  // scenario click loads its own pack, so one failing global request can no
-  // longer leave the scenario page empty.
-  loadMapping().catch(()=>{});
-  qa.checks.push(['Version',document.querySelector('.version')?.textContent?.includes('1.7.6')===true]);
+  qa.checks.push(['Version',document.querySelector('.version')?.textContent?.includes('1.7.5')===true]);
+  // QA-03 : contrôle de cohérence des scénarios avant d'afficher une page vide.
+  const unresolved=campaigns.flatMap(c=>c[2].map(s=>s[0])).filter(name=>!encounterIndex.has(norm(name)) && !all.some(x=>norm(x.encounter_name)===norm(name)));
+  qa.checks.push(['Scenario index',unresolved.length===0]);
+  if(selected)render();
 }
 async function loadMapping(){
  const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
@@ -303,26 +287,39 @@ function buildTree(){
  });
 }
 function bind(){$('search').oninput=handleGlobalSearch;$('typeSelect').onchange=e=>{typeFilter=e.target.value;render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';$('typeSelect').value='all';render()}}
-async function select(s,b,c){
- document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');
- selected={name:s[0],code:s[1],campaign:c[0]};
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(c[0])+'</div><h2>'+esc(s[0])+'</h2><div class="sub">Chargement des cartes du scénario…</div></div></div><div class="empty">Chargement…</div>';
- await render();
- if(window.innerWidth<=850){const n=document.getElementById('arkhamNavPanel');if(n)n.open=false;}
-}
+function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render();if(window.innerWidth<=850){const n=document.getElementById('arkhamNavPanel');if(n)n.open=false;}}
 function codesForScenario(){
  if(!selected)return[];
- const vals=mapping.get(norm(selected.name))||[];const out=[];
- const resolved=encounterIndex.get(norm(selected.name));if(resolved)out.push(resolved);
+ const vals=mapping.get(norm(selected.name))||[];
+ const lookup=new Map();
+ all.forEach(c=>{if(c.encounter_code){lookup.set(norm(c.encounter_code),c.encounter_code);if(c.encounter_name)lookup.set(norm(c.encounter_name),c.encounter_code)}});
+ const out=[];
+ // Toujours résoudre le nom du scénario vers le VRAI encounter_code.
+ // Exemple : « Undimensioned and Unseen » => « uau ».
+ const resolved=encounterIndex.get(norm(selected.name))||lookup.get(norm(selected.name));
+ if(resolved)out.push(resolved);
+ // Le code historique intégré à campaigns reste conservé comme second alias.
  if(selected.code&&!out.includes(selected.code))out.push(selected.code);
- vals.forEach(v=>{const x=encounterIndex.get(norm(v));if(x&&!out.includes(x))out.push(x)});
+ vals.forEach(v=>{const x=lookup.get(norm(v))||encounterIndex.get(norm(v));if(x&&!out.includes(x))out.push(x)});
  return out;
 }
-function encounterMatches(c,codes){const ec=c.encounter_code||'';const en=c.encounter_name||'';return codes.includes(ec)||codes.some(x=>norm(x)===norm(en));}
-function packCodesForScenario(codes){const out=new Set();all.forEach(c=>{if(encounterMatches(c,codes)&&c.pack_code)out.add(c.pack_code)});return [...out]}
+function encounterMatches(c,codes){
+ const ec=c.encounter_code||'';
+ const en=c.encounter_name||'';
+ return codes.includes(ec)||codes.some(x=>norm(x)===norm(en));
+}
+function packCodesForScenario(codes){
+ const out=new Set();
+ all.forEach(c=>{if(encounterMatches(c,codes)&&c.pack_code)out.add(c.pack_code)});
+ return [...out];
+}
 function cardMatchesType(c){
  if(typeFilter==='all')return true;
- if(typeFilter==='story'){const sub=String(c.subtype_code||c.subtype||'').toLowerCase();const tags=String(c.tags||'').toLowerCase();return (c.type_code==='asset'&&(sub.includes('story')||tags.includes('story'))) || c.type_code==='story';}
+ if(typeFilter==='story'){
+   const sub=String(c.subtype_code||c.subtype||'').toLowerCase();
+   const tags=String(c.tags||'').toLowerCase();
+   return (c.type_code==='asset'&&(sub.includes('story')||tags.includes('story'))) || c.type_code==='story';
+ }
  return c.type_code===typeFilter;
 }
 async function loadFrench(cards){
@@ -330,32 +327,76 @@ async function loadFrench(cards){
  await Promise.all(packs.map(async p=>{
   if([...fr.values()].some(x=>x.pack_code===p))return;
   const base=GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p);
-  try{const [a,b]=await Promise.all([json(base+'.json',15000).catch(()=>null),json(base+'_encounter.json',15000).catch(()=>null)]);[a,b].forEach(d=>{if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))})}catch(e){}
+  try{
+   const [a,b]=await Promise.all([
+    json(base+'.json',15000).catch(()=>null),
+    json(base+'_encounter.json',15000).catch(()=>null)
+   ]);
+   ;[a,b].forEach(d=>{if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))});
+  }catch(e){}
  }));
 }
 async function loadAllFrench(){
- if(allFrenchLoaded)return;if(allFrenchPromise)return allFrenchPromise;
+ if(allFrenchLoaded)return;
+ if(allFrenchPromise)return allFrenchPromise;
  const packs=[...new Set(all.map(c=>c.pack_code).filter(Boolean))];
- allFrenchPromise=(async()=>{const queue=packs.slice();const workers=Array.from({length:6},async()=>{while(queue.length){const p=queue.shift();if(!p)continue;if([...fr.values()].some(x=>x.pack_code===p))continue;const base=GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p);try{const [a,b]=await Promise.all([json(base+'.json',12000).catch(()=>null),json(base+'_encounter.json',12000).catch(()=>null)]);[a,b].forEach(d=>{if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))})}catch(e){}}});await Promise.all(workers);allFrenchLoaded=true})();try{await allFrenchPromise}catch(e){}
+ allFrenchPromise=(async()=>{
+   const queue=packs.slice();
+   const workers=Array.from({length:6},async()=>{
+     while(queue.length){
+       const p=queue.shift();
+       if(!p)continue;
+       if([...fr.values()].some(x=>x.pack_code===p))continue;
+       const base=GH+'/translations/fr/pack/'+encodeURIComponent(p)+'/'+encodeURIComponent(p);
+       try{
+         const [a,b]=await Promise.all([json(base+'.json',12000).catch(()=>null),json(base+'_encounter.json',12000).catch(()=>null)]);
+         ;[a,b].forEach(d=>{if(Array.isArray(d))d.forEach(x=>fr.set(x.code,x))});
+       }catch(e){}
+     }
+   });
+   await Promise.all(workers);
+   allFrenchLoaded=true;
+ })();
+ try{await allFrenchPromise}catch(e){}
 }
 async function render(){
  if(!selected)return;
- const q=norm($('search').value);if($('typeSelect'))$('typeSelect').value=typeFilter;$('welcome').style.display='none';
+ const q=norm($('search').value),codes=codesForScenario();
+ if($('typeSelect')) $('typeSelect').value=typeFilter;
+ $('welcome').style.display='none';
+ const packs=packCodesForScenario(codes);
  if(q){
    let cards=all.filter(c=>cardMatchesType(c));
    const matches=c=>norm([c.name,c.text,c.flavor,c.encounter_name,c.encounter_code,c.code,c.pack_code,c.pack_name,fr.get(c.code)?.name,fr.get(c.code)?.text,fr.get(c.code)?.flavor].join(' ')).includes(q);
    cards=cards.filter(matches);
-   if(!cards.length){$('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">RECHERCHE GLOBALE ARKHAM</div><h2>Résultats</h2></div></div><div class="empty">La recherche globale sera disponible après le chargement des cartes.</div>';return;}
-   await loadFrench(cards);cards=all.filter(c=>cardMatchesType(c)&&matches(c));const byPack=new Map();cards.sort((a,b)=>(a.pack_name||a.pack_code||'').localeCompare(b.pack_name||b.pack_code||'')||(a.position||0)-(b.position||0));cards.forEach(c=>{const k=c.pack_code||'pack';if(!byPack.has(k))byPack.set(k,[]);byPack.get(k).push(c)});const groups=[...byPack.entries()].map(([p,cs])=>({name:(cs[0].pack_name||p)+' · '+p,cards:cs}));$('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">RECHERCHE GLOBALE ARKHAM</div><h2>Résultats</h2><div class="sub">Toutes les cartes chargées</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('');return;
+   $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">RECHERCHE GLOBALE ARKHAM</div><h2>Résultats</h2><div class="sub">Recherche dans toutes les cartes Arkham · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' carte'+(cards.length>1?'s':'')+'</div></div><div class="empty">Recherche en cours dans toutes les traductions françaises…</div>';
+   await loadAllFrench();
+   cards=all.filter(c=>cardMatchesType(c)&&matches(c));
+   const byPack=new Map();
+   cards.sort((a,b)=>(a.pack_name||a.pack_code||'').localeCompare(b.pack_name||b.pack_code||'')||(a.position||0)-(b.position||0));
+   cards.forEach(c=>{const k=c.pack_code||'pack';if(!byPack.has(k))byPack.set(k,[]);byPack.get(k).push(c)});
+   const groups=[...byPack.entries()].map(([p,cs])=>({name:(cs[0].pack_name||p)+' · '+p,cards:cs}));
+   $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">RECHERCHE GLOBALE ARKHAM</div><h2>Résultats</h2><div class="sub">Toutes les cartes · recherche dans les noms et textes EN / FR</div></div><div class="count">'+cards.length+' carte'+(cards.length>1?'s':'')+'</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte ne correspond à la recherche.</div>');
+   return;
  }
- let cards=await loadScenarioCards();
- await loadFrench(cards);cards=cards.filter(c=>cardMatchesType(c));
- const codes=codesForScenario();const groups=[];const used=new Set();
- codes.forEach(code=>{const cs=cards.filter(c=>encounterMatches(c,[code])).sort((a,b)=>(a.position||0)-(b.position||0));if(cs.length){groups.push({code,name:setNames.get(code)||cs[0].encounter_name||selected.name,cards:cs});cs.forEach(c=>used.add(c.code));}});
- if(!groups.length&&cards.length){groups.push({code:selected.code,name:selected.name,cards:cards});cards.forEach(c=>used.add(c.code));}
- $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupe'+(groups.length>1?'s':'')+' · cartes du scénario</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Pack source : <code>'+esc(campaignPackCodes().join(', ')||'aucun')+'</code></p><p>Cartes chargées : '+cards.length+'</p></details>';
+ let cards=all.filter(c=>encounterMatches(c,codes)||packs.includes(c.pack_code));
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+packs.length+' pack'+(packs.length>1?'s':'')+' · chargement des traductions françaises…</div></div><div class="count">'+cards.length+' cartes</div></div><div class="empty">Chargement…</div>';
+ await loadFrench(cards);
+ cards=cards.filter(c=>cardMatchesType(c));
+ const groups=[];
+ const used=new Set();
+ codes.forEach(code=>{
+   const cs=cards.filter(c=>encounterMatches(c,[code])).sort((a,b)=>(a.position||0)-(b.position||0));
+   if(cs.length){groups.push({code,name:setNames.get(code)||cs[0].encounter_name||code,cards:cs});cs.forEach(c=>used.add(c.code));}
+ });
+ const player=cards.filter(c=>!used.has(c.code)&&packs.includes(c.pack_code));
+ if(player.length){
+   const byPack=new Map();
+   player.forEach(c=>{const k=c.pack_code||'pack';if(!byPack.has(k))byPack.set(k,[]);byPack.get(k).push(c)});
+   byPack.forEach((cs,p)=>groups.push({code:'pack:'+p,name:(cs[0].pack_name||p)+' · cartes du pack',cards:cs.sort((a,b)=>(a.position||0)-(b.position||0))}));
+ }
+ $('cards').innerHTML='<div class="scenarioHead"><div><div class="eyebrow">'+esc(selected.campaign)+'</div><h2>'+esc(selected.name)+'</h2><div class="sub">'+groups.length+' groupes · cartes du scénario et cartes du pack correspondant</div></div><div class="count">'+cards.length+' cartes</div></div>'+groups.map(g=>'<div class="set"><div class="setHead"><h3>'+esc(g.name)+'</h3><span>'+g.cards.length+'</span></div><div class="paired">'+g.cards.map(pair).join('')+'</div></div>').join('')+(groups.length?'':'<div class="empty">Aucune carte trouvée pour ce scénario.</div>')+'<details class="diag"><summary>Diagnostic</summary><p>Encounter codes : <code>'+esc(codes.join(', '))+'</code></p><p>Packs du scénario : <code>'+esc(packs.join(', '))+'</code></p><p>Cartes chargées : '+all.length+'</p><p>Cartes retenues : '+cards.length+'</p><p>Mapping scénario chargé : '+(mapping.has(norm(selected.name))?'oui':'non')+'</p></details>';
 }
-
 function frenchImageUrl(code){
   return 'https://assets.arkhamhorror.app/img/arkham/fr/cards/'+String(code)+'.avif?v=1.5.9';
 }
@@ -416,10 +457,10 @@ function ensureMeeplesFrame(){
 function positionMeeples(){const h=document.querySelector('body>header')?.offsetHeight||0;document.documentElement.style.setProperty('--arkham-header-height',h+'px');const v=document.getElementById('meeplesView');v.style.top=h+'px';}
 function setMainActive(id){['meeplesMenu','civilizationMenu','arkhamMenu','chaosMenu','terraformingMarsMenu'].forEach(x=>document.getElementById(x)?.classList.toggle('active',x===id));}
 function setChaosActive(on){document.getElementById('chaosMenu')?.classList.toggle('active',!!on);}
-function showMeeples(){document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
-function showArkham(){hideDemeter();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('arkhamNavPanel')?.classList.add('visible');setMainActive('arkhamMenu');setChaosActive(false);const q=document.getElementById('search');if(q)q.placeholder='Rechercher une carte…';}
-function showCivilization(){document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
-function showChaos(){document.getElementById('tmView')?.classList.remove('open');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
+function showMeeples(){document.getElementById('tmSubmenu')?.style.setProperty('display','none');document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
+function showArkham(){hideDemeter();document.getElementById('tmSubmenu')?.style.setProperty('display','none');document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('arkhamNavPanel')?.classList.add('visible');setMainActive('arkhamMenu');setChaosActive(false);const q=document.getElementById('search');if(q)q.placeholder='Rechercher une carte…';}
+function showCivilization(){document.getElementById('tmSubmenu')?.style.setProperty('display','none');document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
+function showChaos(){document.getElementById('tmSubmenu')?.style.setProperty('display','none');document.getElementById('tmView')?.classList.remove('open');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
 document.getElementById('meeplesMenu').addEventListener('click',showMeeples);document.getElementById('arkhamMenu').addEventListener('click',showArkham);document.getElementById('civilizationMenu').addEventListener('click',showCivilization);document.getElementById('chaosMenu').addEventListener('click',showChaos);
 
 /* TERRAFORMING MARS */
@@ -447,15 +488,16 @@ function tmBuildEntries(exp, file, obj){
 }
 async function tmLoad(){if(tmLoaded)return tmData;if(tmLoading)return tmLoading;tmLoading=(async()=>{const all=[];for(const [code,name,files] of TM_EXPANSIONS){for(const file of files){try{const key=code+'|'+file;let obj=tmCache.get(key);if(!obj){obj=await tmJson(TM_LOCALE+file);tmCache.set(key,obj)}tmBuildEntries(code,file,obj).forEach(x=>{x.expansionName=name;all.push(x)});}catch(e){}}}const seen=new Set();tmData=all.filter(x=>{if(seen.has(x.name+'|'+x.expansion+'|'+x.type))return false;seen.add(x.name+'|'+x.expansion+'|'+x.type);return true});tmLoaded=true;tmRenderTree();tmRender();tmLoadImageIndex().then(()=>{tmData.forEach(c=>c.imageUrl=tmResolveImage(c));tmRender();});return tmData;})();return tmLoading}
 function tmSetActiveNav(){setMainActive('terraformingMarsMenu');setChaosActive(false)}
-function showTerraformingMars(){document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('demeterView').classList.remove('open');document.getElementById('demeterView').setAttribute('aria-hidden','true');document.getElementById('tmView').classList.add('open');document.getElementById('tmView').setAttribute('aria-hidden','false');tmSetActiveNav();const q=document.getElementById('search');q.placeholder='Rechercher une carte Terraforming Mars…';q.value=tmSearch;tmLoad()}
-function tmRenderTree(){const tree=document.getElementById('tmTree');if(!tree)return;const counts=new Map();tmData.forEach(c=>counts.set(c.expansion,(counts.get(c.expansion)||0)+1));tree.innerHTML='<button class="tmExtBtn '+(tmExpansion==='all'?'active':'')+'" data-tm-exp="all">Toutes les cartes <span class="tmExtCount">'+tmData.length+'</span></button>'+TM_EXPANSIONS.map(x=>'<button class="tmExtBtn '+(tmExpansion===x[0]?'active':'')+'" data-tm-exp="'+x[0]+'">'+esc(x[1])+' <span class="tmExtCount">'+(counts.get(x[0])||0)+'</span></button>').join('');tree.querySelectorAll('[data-tm-exp]').forEach(b=>b.onclick=()=>{tmExpansion=b.dataset.tmExp;tmRenderTree();tmRender()})}
+function showTerraformingMars(){document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('demeterView').classList.remove('open');document.getElementById('demeterView').setAttribute('aria-hidden','true');document.getElementById('demeterSubmenu').style.display='none';document.getElementById('tmSubmenu').style.display='flex';document.getElementById('tmView').classList.add('open');document.getElementById('tmView').setAttribute('aria-hidden','false');tmSetActiveNav();tmSyncHeader();const q=document.getElementById('search');q.placeholder='Rechercher une carte Terraforming Mars…';q.value=tmSearch;tmLoad()}
+function tmSyncHeader(){document.querySelectorAll('#tmSubmenu .tmSubBtn').forEach(b=>b.classList.toggle('active',b.dataset.tmExp===tmExpansion));}
+function tmRenderTree(){const tree=document.getElementById('tmTree');tmSyncHeader();if(!tree)return;const counts=new Map();tmData.forEach(c=>counts.set(c.expansion,(counts.get(c.expansion)||0)+1));tree.innerHTML='';}
 function tmMatches(c){const q=norm(tmSearch);if(q&&!norm([c.name,c.text,c.sourceName,c.expansionName].join(' ')).includes(q))return false;if(tmExpansion!=='all'&&c.expansion!==tmExpansion)return false;const t=document.getElementById('tmType')?.value||'all';if(t!=='all'&&c.type!==t)return false;const tag=norm(document.getElementById('tmTag')?.value||'');if(tag&&!norm(c.text).includes(tag)&&!norm(c.name).includes(tag))return false;return true}
 function tmRender(){const box=document.getElementById('tmCards');if(!box)return;const arr=tmData.filter(tmMatches);if(tmSelected){tmRenderDetail(tmSelected);return}document.getElementById('tmWelcome').style.display=arr.length?'none':'block';box.innerHTML='<div class="tmHead"><div><div class="eyebrow">TERRAFORMING MARS</div><h2>Cartes françaises</h2><div class="sub">'+arr.length+' résultat'+(arr.length>1?'s':'')+' · aucune carte anglaise affichée</div></div><div class="count">'+arr.length+'</div></div>'+(arr.length?'<div class="tmGrid">'+arr.map(tmCardHtml).join('')+'</div>':'<div class="empty">Aucune carte ne correspond aux filtres.</div>');box.querySelectorAll('[data-tm-id]').forEach(el=>el.onclick=()=>{tmSelected=tmData.find(x=>x.id===el.dataset.tmId);tmRender()})}
 function tmCardHtml(c){return '<article class="tmCard" data-tm-id="'+esc(c.id)+'"><div class="tmCardImage">'+(c.imageUrl?'<img src="'+esc(c.imageUrl)+'" alt="" loading="lazy">':'<span>Image indisponible</span>')+'</div><div class="tmCardMeta"><div class="tmCardName">'+esc(c.name)+'</div><div class="tmCardSub">'+esc(c.type==='corporation'?'Corporation':c.type==='prelude'?'Prelude':c.type==='colony'?'Colony':c.type==='event'?'Global Event':c.type==='automa'?'Automa':'Project')+'</div></div></article>'}
 function tmRenderDetail(c){document.getElementById('tmWelcome').style.display='none';document.getElementById('tmCards').innerHTML='<div class="tmDetail"><button class="tmDetailBack" id="tmBack">← Retour aux cartes</button><div class="tmDetailGrid"><div class="tmScanPlaceholder">'+(c.imageUrl?'<img src="'+esc(c.imageUrl)+'" alt="" style="max-width:100%;height:auto;display:block;margin:auto">':'English card image unavailable')+'</div><div class="tmData"><div><div class="eyebrow">'+esc(c.expansionName)+'</div><h2>'+esc(c.name)+'</h2></div><div class="tmDataRow"><div class="tmDataLabel">Type</div><div class="tmDataValue">'+esc(c.type)+'</div></div><div class="tmDataRow"><div class="tmDataLabel">Card text</div><div class="tmDataValue">'+esc(c.text)+'</div></div><div class="tmMissing">English card images are loaded from the public Terraforming Mars card-image repository.</div></div></div></div>';document.getElementById('tmBack').onclick=()=>{tmSelected=null;tmRender()}}
 function handleGlobalSearch(){const v=document.getElementById('search')?.value||'';if(document.getElementById('tmView')?.classList.contains('open')){tmSearch=v;tmRender();}else{tmSearch='';render();}}
 function tmHandleSearch(){handleGlobalSearch()}
-document.getElementById('terraformingMarsMenu').addEventListener('click',showTerraformingMars);document.getElementById('tmExpansion').onchange=e=>{tmExpansion=e.target.value;tmRenderTree();tmRender()};document.getElementById('tmType').onchange=tmRender;document.getElementById('tmTag').oninput=tmRender;document.getElementById('tmCost').oninput=tmRender;document.getElementById('tmReset').onclick=()=>{tmExpansion='all';tmSelected=null;document.getElementById('tmType').value='all';document.getElementById('tmTag').value='';document.getElementById('tmCost').value='';tmRenderTree();tmRender()};
+document.getElementById('terraformingMarsMenu').addEventListener('click',showTerraformingMars);document.querySelectorAll('#tmSubmenu .tmSubBtn').forEach(b=>b.onclick=()=>{tmExpansion=b.dataset.tmExp;tmSyncHeader();if(document.getElementById('tmExpansion'))document.getElementById('tmExpansion').value=tmExpansion;tmRender()});document.getElementById('tmExpansion').onchange=e=>{tmExpansion=e.target.value;tmSyncHeader();tmRender()};document.getElementById('tmType').onchange=tmRender;document.getElementById('tmTag').oninput=tmRender;document.getElementById('tmCost').oninput=tmRender;document.getElementById('tmReset').onclick=()=>{tmExpansion='all';tmSelected=null;document.getElementById('tmType').value='all';document.getElementById('tmTag').value='';document.getElementById('tmCost').value='';tmRenderTree();tmRender()};
 
 /* DEMETER */
 const DEMETER_ASSETS = {
@@ -766,7 +808,7 @@ function demeterAutumnAbandon(){
 function demeterModal(body){let m=document.getElementById('demeterModal');if(!m){m=document.createElement('div');m.id='demeterModal';m.className='demeterModal';document.body.appendChild(m)}m.innerHTML='<div class="demeterDialog">'+body+'</div>';m.classList.add('open')}
 function demeterModalClose(){const m=document.getElementById('demeterModal');if(m)m.classList.remove('open')}
 
-document.getElementById('demeterMenu').addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();document.getElementById('tmView')?.classList.remove('open');document.getElementById('meeplesView')?.classList.remove('open');document.getElementById('demeterSubmenu').style.display='flex';document.body.classList.add('demeterMode');demeterHome('summer');});
+document.getElementById('demeterMenu').addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();document.getElementById('tmView')?.classList.remove('open');document.getElementById('tmSubmenu')?.style.setProperty('display','none');document.getElementById('meeplesView')?.classList.remove('open');document.getElementById('demeterSubmenu').style.display='flex';document.body.classList.add('demeterMode');demeterHome('summer');});
 document.getElementById('demeterSummerMenu').addEventListener('click',()=>demeterHome('summer'));
 document.getElementById('demeterAutumnMenu').addEventListener('click',()=>demeterHome('autumn'));
 document.getElementById('varunaMenu').addEventListener('click',()=>demeterHome('varuna'));
