@@ -83,11 +83,25 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 @media(max-width:850px){#demeterView{left:0}.demeterCards{grid-template-columns:repeat(2,minmax(0,1fr))}.demeterSpecies,.demeterAutumnGame .demeterSpecies{grid-template-columns:repeat(3,minmax(80px,1fr))}.demeterMenuGrid{grid-template-columns:1fr}.demeterTop{grid-template-columns:1fr}.discardGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .demeterVarunaGame .demeterObjectives{justify-content:flex-start}.demeterVarunaGame .demeterObjective{width:210px;height:140px}.demeterVarunaGame .demeterSpecies{grid-template-columns:repeat(7,minmax(70px,1fr))}.demeterVarunaGame .demeterSpecies .species{height:240px}
+
+/* TERRAFORMING MARS */
+#tmView{display:none;position:fixed;z-index:17;top:var(--arkham-header-height,0px);right:0;bottom:0;left:0;background:#f4f1eb;overflow:auto}
+#tmView.open{display:block}
+.tmShell{display:grid;grid-template-columns:minmax(210px,250px) minmax(0,1fr);min-height:100%}
+.tmAside{background:#faf8f4;border-right:1px solid var(--line);padding:12px;position:sticky;top:0;height:100vh;overflow:auto}
+.tmSideTitle{font-weight:900;font-size:16px;margin:3px 0 6px}.tmHint{font-size:11px;color:var(--muted);line-height:1.35;margin-bottom:10px}
+.tmFilters,.tmFilters2{display:grid;gap:6px;margin-bottom:8px}.tmFilters2{grid-template-columns:1fr 1fr}
+.tmFilters select,.tmFilters2 input{width:100%;padding:8px;border:1px solid var(--line);border-radius:7px;background:#fff;font:inherit;font-size:12px}
+.tmReset{width:100%;padding:7px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer;font-size:11px;margin-bottom:10px}
+.tmTree{display:grid;gap:4px}.tmExtBtn{width:100%;text-align:left;border:0;background:transparent;padding:7px 8px;border-radius:6px;cursor:pointer;font:inherit;font-size:12px}.tmExtBtn:hover,.tmExtBtn.active{background:var(--active);color:var(--accent);font-weight:800}
+.tmExtCount{float:right;color:var(--muted);font-size:10px}.tmContent{padding:18px;min-width:0}.tmWelcome{max-width:850px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;line-height:1.5}.tmWelcome h2{margin-top:0}.tmNote{font-size:12px;color:var(--muted)}
+.tmHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}.tmGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.tmCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer}.tmCard:hover{box-shadow:0 5px 18px rgba(0,0,0,.08);transform:translateY(-1px)}.tmCardImage{aspect-ratio:.72;background:#eee9e1;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:11px;padding:14px}.tmCardMeta{padding:7px 2px 1px}.tmCardName{font-weight:900;font-size:13px;line-height:1.2}.tmCardSub{font-size:10px;color:var(--muted);margin-top:3px}.tmTags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.tmTagPill{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:2px 5px;background:#faf8f4}.tmDetail{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}.tmDetailBack{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 9px;cursor:pointer;margin-bottom:12px}.tmDetailGrid{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:18px}.tmScanPlaceholder{aspect-ratio:.72;border-radius:8px;background:#eee9e1;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:20px;font-size:12px}.tmData{display:grid;gap:9px}.tmDataRow{border-bottom:1px solid var(--line);padding-bottom:7px}.tmDataLabel{font-size:10px;color:var(--muted);text-transform:uppercase}.tmDataValue{font-size:13px;line-height:1.4}.tmMissing{padding:12px;background:#fff8e8;border:1px solid #e5d4a4;border-radius:8px;color:#725b19;font-size:12px}
+@media(max-width:850px){.tmShell{grid-template-columns:1fr}.tmAside{position:relative;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.tmGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.tmDetailGrid{grid-template-columns:1fr}.tmContent{padding:12px}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.6.12</span></div>
+ <div class="brand"><h1>Arkham Horror LCG</h1><span>Cartes de scénario — English / Français</span><span class="version">Version 1.7.0</span></div>
  <input id="search" placeholder="Rechercher une carte…" autocomplete="off">
  <div class="tools"><button id="both">EN / FR</button><button id="hideEn">FR</button><button id="hideFr">EN</button><button id="reset">Réinitialiser</button></div>
  <nav class="mainNav" aria-label="Navigation principale">
@@ -96,6 +110,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <button id="arkhamMenu" class="mainMenu active" type="button">Arkham JDC</button>
   <button id="chaosMenu" class="mainMenu" type="button">Chaos Bag</button>
   <button id="demeterMenu" class="mainMenu" type="button">DEMETER</button>
+   <button id="terraformingMarsMenu" class="mainMenu" type="button">Terraforming Mars</button>
   <div id="demeterSubmenu" class="subMenu" style="display:none" aria-label="Jeux DEMETER">
    <button id="demeterSummerMenu" class="subMenuBtn" type="button">Été</button>
    <button id="demeterAutumnMenu" class="subMenuBtn" type="button">Autumn</button>
@@ -111,7 +126,7 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 <p>Ce site permet de consulter les cartes utilisées par les scénarios d’Arkham Horror: The Card Game.</p>
 <p>Les cartes anglaises sont affichées à gauche et les <strong>vrais scans français</strong> correspondants à droite lorsqu’ils sont disponibles.</p>
 <p>Le classement est organisé par campagne puis par scénario et par encounter set. Les données des cartes proviennent d’ArkhamDB.</p>
-<p><strong>Version 1.6.12</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
+<p><strong>Version 1.7.0</strong> — application autonome dans un seul fichier. Aucun dossier ni sous-dossier n’est nécessaire dans GitHub.</p>
 </div>
 <div id="cards"></div>
 </section>
@@ -119,7 +134,33 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
   <div id="demeterApp"></div>
 </div>
 </main>
-<footer>Arkham Horror LCG — cartes bilingues · Version 1.6.12 · Projet personnel non affilié à Fantasy Flight Games</footer>
+<div id="tmView" aria-hidden="true">
+  <div class="tmShell">
+    <aside class="tmAside">
+      <div class="tmSideTitle">Terraforming Mars</div>
+      <div class="tmHint">Cartes françaises uniquement. Les plateaux et autres composants sont exclus.</div>
+      <div class="tmFilters">
+        <select id="tmExpansion"><option value="all">Toutes les extensions</option></select>
+        <select id="tmType"><option value="all">Tous les types</option><option value="project">Projets</option><option value="corporation">Corporations</option><option value="prelude">Préludes</option><option value="colony">Colonies</option><option value="event">Événements globaux</option><option value="automa">Automa</option></select>
+      </div>
+      <div class="tmFilters2">
+        <input id="tmTag" placeholder="Tag…">
+        <input id="tmCost" type="number" min="0" placeholder="Coût max">
+      </div>
+      <button id="tmReset" class="tmReset">Réinitialiser les filtres</button>
+      <div id="tmTree" class="tmTree"></div>
+    </aside>
+    <section class="tmContent">
+      <div id="tmWelcome" class="tmWelcome">
+        <h2>Terraforming Mars — cartes françaises</h2>
+        <p>Base structurée des cartes de Terraforming Mars, classées par extension, avec recherche dans les noms et textes français.</p>
+        <p class="tmNote"><strong>Images :</strong> l’interface est préparée pour les vrais scans français. Je n’utilise volontairement aucun scan anglais comme substitut.</p>
+      </div>
+      <div id="tmCards"></div>
+    </section>
+  </div>
+</div>
+<footer>Arkham Horror LCG — cartes bilingues · Version 1.7.0 · Projet personnel non affilié à Fantasy Flight Games</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script>
@@ -192,7 +233,7 @@ function buildTree(){
   box.append(h,list);root.append(box);
  });
 }
-function bind(){$('search').oninput=render;$('typeSelect').onchange=e=>{typeFilter=e.target.value;render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';$('typeSelect').value='all';render()}}
+function bind(){$('search').oninput=tmHandleSearch;$('typeSelect').onchange=e=>{typeFilter=e.target.value;render()};$('both').onclick=()=>{mode='both';render()};$('hideFr').onclick=()=>{mode='en';render()};$('hideEn').onclick=()=>{mode='fr';render()};$('reset').onclick=()=>{$('search').value='';mode='both';typeFilter='all';$('typeSelect').value='all';render()}}
 function select(s,b,c){document.querySelectorAll('.scenario').forEach(x=>x.classList.remove('active'));b.classList.add('active');selected={name:s[0],code:s[1],campaign:c[0]};render();if(window.innerWidth<=850){const n=document.getElementById('arkhamNavPanel');if(n)n.open=false;}}
 function codesForScenario(){
  if(!selected)return[];
@@ -356,13 +397,45 @@ function ensureMeeplesFrame(){
  }
 }
 function positionMeeples(){const h=document.querySelector('body>header')?.offsetHeight||0;document.documentElement.style.setProperty('--arkham-header-height',h+'px');const v=document.getElementById('meeplesView');v.style.top=h+'px';}
-function setMainActive(id){['meeplesMenu','civilizationMenu','arkhamMenu','chaosMenu'].forEach(x=>document.getElementById(x)?.classList.toggle('active',x===id));}
+function setMainActive(id){['meeplesMenu','civilizationMenu','arkhamMenu','chaosMenu','terraformingMarsMenu'].forEach(x=>document.getElementById(x)?.classList.toggle('active',x===id));}
 function setChaosActive(on){document.getElementById('chaosMenu')?.classList.toggle('active',!!on);}
-function showMeeples(){document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
-function showArkham(){document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');setMainActive('arkhamMenu');setChaosActive(false);}
-function showCivilization(){document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
-function showChaos(){positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
+function showMeeples(){document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
+function showArkham(){document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');setMainActive('arkhamMenu');setChaosActive(false);}
+function showCivilization(){document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
+function showChaos(){document.getElementById('tmView')?.classList.remove('open');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
 document.getElementById('meeplesMenu').addEventListener('click',showMeeples);document.getElementById('arkhamMenu').addEventListener('click',showArkham);document.getElementById('civilizationMenu').addEventListener('click',showCivilization);document.getElementById('chaosMenu').addEventListener('click',showChaos);
+
+/* TERRAFORMING MARS */
+const TM_LOCALE='https://raw.githubusercontent.com/terraforming-mars/terraforming-mars/main/src/locales/fr/';
+const TM_EXPANSIONS=[
+ ['base','Jeu de base',['base_cards.json','base_corporations.json']],
+ ['corpera','Ère des Corporations',['base_cards.json','base_corporations.json']],
+ ['venus','Venus Next',['venus_next_cards.json','venus_next_corporations.json']],
+ ['prelude','Prélude',['prelude_cards.json','prelude_corporations.json']],
+ ['colonies','Colonies',['colonies_cards.json','colonies_corporations.json','colonies.json']],
+ ['turmoil','Turmoil',['turmoil_cards.json','turmoil_corporations.json','turmoil_events.json']],
+ ['prelude2','Prélude 2',['prelude2_cards.json','prelude2_corporations.json']],
+ ['promo','Promo',['promo_cards.json','promo_corporations.json']],
+ ['automa','Automa',['UI_cards.json']]
+];
+let tmData=[],tmLoaded=false,tmLoading=null,tmExpansion='all',tmSelected=null,tmSearch='';
+const tmCache=new Map();
+function tmJson(url){return fetch(url,{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()})}
+function tmTypeFromFile(f){if(f.includes('corporations'))return'corporation';if(f.includes('prelude'))return'prelude';if(f.includes('colonies'))return'colony';if(f.includes('events'))return'event';if(f.includes('UI_cards'))return'automa';return'project'}
+function tmBuildEntries(exp, file, obj){
+ const type=tmTypeFromFile(file), out=[]; if(!obj||typeof obj!=='object')return out;
+ Object.entries(obj).forEach(([en,fr])=>{ if(typeof fr!=='string'||!fr.trim())return; out.push({id:exp+'|'+file+'|'+en,name:fr,sourceName:en,text:fr,expansion:exp,type,source:file}); }); return out;
+}
+async function tmLoad(){if(tmLoaded)return tmData;if(tmLoading)return tmLoading;tmLoading=(async()=>{const all=[];for(const [code,name,files] of TM_EXPANSIONS){for(const file of files){try{const key=code+'|'+file;let obj=tmCache.get(key);if(!obj){obj=await tmJson(TM_LOCALE+file);tmCache.set(key,obj)}tmBuildEntries(code,file,obj).forEach(x=>{x.expansionName=name;all.push(x)});}catch(e){}}}const seen=new Set();tmData=all.filter(x=>{if(seen.has(x.name+'|'+x.expansion+'|'+x.type))return false;seen.add(x.name+'|'+x.expansion+'|'+x.type);return true});tmLoaded=true;tmRenderTree();tmRender();return tmData;})();return tmLoading}
+function tmSetActiveNav(){setMainActive('terraformingMarsMenu');setChaosActive(false)}
+function showTerraformingMars(){document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('demeterView').classList.remove('open');document.getElementById('demeterView').setAttribute('aria-hidden','true');document.getElementById('tmView').classList.add('open');document.getElementById('tmView').setAttribute('aria-hidden','false');tmSetActiveNav();const q=document.getElementById('search');q.placeholder='Rechercher une carte Terraforming Mars…';q.value=tmSearch;tmLoad()}
+function tmRenderTree(){const tree=document.getElementById('tmTree');if(!tree)return;const counts=new Map();tmData.forEach(c=>counts.set(c.expansion,(counts.get(c.expansion)||0)+1));tree.innerHTML='<button class="tmExtBtn '+(tmExpansion==='all'?'active':'')+'" data-tm-exp="all">Toutes les cartes <span class="tmExtCount">'+tmData.length+'</span></button>'+TM_EXPANSIONS.map(x=>'<button class="tmExtBtn '+(tmExpansion===x[0]?'active':'')+'" data-tm-exp="'+x[0]+'">'+esc(x[1])+' <span class="tmExtCount">'+(counts.get(x[0])||0)+'</span></button>').join('');tree.querySelectorAll('[data-tm-exp]').forEach(b=>b.onclick=()=>{tmExpansion=b.dataset.tmExp;tmRenderTree();tmRender()})}
+function tmMatches(c){const q=norm(tmSearch);if(q&&!norm([c.name,c.text,c.sourceName,c.expansionName].join(' ')).includes(q))return false;if(tmExpansion!=='all'&&c.expansion!==tmExpansion)return false;const t=document.getElementById('tmType')?.value||'all';if(t!=='all'&&c.type!==t)return false;const tag=norm(document.getElementById('tmTag')?.value||'');if(tag&&!norm(c.text).includes(tag)&&!norm(c.name).includes(tag))return false;return true}
+function tmRender(){const box=document.getElementById('tmCards');if(!box)return;const arr=tmData.filter(tmMatches);if(tmSelected){tmRenderDetail(tmSelected);return}document.getElementById('tmWelcome').style.display=arr.length?'none':'block';box.innerHTML='<div class="tmHead"><div><div class="eyebrow">TERRAFORMING MARS</div><h2>Cartes françaises</h2><div class="sub">'+arr.length+' résultat'+(arr.length>1?'s':'')+' · aucune carte anglaise affichée</div></div><div class="count">'+arr.length+'</div></div>'+(arr.length?'<div class="tmGrid">'+arr.map(tmCardHtml).join('')+'</div>':'<div class="empty">Aucune carte ne correspond aux filtres.</div>');box.querySelectorAll('[data-tm-id]').forEach(el=>el.onclick=()=>{tmSelected=tmData.find(x=>x.id===el.dataset.tmId);tmRender()})}
+function tmCardHtml(c){return '<article class="tmCard" data-tm-id="'+esc(c.id)+'"><div class="tmCardImage">Scan français à connecter<br><small>'+esc(c.expansionName)+'</small></div><div class="tmCardMeta"><div class="tmCardName">'+esc(c.name)+'</div><div class="tmCardSub">'+esc(c.type==='corporation'?'Corporation':c.type==='prelude'?'Prélude':c.type==='colony'?'Colonie':c.type==='event'?'Événement global':c.type==='automa'?'Automa':'Projet')+'</div></div></article>'}
+function tmRenderDetail(c){document.getElementById('tmWelcome').style.display='none';document.getElementById('tmCards').innerHTML='<div class="tmDetail"><button class="tmDetailBack" id="tmBack">← Retour aux cartes</button><div class="tmDetailGrid"><div class="tmScanPlaceholder">Vrai scan français<br><br>Cette zone est prête à recevoir l’image française correspondante.</div><div class="tmData"><div><div class="eyebrow">'+esc(c.expansionName)+'</div><h2>'+esc(c.name)+'</h2></div><div class="tmDataRow"><div class="tmDataLabel">Type</div><div class="tmDataValue">'+esc(c.type)+'</div></div><div class="tmDataRow"><div class="tmDataLabel">Texte français disponible</div><div class="tmDataValue">'+esc(c.text)+'</div></div><div class="tmMissing">Les données françaises proviennent du dépôt open source Terraforming Mars. Les scans français ne sont pas remplacés par des images anglaises.</div></div></div></div>';document.getElementById('tmBack').onclick=()=>{tmSelected=null;tmRender()}}
+function tmHandleSearch(){tmSearch=document.getElementById('search').value;if(document.getElementById('tmView').classList.contains('open'))tmRender();else render()}
+document.getElementById('terraformingMarsMenu').addEventListener('click',showTerraformingMars);document.getElementById('tmExpansion').onchange=e=>{tmExpansion=e.target.value;tmRenderTree();tmRender()};document.getElementById('tmType').onchange=tmRender;document.getElementById('tmTag').oninput=tmRender;document.getElementById('tmCost').oninput=tmRender;document.getElementById('tmReset').onclick=()=>{tmExpansion='all';tmSelected=null;document.getElementById('tmType').value='all';document.getElementById('tmTag').value='';document.getElementById('tmCost').value='';tmRenderTree();tmRender()};
 
 /* DEMETER */
 const DEMETER_ASSETS = {
@@ -377,7 +450,7 @@ let varunaSaves=JSON.parse(localStorage.getItem("varunaSaves")||"{}");
 function varunaPersist(){localStorage.setItem("varunaSaves",JSON.stringify(varunaSaves));}
 function varunaShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function varunaUid(){return "v_"+Date.now()+"_"+Math.random().toString(36).slice(2,8)}
-function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.6.12</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
+function varunaRenderHome(){const has=!!varunaState;demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");document.getElementById("demeterApp").innerHTML=`<div class="demeterShell"><div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Varuna</h2><div class="sub">Gestion complète d'une partie · Version 1.7.0</div></div></div><div class="demeterPanel"><div class="demeterMenuGrid"><button class="demeterBtn primary" id="varunaStartBtn">Lancer une partie</button><button class="demeterBtn" id="varunaLoadBtn">Charger une partie</button><button class="demeterBtn" id="varunaSaveBtn" ${has?'':'disabled'}>Sauvegarder une partie</button><button class="demeterBtn danger" id="varunaAbandonBtn" ${has?'':'disabled'}>Abandonner une partie</button></div>${has?'<p class="hint">Une partie est actuellement en cours.</p>':'<p class="hint">Aucune partie en cours.</p>'}</div></div>`;document.getElementById("varunaStartBtn").onclick=varunaStart;document.getElementById("varunaLoadBtn").onclick=varunaShowLoads;document.getElementById("varunaSaveBtn").onclick=varunaShowSave;document.getElementById("varunaAbandonBtn").onclick=varunaAbandon}
 function varunaStart(){const decks={};const removed={bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]};VARUNA_COLORS.forEach(([key])=>{decks[key]=varunaShuffle(VARUNA_ASSETS.cards[key].map((_,i)=>i));removed[key]=decks[key].splice(0,2)});varunaState={id:varunaUid(),version:"1.6.9",objectives:varunaShuffle(VARUNA_ASSETS.objectives.map((_,i)=>i)).slice(0,4),discoveries:varunaShuffle(VARUNA_ASSETS.discoveries.map((_,i)=>i)).slice(0,4),decks,displayed:{},played:{bleues:[],rouges:[],jaunes:[],violettes:[],grises:[]},removed,turn:1,finished:false,startedAt:new Date().toISOString()};VARUNA_COLORS.forEach(([key])=>varunaState.displayed[key]=varunaState.decks[key].shift());varunaRenderGame()}
 function varunaRenderGame(){demeterOpenView();document.querySelectorAll("#demeterSubmenu .subMenuBtn").forEach(x=>x.classList.remove("active"));document.getElementById("varunaMenu").classList.add("active");const s=varunaState;const objectives=s.objectives.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.objectives[i]}" alt="Tuile objectif ${i+1}"></div>`).join("");const discoveries=s.discoveries.map(i=>`<div class="demeterObjective"><img src="${VARUNA_ASSETS.discoveries[i]}" alt="Carte découverte ${i+1}"></div>`).join("");const species=VARUNA_ASSETS.species.map((src,i)=>`<div class="species"><img src="${src}" alt="Espèce ${i+1}"></div>`).join("");const cards=VARUNA_COLORS.map(([key,label,css])=>{const idx=s.displayed[key];return `<div class="demeterColorCard ${css}"><div class="demeterColorName">${label}</div><img src="${VARUNA_ASSETS.cards[key][idx]}" alt="Carte ${label}"></div>`}).join("");const remaining=Math.max(0,Object.values(s.decks).reduce((n,a)=>n+a.length,0));const played=Object.values(s.played).reduce((n,a)=>n+a.length,0);const discarded=Object.values(s.removed).reduce((n,a)=>n+a.length,0);document.getElementById("demeterApp").innerHTML=`<div class="demeterShell demeterGame demeterVarunaGame"><div class="demeterTitle"><div><div class="eyebrow">DEMETER · VARUNA</div><h2>Partie en cours</h2><div class="sub">Tour ${s.turn} sur 13 · ${remaining} cartes encore dans les paquets</div></div><div class="demeterActions"><button class="demeterBtn" id="varunaSaveGameBtn">Sauvegarder</button><button class="demeterBtn" id="varunaDiscardedBtn">Cartes écartées (${discarded})</button><button class="demeterBtn danger" id="varunaAbandonGameBtn">Abandonner</button></div></div><div class="demeterPanel"><h3>Objectifs tirés au hasard</h3><div class="demeterObjectives">${objectives}</div></div><div class="demeterPanel"><h3>Cartes découverte tirées au hasard</h3><div class="demeterObjectives">${discoveries}</div></div><div class="demeterPanel"><h3>Tuiles espèces</h3><div class="demeterSpecies">${species}</div></div><div class="demeterPanel"><h3>Cartes du tour ${s.turn}</h3><div class="demeterCards">${cards}</div><div class="demeterTurnBar"><div class="demeterTurn">Ordre : Bleu · Rouge · Jaune · Violet · Gris</div></div></div><div class="demeterTurnBar">${s.finished?'<strong>Fin de partie</strong>':'<button class="demeterBtn primary" id="varunaNextBtn">Tour suivant</button>'}<span class="demeterStatus">${played} cartes jouées · ${discarded} cartes écartées</span></div></div>`;document.getElementById("varunaSaveGameBtn").onclick=varunaShowSave;document.getElementById("varunaDiscardedBtn").onclick=varunaShowDiscarded;document.getElementById("varunaAbandonGameBtn").onclick=varunaAbandon;if(!s.finished)document.getElementById("varunaNextBtn").onclick=varunaNextTurn}
 function varunaNextTurn(){const s=varunaState;VARUNA_COLORS.forEach(([key])=>{s.played[key].push(s.displayed[key]);s.displayed[key]=null});if(s.turn>=13){s.finished=true;varunaRenderGame();return}s.turn++;VARUNA_COLORS.forEach(([key])=>s.displayed[key]=s.decks[key].shift());varunaRenderGame()}
@@ -460,7 +533,7 @@ function demeterHome(sub='summer'){
 function demeterRenderHome(){
  const has=!!demeterState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.6.12</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Été</h2><div class="sub">Gestion complète d'une partie · Version 1.7.0</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
@@ -572,7 +645,7 @@ function demeterAutumnUid(){return 'da_'+Date.now()+'_'+Math.random().toString(3
 function demeterRenderAutumnHome(){
  const has=!!demeterAutumnState;
  document.getElementById('demeterApp').innerHTML=`<div class="demeterShell">
-  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.6.12</div></div></div>
+  <div class="demeterTitle"><div><div class="eyebrow">DEMETER</div><h2>Demeter Autumn</h2><div class="sub">Gestion complète d'une partie · Version 1.7.0</div></div></div>
   <div class="demeterPanel">
    <div class="demeterMenuGrid">
     <button class="demeterBtn primary" id="demeterStartBtn">Lancer une partie</button>
