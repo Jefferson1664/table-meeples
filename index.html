@@ -100,6 +100,22 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
 .tmExtCount{float:right;color:var(--muted);font-size:10px}.tmContent{padding:18px;min-width:0}.tmWelcome{max-width:850px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;line-height:1.5}.tmWelcome h2{margin-top:0}.tmNote{font-size:12px;color:var(--muted)}
 .tmHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}.tmGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.tmCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer}.tmCard:hover{box-shadow:0 5px 18px rgba(0,0,0,.08);transform:translateY(-1px)}.tmCardImage{aspect-ratio:.72;background:#eee9e1;border-radius:7px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:11px;padding:14px}.tmCardImage img{width:100%;height:100%;object-fit:contain;display:block}.tmCardImage span{display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:12px;text-align:center;padding:8px;}.tmCardMeta{padding:7px 2px 1px}.tmCardName{font-weight:900;font-size:13px;line-height:1.2}.tmCardSub{font-size:10px;color:var(--muted);margin-top:3px}.tmTags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}.tmTagPill{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:2px 5px;background:#faf8f4}.tmDetail{max-width:850px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}.tmDetailBack{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 9px;cursor:pointer;margin-bottom:12px}.tmDetailGrid{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:18px}.tmScanPlaceholder{aspect-ratio:.72;border-radius:8px;background:#eee9e1;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:20px;font-size:12px}.tmData{display:grid;gap:9px}.tmDataRow{border-bottom:1px solid var(--line);padding-bottom:7px}.tmDataLabel{font-size:10px;color:var(--muted);text-transform:uppercase}.tmDataValue{font-size:13px;line-height:1.4}.tmMissing{padding:12px;background:#fff8e8;border:1px solid #e5d4a4;border-radius:8px;color:#725b19;font-size:12px}
 @media(max-width:850px){.tmShell{grid-template-columns:1fr}.tmAside{position:relative;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}.tmGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.tmDetailGrid{grid-template-columns:1fr}.tmContent{padding:12px}}
+
+<style>
+.tm668Content{padding:0!important;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.tm668Bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;background:#fff;border-bottom:1px solid var(--line);font-size:12px}
+.tm668Bar strong{font-weight:900}
+.tm668Bar span{color:var(--muted)}
+.tm668Bar a{margin-left:auto;color:var(--accent);font-weight:800;text-decoration:none}
+#tm668Frame{border:0;width:100%;height:calc(100vh - var(--arkham-header-height,0px) - 42px);min-height:700px;background:#0f1923}
+body.tm668Mode #tmView .tmAside{display:none}
+body.tm668Mode #tmView .tmShell{grid-template-columns:1fr}
+@media(max-width:850px){
+  .tm668Bar{font-size:11px}
+  .tm668Bar a{margin-left:0}
+  #tm668Frame{height:calc(100vh - var(--arkham-header-height,0px) - 70px);min-height:620px}
+}
+</style>
 </style>
 </head>
 <body>
@@ -146,15 +162,23 @@ body.demeterMode #search,body.demeterMode .tools{display:none}body.demeterMode h
       <div class="arkhamNavSummary">Choisir une extension / un type</div>
       <div class="arkhamNavContent">
         <div class="hint">Choisis une extension puis un type de carte pour afficher les cartes.</div>
+<div class="tmNote" style="margin-top:6px">Les scans disponibles sont chargés automatiquement depuis l’archive publique des images Terraforming Mars.</div>
         <div id="tmTree"><div class="empty">Chargement des extensions…</div></div>
       </div>
     </aside>
-    <section class="tmContent">
-      <div id="tmWelcome" class="tmWelcome">
-        <h2>Terraforming Mars — English cards</h2>
-        <p>Cartes anglaises classées par extension puis par type, comme la navigation d’Arkham.</p>
+    <section class="tmContent tm668Content">
+      <div class="tm668Bar">
+        <strong>Terraforming Mars — 668 scans</strong>
+        <span>Base complète : Base, Corporate Era, Venus Next, Prelude 1 & 2, Colonies, Turmoil, Promo et Automa.</span>
+        <a href="https://tm.hadronikle.com/" target="_blank" rel="noopener">Ouvrir en plein écran ↗</a>
       </div>
-      <div id="tmCards"></div>
+      <iframe
+        id="tm668Frame"
+        title="Terraforming Mars — 668 cartes scannées"
+        src="https://tm.hadronikle.com/"
+        loading="eager"
+        referrerpolicy="no-referrer">
+      </iframe>
     </section>
   </div>
 </div>
@@ -397,10 +421,10 @@ function ensureMeeplesFrame(){
 function positionMeeples(){const h=document.querySelector('body>header')?.offsetHeight||0;document.documentElement.style.setProperty('--arkham-header-height',h+'px');const v=document.getElementById('meeplesView');v.style.top=h+'px';}
 function setMainActive(id){['meeplesMenu','civilizationMenu','arkhamMenu','chaosMenu','terraformingMarsMenu'].forEach(x=>document.getElementById(x)?.classList.toggle('active',x===id));}
 function setChaosActive(on){document.getElementById('chaosMenu')?.classList.toggle('active',!!on);}
-function showMeeples(){tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
-function showArkham(){hideDemeter();tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('arkhamNavPanel')?.classList.add('visible');setMainActive('arkhamMenu');setChaosActive(false);const q=document.getElementById('search');if(q)q.placeholder='Rechercher une carte…';}
-function showCivilization(){tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
-function showChaos(){tmHideNav();document.getElementById('tmView')?.classList.remove('open');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
+function showMeeples(){document.body.classList.remove('tm668Mode');tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('meeplesMenu');setChaosActive(false);}
+function showArkham(){document.body.classList.remove('tm668Mode');hideDemeter();tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');document.getElementById('meeplesView').classList.remove('open');document.getElementById('meeplesView').setAttribute('aria-hidden','true');document.getElementById('arkhamNavPanel')?.classList.add('visible');setMainActive('arkhamMenu');setChaosActive(false);const q=document.getElementById('search');if(q)q.placeholder='Rechercher une carte…';}
+function showCivilization(){document.body.classList.remove('tm668Mode');tmHideNav();document.getElementById('tmView')?.classList.remove('open');document.body.classList.remove('demeterMode');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('civilizationMenu');setChaosActive(false);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.drawCard==='function')w.drawCard();},100);}
+function showChaos(){document.body.classList.remove('tm668Mode');tmHideNav();document.getElementById('tmView')?.classList.remove('open');positionMeeples();ensureMeeplesFrame();document.getElementById('meeplesView').classList.add('open');document.getElementById('meeplesView').setAttribute('aria-hidden','false');setMainActive('chaosMenu');setChaosActive(true);setTimeout(()=>{const w=document.getElementById('meeplesFrame').contentWindow;if(w&&typeof w.manageChaosBags==='function')w.manageChaosBags();},100);}
 document.getElementById('meeplesMenu').addEventListener('click',showMeeples);document.getElementById('arkhamMenu').addEventListener('click',showArkham);document.getElementById('civilizationMenu').addEventListener('click',showCivilization);document.getElementById('chaosMenu').addEventListener('click',showChaos);
 
 /* TERRAFORMING MARS */
@@ -421,10 +445,33 @@ let tmImageIndexPromise=null,tmImageIndex=null;
 function tmNormImageName(v){return String(v||'').toLowerCase().replace(/\.(png|jpg|jpeg|webp)$/,'').replace(/^\d+[-_]/,'').replace(/[^a-z0-9]+/g,'');}
 function tmLoadImageIndex(){
  if(tmImageIndexPromise)return tmImageIndexPromise;
+
+ const buildIndex=(files)=>{
+  tmImageIndex=new Map();
+  (Array.isArray(files)?files:[]).forEach(name=>{
+   if(!name||!/\.(png|jpg|jpeg|webp)$/i.test(name))return;
+   const url='https://raw.githubusercontent.com/terraforming-mars/card-images/master/'+name.split('/').map(encodeURIComponent).join('/');
+   tmImageIndex.set(tmNormImageName(name),url);
+  });
+  return tmImageIndex;
+ };
+
  tmImageIndexPromise=fetch('https://api.github.com/repos/terraforming-mars/card-images/contents/',{cache:'force-cache'})
-  .then(r=>r.ok?r.json():[])
-  .then(a=>{tmImageIndex=new Map();(Array.isArray(a)?a:[]).forEach(x=>{if(x&&x.type==='file'&&/\.(png|jpg|jpeg|webp)$/i.test(x.name))tmImageIndex.set(tmNormImageName(x.name),x.download_url||'')});return tmImageIndex})
-  .catch(()=>{tmImageIndex=new Map();return tmImageIndex});
+  .then(r=>r.ok?r.json():Promise.reject(new Error('GitHub API unavailable')))
+  .then(a=>buildIndex((Array.isArray(a)?a:[]).map(x=>x&&x.name)))
+  .catch(()=>fetch('https://raw.githubusercontent.com/terraforming-mars/card-images/master/README.md',{cache:'force-cache'})
+    .then(r=>r.ok?r.text():Promise.reject(new Error('README unavailable')))
+    .then(t=>{
+      const names=[];
+      t.split(/\r?\n/).forEach(line=>{
+       const m=line.match(/^\s*\*\s+([^\s]+\.(?:png|jpg|jpeg|webp))\s*$/i);
+       if(m)names.push(m[1]);
+      });
+      return buildIndex(names);
+    })
+    .catch(()=>{tmImageIndex=new Map();return tmImageIndex})
+  );
+
  return tmImageIndexPromise;
 }
 function tmResolveImage(c){return tmImageIndex?.get(tmNormImageName(c.sourceName))||'';}
@@ -520,6 +567,7 @@ function tmRenderTree(){
 function showTerraformingMars(){
  positionMeeples();
  document.body.classList.remove('demeterMode');
+ document.body.classList.add('tm668Mode');
  document.getElementById('meeplesView').classList.remove('open');
  document.getElementById('meeplesView').setAttribute('aria-hidden','true');
  document.getElementById('demeterView').classList.remove('open');
